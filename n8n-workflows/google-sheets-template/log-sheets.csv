@@ -1,0 +1,47 @@
+--- SHEET: Gesendet ---
+Telefon,Datum,Uhrzeit,Typ,Schueler,Gesendet_am,Status
+
+--- SHEET: Feedback_Log ---
+Schueler,Telefon,Trigger,Gefragt_am,Status,Bewertung,Google_Review
+
+--- SHEET: Zahlungserinnerungen_Log ---
+Schueler,Telefon,Rechnungs_Nr,Betrag,Stufe,Stufe_Text,Gesendet_am,Tage_Ueberfaellig
+
+--- SHEET: Onboarding_Log ---
+Schueler_ID,Schueler,Telefon,Email,Schritt,Gesendet_am,WA_Willkommen,Email_Willkommen,Tage_seit_Anmeldung,Status
+
+--- SHEET: Pruefung_Nachrichten_Log ---
+Schueler,Telefon,Typ,Gesendet_am,Status
+
+--- SHEET: Reminder_Log ---
+Schueler,Telefon,Typ,Gesendet_am,Status
+
+--- SHEET: Nachrichten_Log ---
+Von,Nachricht,Kategorie,Empfangen_am,Media_URL,Media_Typ
+
+--- SHEET: Wartelisten_Log ---
+Slot_ID,Datum,Zeit,Art,Fahrlehrer,Abgesagt_von,Angeboten_an,Telefon,Gesendet_am,Ablauf_um,Status
+
+--- SHEET: Verschiebungen_Log ---
+Von,Nachricht,Gemeldet_am,Status
+
+--- SHEET: Beschwerden_Log ---
+Von,Nachricht,Eingegangen_am,Status
+
+--- SHEET: Zuweisungen_Log ---
+Schueler_ID,Schueler,Schueler_Tel,Klasse,Fahrlehrer,Fahrlehrer_Tel,Erster_Theorietermin,Zugewiesen_am,WA_Schueler,WA_Fahrlehrer
+
+--- SHEET: DSGVO_Log ---
+Telefon,Aktion,Nachricht,Details,Schueler_ID,Datum
+
+--- SHEET: Archiv ---
+Schueler_ID,Name_Anonymisiert,Telefon_Anonymisiert,Klasse,Letzter_Status,Archiv_Grund,Archiviert_am
+
+--- SHEET: Anrufe ---
+Call_ID,Status,Anrufer_Nummer,Richtung,Gestartet_Um,Dauer_Sekunden,Dauer_Formatiert,Transkription,Recording_URL,Trennungsgrund,Beendet_Um,Zusammenfassung,Stimmung,Intent,Anrufer_Name,Anrufer_Telefon,Anrufer_Email,Fuehrerscheinklasse,Bevorzugte_Zeit,Dringlichkeit,Braucht_FollowUp,Braucht_Review,Ist_Neuer_Lead,Analysiert_Um
+
+--- SHEET: Leads ---
+Name,Telefon,Email,Quelle,Intent,Fuehrerscheinklasse,Bevorzugte_Zeit,Dringlichkeit,Stimmung,Zusammenfassung,Call_ID,Erstellt_Am,Status,FollowUp_Gesendet
+
+--- SHEET: Analytics_Telefon ---
+Datum,Call_ID,Dauer_Sekunden,Intent,Stimmung,Ist_Lead,FollowUp_Noetig,Fuehrerscheinklasse

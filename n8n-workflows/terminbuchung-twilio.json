@@ -1,0 +1,433 @@
+{
+  "name": "Fahrschule Autopilot - Terminbuchung & Lehrer-Notification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "terminbuchung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-buchung",
+      "name": "Neue Buchung (Website/Chatbot)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "terminbuchung"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-buchung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-whatsapp",
+      "name": "Buchung per WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 600],
+      "webhookId": "whatsapp-buchung"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Buchungsdaten normalisieren (Website oder WhatsApp)\nconst body = $input.first().json.body || $input.first().json;\n\nlet schuelerName = body.name || body.schuelerName || body.Name || '';\nlet telefon = body.telefon || body.phone || body.Telefon || '';\nlet email = body.email || body.Email || '';\nlet wunschDatum = body.datum || body.date || body.Datum || '';\nlet wunschZeit = body.zeit || body.time || body.Zeit || body.Uhrzeit || '';\nlet terminArt = body.art || body.type || body.Art || 'Fahrstunde';\nlet fahrlehrerWunsch = body.fahrlehrer || body.instructor || body.Fahrlehrer || '';\nlet nachricht = body.nachricht || body.message || body.Nachricht || '';\nlet fuehrerscheinKlasse = body.klasse || body.Klasse || body.license_class || 'B';\n\n// Telefonnummer bereinigen\ntelefon = telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\nif (telefon && !telefon.startsWith('+')) {\n  telefon = '+49' + telefon.replace(/^0/, '');\n}\n\n// Buchungs-ID generieren\nconst buchungsId = 'BK-' + Date.now().toString(36).toUpperCase();\n\nreturn [{\n  json: {\n    buchungsId,\n    schuelerName,\n    telefon,\n    email,\n    wunschDatum,\n    wunschZeit,\n    terminArt,\n    fahrlehrerWunsch,\n    fuehrerscheinKlasse,\n    nachricht,\n    eingang: new Date().toISOString(),\n    status: 'neu'\n  }\n}];"
+      },
+      "id": "normalize-buchung",
+      "name": "Buchung normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-name",
+              "leftValue": "={{ $json.schuelerName }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "check-telefon",
+              "leftValue": "={{ $json.telefon }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "validate-buchung",
+      "name": "Pflichtfelder pruefen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Buchungen",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Buchungs_ID": "={{ $json.buchungsId }}",
+            "Schueler": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.telefon }}",
+            "Email": "={{ $json.email }}",
+            "Wunsch_Datum": "={{ $json.wunschDatum }}",
+            "Wunsch_Zeit": "={{ $json.wunschZeit }}",
+            "Art": "={{ $json.terminArt }}",
+            "Fahrlehrer_Wunsch": "={{ $json.fahrlehrerWunsch }}",
+            "Klasse": "={{ $json.fuehrerscheinKlasse }}",
+            "Nachricht": "={{ $json.nachricht }}",
+            "Eingang": "={{ $json.eingang }}",
+            "Status": "neu"
+          }
+        }
+      },
+      "id": "save-buchung",
+      "name": "Buchung in Sheet speichern",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [920, 400],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Zustaendigen Fahrlehrer bestimmen\nconst data = $input.first().json;\nif (!data) throw new Error('Keine Buchungsdaten empfangen');\n\nconst wunschLehrer = data.fahrlehrerWunsch || '';\n\n// Fahrlehrer-Zuordnung (pro Kunde konfigurierbar)\nlet fahrlehrer = {};\ntry {\n  fahrlehrer = JSON.parse($env.FAHRLEHRER_CONFIG || '{}');\n} catch(e) {\n  // Falls FAHRLEHRER_CONFIG kein gueltiges JSON ist, leeres Objekt verwenden\n  fahrlehrer = {};\n}\n\n// Beispiel FAHRLEHRER_CONFIG:\n// {\"default\":\"+491721234567\",\"Schmidt\":\"+491721234567\",\"Klein\":\"+491739876543\"}\n\nlet lehrerTelefon = fahrlehrer.default || $env.FAHRLEHRER_TELEFON || '';\nlet lehrerName = 'Zustaendiger Fahrlehrer';\n\nif (wunschLehrer) {\n  for (const [name, tel] of Object.entries(fahrlehrer)) {\n    if (name === 'default') continue;\n    if (name.toLowerCase() === wunschLehrer.toLowerCase() ||\n        wunschLehrer.toLowerCase().includes(name.toLowerCase())) {\n      lehrerTelefon = tel;\n      lehrerName = name;\n      break;\n    }\n  }\n}\n\nif (!lehrerTelefon) {\n  lehrerTelefon = $env.FAHRLEHRER_TELEFON || $env.FAHRSCHULINHABER_TELEFON || '';\n}\n\nreturn [{\n  json: {\n    ...data,\n    lehrerTelefon,\n    lehrerName\n  }\n}];"
+      },
+      "id": "find-lehrer",
+      "name": "Zustaendigen Fahrlehrer finden",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 400]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.lehrerTelefon }}",
+        "body": "=📋 Neue Terminanfrage!\n\n🆔 {{ $json.buchungsId }}\n👤 {{ $json.schuelerName }}\n📱 {{ $json.telefon }}\n🚗 {{ $json.terminArt }} (Klasse {{ $json.fuehrerscheinKlasse }})\n📅 Wunsch: {{ $json.wunschDatum }} um {{ $json.wunschZeit }} Uhr\n{{ $json.fahrlehrerWunsch ? '👨‍🏫 Wunsch-Fahrlehrer: ' + $json.fahrlehrerWunsch : '' }}\n{{ $json.nachricht ? '💬 Nachricht: ' + $json.nachricht : '' }}\n\nBitte antworten Sie:\n✅ BESTAETIGEN {{ $json.buchungsId }}\n📅 ALTERNATIV {{ $json.buchungsId }} [neues Datum] [neue Zeit]\n❌ ABLEHNEN {{ $json.buchungsId }}"
+      },
+      "id": "notify-lehrer",
+      "name": "Fahrlehrer per WhatsApp benachrichtigen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1360, 300],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nVielen Dank fuer Ihre Terminanfrage! ✅\n\n📋 Buchungs-Nr: {{ $json.buchungsId }}\n🚗 {{ $json.terminArt }}\n📅 Wunsch: {{ $json.wunschDatum }} um {{ $json.wunschZeit }} Uhr\n\nIhr Fahrlehrer wird sich in Kuerze bei Ihnen melden, um den Termin zu bestaetigen.\n\nBei Fragen antworten Sie einfach auf diese Nachricht.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "confirm-schueler",
+      "name": "Bestaetigung an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1360, 500],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"buchungsId\": \"{{ $json.buchungsId }}\", \"message\": \"Terminanfrage erhalten\"}"
+      },
+      "id": "webhook-response",
+      "name": "API Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1580, 400]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lehrer-antwort",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-lehrer",
+      "name": "Fahrlehrer antwortet",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 900],
+      "webhookId": "lehrer-antwort"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fahrlehrer-Antwort auswerten\nconst body = $input.first().json.body || $input.first().json;\nconst messageBody = (body.Body || body.body || '').trim().toUpperCase();\nconst from = (body.From || body.from || '').replace('whatsapp:', '').trim();\n\n// BESTAETIGEN BK-XXXXX\nif (messageBody.startsWith('BESTAETIGEN') || messageBody.startsWith('BESTÄTIGEN')) {\n  const buchungsId = messageBody.split(' ')[1] || '';\n  return [{\n    json: {\n      action: 'bestaetigt',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: '',\n      alternativZeit: ''\n    }\n  }];\n}\n\n// ALTERNATIV BK-XXXXX 29.03.2026 14:00\nif (messageBody.startsWith('ALTERNATIV')) {\n  const parts = messageBody.split(' ');\n  const buchungsId = parts[1] || '';\n  const altDatum = parts[2] || '';\n  const altZeit = parts[3] || '';\n  return [{\n    json: {\n      action: 'alternativ',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: altDatum,\n      alternativZeit: altZeit\n    }\n  }];\n}\n\n// ABLEHNEN BK-XXXXX\nif (messageBody.startsWith('ABLEHNEN')) {\n  const buchungsId = messageBody.split(' ')[1] || '';\n  return [{\n    json: {\n      action: 'abgelehnt',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: '',\n      alternativZeit: ''\n    }\n  }];\n}\n\nreturn [{ json: { action: 'unbekannt', lehrerTelefon: from, message: messageBody } }];"
+      },
+      "id": "parse-lehrer-antwort",
+      "name": "Lehrer-Antwort auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 900]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-bestaetigt",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "bestaetigt",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-lehrer-action",
+      "name": "Bestaetigt oder Alternativ oder Abgelehnt",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [700, 900]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Buchungen",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Buchungs_ID",
+              "lookupValue": "={{ $json.buchungsId }}"
+            }
+          ]
+        }
+      },
+      "id": "lookup-buchung",
+      "name": "Buchung nachschlagen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [920, 800],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.Telefon }}",
+        "body": "=Gute Nachricht, {{ $json.Schueler }}! ✅🎉\n\nIhr Termin wurde bestaetigt!\n\n📋 {{ $json.Buchungs_ID }}\n🚗 {{ $json.Art }}\n📅 {{ $json.Wunsch_Datum }}\n🕐 {{ $json.Wunsch_Zeit }} Uhr\n\nWir freuen uns auf Sie! 🚗"
+      },
+      "id": "confirm-to-schueler",
+      "name": "Schueler - Termin bestaetigt",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1140, 800],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.Telefon }}",
+        "body": "=Hallo {{ $json.Schueler }}! 📅\n\nIhr Wunschtermin ist leider nicht verfuegbar.\n\nIhr Fahrlehrer schlaegt vor:\n📅 {{ $('Lehrer-Antwort auswerten').item.json.alternativDatum }}\n🕐 {{ $('Lehrer-Antwort auswerten').item.json.alternativZeit }} Uhr\n\nPasst Ihnen das?\n✅ Antworten Sie mit JA\n❌ Antworten Sie mit NEIN\n\nIhre Fahrschule 🚗"
+      },
+      "id": "alternativ-to-schueler",
+      "name": "Schueler - Alternativtermin",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1140, 1000],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-lehrer",
+      "name": "Webhook Response Lehrer",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1360, 900]
+    }
+  ],
+  "connections": {
+    "Neue Buchung (Website/Chatbot)": {
+      "main": [
+        [
+          { "node": "Buchung normalisieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung per WhatsApp": {
+      "main": [
+        [
+          { "node": "Buchung normalisieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung normalisieren": {
+      "main": [
+        [
+          { "node": "Pflichtfelder pruefen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Pflichtfelder pruefen": {
+      "main": [
+        [
+          { "node": "Buchung in Sheet speichern", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung in Sheet speichern": {
+      "main": [
+        [
+          { "node": "Zustaendigen Fahrlehrer finden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Zustaendigen Fahrlehrer finden": {
+      "main": [
+        [
+          { "node": "Fahrlehrer per WhatsApp benachrichtigen", "type": "main", "index": 0 },
+          { "node": "Bestaetigung an Schueler", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer per WhatsApp benachrichtigen": {
+      "main": [
+        [
+          { "node": "API Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bestaetigung an Schueler": {
+      "main": [
+        [
+          { "node": "API Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer antwortet": {
+      "main": [
+        [
+          { "node": "Lehrer-Antwort auswerten", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Lehrer-Antwort auswerten": {
+      "main": [
+        [
+          { "node": "Bestaetigt oder Alternativ oder Abgelehnt", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bestaetigt oder Alternativ oder Abgelehnt": {
+      "main": [
+        [
+          { "node": "Buchung nachschlagen", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Buchung nachschlagen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung nachschlagen": {
+      "main": [
+        [
+          { "node": "Schueler - Termin bestaetigt", "type": "main", "index": 0 },
+          { "node": "Schueler - Alternativtermin", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler - Termin bestaetigt": {
+      "main": [
+        [
+          { "node": "Webhook Response Lehrer", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler - Alternativtermin": {
+      "main": [
+        [
+          { "node": "Webhook Response Lehrer", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Terminbuchung", "id": "6" }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "name": "Fahrschule Autopilot - TEST Minimal (Production)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "test-minimal",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-test",
+      "name": "Test Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "test-minimal"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Test-Daten normalisieren\nconst body = $input.first().json.body || $input.first().json;\n\nconst telefon = body.telefon || body.phone || '';\nconst nachricht = body.nachricht || body.message || 'Test erfolgreich! ✅';\nconst testId = 'TEST-' + Date.now().toString(36).toUpperCase();\n\nreturn [{\n  json: {\n    testId,\n    telefon,\n    nachricht,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "normalize-test",
+      "name": "Test-Daten normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-telefon",
+              "leftValue": "={{ $json.telefon }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "validate-test",
+      "name": "Telefon vorhanden?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"test\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": {\n    \"test_id\": \"{{ $json.testId }}\",\n    \"nachricht\": \"{{ $json.nachricht }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-test",
+      "name": "Test in Supabase loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=🧪 Fahrschule Autopilot - Systemtest\n\n✅ Test erfolgreich!\n🆔 {{ $json.testId }}\n⏰ {{ $json.timestamp }}\n\nAlle Systeme laufen einwandfrei:\n• Supabase ✅\n• WhatsApp ✅\n• n8n Workflows ✅\n\n{{ $json.nachricht }}"
+      },
+      "id": "send-test-wa",
+      "name": "Test-Nachricht senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1100, 300],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"test_fehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"test_id\": \"{{ $json.testId }}\",\n    \"fehler\": \"WhatsApp-Testnachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-test-error",
+      "name": "Fehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, 460]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"testId\": \"{{ $json.testId }}\", \"message\": \"Test erfolgreich - Nachricht gesendet\", \"timestamp\": \"{{ $json.timestamp }}\"}"
+      },
+      "id": "webhook-response",
+      "name": "Erfolg-Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1320, 300]
+    }
+  ],
+  "connections": {
+    "Test Webhook": {
+      "main": [
+        [
+          { "node": "Test-Daten normalisieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Test-Daten normalisieren": {
+      "main": [
+        [
+          { "node": "Telefon vorhanden?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Telefon vorhanden?": {
+      "main": [
+        [
+          { "node": "Test in Supabase loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Test in Supabase loggen": {
+      "main": [
+        [
+          { "node": "Test-Nachricht senden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Test-Nachricht senden": {
+      "main": [
+        [
+          { "node": "Erfolg-Response", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Fehler loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Test", "id": "15" },
+    { "name": "Production", "id": "21" }
+  ]
+}

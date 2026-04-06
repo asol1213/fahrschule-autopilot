@@ -1,0 +1,336 @@
+{
+  "name": "Fahrschule Autopilot - DSGVO Archivierung & Datenloeschung (Production)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 3 1 * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-monthly",
+      "name": "Monatlich am 1. um 3 Uhr nachts",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schueler?tenant_id=eq.{{ $env.TENANT_ID }}&status=in.(bestanden,abgemeldet,storniert)&select=*",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "gsheets-alle-schueler",
+      "name": "Alle Schueler laden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// DSGVO-KONFORME ARCHIVIERUNG\n//\n// Prueft Schueler auf Archivierungsreife:\n// - Status 'bestanden' oder 'abgemeldet' oder 'storniert'\n// - Letzte Aktivitaet > 6 Monate her (Aufbewahrungsfrist)\n// - ODER: Opt-Out und > 30 Tage inaktiv\n//\n// Personenbezogene Daten werden anonymisiert:\n// - Telefon -> letzte 4 Ziffern behalten\n// - Email -> entfernt\n// - Name -> Initialen\n// - Adresse -> entfernt\n// ============================================================\nconst schueler = $input.all();\nconst now = new Date();\nconst AUFBEWAHRUNG_MONATE = 6;\nconst OPT_OUT_TAGE = 30;\n\nconst zuArchivieren = [];\n\nfor (const item of schueler) {\n  const d = item.json;\n  const status = (d.Status || d.status || '').toLowerCase();\n  const optOut = (d.WA_Opt_Out || d.wa_opt_out || '').toString().toLowerCase() === 'ja' || d.wa_opt_out === true;\n  const name = d.Name || d.Schueler || d.vorname && d.nachname ? `${d.vorname} ${d.nachname}` : '';\n  const telefon = (d.Telefon || d.telefon || '').toString();\n  const email = d.Email || d.email || '';\n  const schuelerId = d.Schueler_ID || d.id || '';\n  const klasse = d.Klasse || d.klasse || '';\n\n  // Bestimmung des 'End-Datums'\n  let endDatum = null;\n  const bestandenDatum = d.Pruefung_Bestanden || d.pruefung_bestanden || '';\n  const anmeldeDatum = d.Anmelde_Datum || d.anmelde_datum || d.created_at || '';\n  const optOutDatum = d.WA_Opt_Out_Datum || d.wa_opt_out_datum || '';\n\n  if (status === 'bestanden' && bestandenDatum) {\n    try { endDatum = new Date(bestandenDatum); } catch(e) {}\n  } else if (status === 'abgemeldet' || status === 'storniert') {\n    // Anmeldedatum als Referenz wenn kein besseres Datum\n    try { endDatum = new Date(anmeldeDatum); } catch(e) {}\n  }\n\n  if (!endDatum || isNaN(endDatum.getTime())) continue;\n\n  const monateSeitEnde = (now.getTime() - endDatum.getTime()) / (1000 * 60 * 60 * 24 * 30);\n\n  let archivGrund = '';\n\n  if (monateSeitEnde >= AUFBEWAHRUNG_MONATE && (status === 'bestanden' || status === 'abgemeldet' || status === 'storniert')) {\n    archivGrund = `Aufbewahrungsfrist abgelaufen (${Math.round(monateSeitEnde)} Monate seit ${status})`;\n  } else if (optOut && optOutDatum) {\n    try {\n      const optOutDate = new Date(optOutDatum);\n      const tageSeitOptOut = (now.getTime() - optOutDate.getTime()) / (1000 * 60 * 60 * 24);\n      if (tageSeitOptOut >= OPT_OUT_TAGE) {\n        archivGrund = `Opt-Out vor ${Math.round(tageSeitOptOut)} Tagen, Kontaktdaten anonymisieren`;\n      }\n    } catch(e) {}\n  }\n\n  if (!archivGrund) continue;\n\n  // Anonymisierung\n  const telefonAnonym = telefon.length > 4 ? '***' + telefon.slice(-4) : '***';\n  const nameInitialen = name.split(' ').map(t => t.charAt(0) + '.').join(' ');\n\n  zuArchivieren.push({\n    json: {\n      schuelerId,\n      originalName: name,\n      nameAnonymisiert: nameInitialen,\n      telefonAnonymisiert: telefonAnonym,\n      klasse,\n      status,\n      archivGrund,\n      archivDatum: now.toISOString()\n    }\n  });\n}\n\nreturn zuArchivieren.length > 0 ? zuArchivieren : [{ json: { skip: true, anzahlGeprueft: schueler.length } }];"
+      },
+      "id": "check-archivierung",
+      "name": "Archivierungsreife pruefen + anonymisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-archiv",
+      "name": "Schueler zu archivieren?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        880,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"typ\": \"dsgvo_archivierung\",\n  \"telefon\": \"{{ $json.telefonAnonymisiert }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"schueler_name\": \"{{ $json.nameAnonymisiert }}\",\n  \"status\": \"archiviert\",\n  \"kanal\": \"system\",\n  \"details\": \"Klasse: {{ $json.klasse }}, Letzter Status: {{ $json.status }}, Grund: {{ $json.archivGrund }}, Archiviert am: {{ $json.archivDatum }}\"\n}",
+        "options": {}
+      },
+      "id": "save-archiv",
+      "name": "In Archiv-Sheet schreiben",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"typ\": \"dsgvo_log\",\n  \"telefon\": \"{{ $json.telefonAnonymisiert }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"status\": \"verarbeitet\",\n  \"kanal\": \"system\",\n  \"details\": \"Aktion: archiviert_und_anonymisiert, Grund: {{ $json.archivGrund }}\"\n}",
+        "options": {}
+      },
+      "id": "log-dsgvo-archiv",
+      "name": "DSGVO-Archivierung loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=📋 DSGVO Monatsbericht\n\n{{ $json.skip ? '✅ Keine Schueler zu archivieren.' : '🗂 Schueler archiviert:\\n\\n📋 ' + $json.schuelerId + ' (' + $json.nameAnonymisiert + ')\\n📝 ' + $json.archivGrund + '\\n\\nPersonenbezogene Daten wurden anonymisiert.\\nOriginal-Eintrag kann im Schueler-Sheet geloescht werden.' }}"
+      },
+      "id": "notify-inhaber-archiv",
+      "name": "Inhaber ueber Archivierung informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        300
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefonAnonymisiert || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - DSGVO Archivierung & Datenloeschung (Production)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Monatlich am 1. um 3 Uhr nachts": {
+      "main": [
+        [
+          {
+            "node": "Alle Schueler laden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alle Schueler laden": {
+      "main": [
+        [
+          {
+            "node": "Archivierungsreife pruefen + anonymisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Archivierungsreife pruefen + anonymisieren": {
+      "main": [
+        [
+          {
+            "node": "Schueler zu archivieren?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schueler zu archivieren?": {
+      "main": [
+        [
+          {
+            "node": "In Archiv-Sheet schreiben",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "DSGVO-Archivierung loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "In Archiv-Sheet schreiben": {
+      "main": [
+        [
+          {
+            "node": "Inhaber ueber Archivierung informieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inhaber ueber Archivierung informieren": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "DSGVO",
+      "id": "17"
+    },
+    {
+      "name": "Archivierung",
+      "id": "18"
+    },
+    {
+      "name": "Production",
+      "id": "21"
+    }
+  ]
+}

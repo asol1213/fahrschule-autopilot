@@ -1,0 +1,454 @@
+{
+  "name": "Fahrschule Autopilot - Pruefungserinnerungen (Production)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "trigger-pruefung",
+      "name": "Alle 15 Min pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/pruefungen?tenant_id=eq.{{ $env.TENANT_ID }}&status=eq.geplant&datum=gte.{{ $now.toISODate() }}&select=*,schueler:schueler_id(id,vorname,nachname,telefon,wa_opt_out)",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "load-pruefungen",
+      "name": "Pruefungen laden (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log?typ=in.(pruefung_erinnerung_24h,pruefung_erinnerung_2h)&tenant_id=eq.{{ $env.TENANT_ID }}&select=telefon,datum,uhrzeit,typ,created_at",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "load-log",
+      "name": "Bereits gesendete Erinnerungen laden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pruefungen verarbeiten und mit automation_log abgleichen\nconst pruefungen = $('Pruefungen laden (Production)').all();\nconst logItems = $('Bereits gesendete Erinnerungen laden').all();\n\n// Set von bereits gesendeten Erinnerungen\nconst gesendet = new Set();\nfor (const item of logItems) {\n  const d = item.json;\n  const key = `${d.telefon}_${d.datum}_${d.uhrzeit}_${d.typ}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of pruefungen) {\n  const data = item.json;\n  const schueler = data.schueler;\n\n  // Schueler-Daten pruefen\n  if (!schueler || !schueler.telefon || !schueler.vorname) continue;\n\n  // WhatsApp Opt-Out pruefen\n  if (schueler.wa_opt_out) continue;\n\n  const datum = data.datum;\n  const zeit = data.uhrzeit || data.zeit || '09:00';\n  const name = `${schueler.vorname} ${schueler.nachname}`;\n  const typ = data.typ || 'Theorie'; // Theorie oder Praxis\n  const pruefungsTypLabel = typ.charAt(0).toUpperCase() + typ.slice(1).toLowerCase();\n\n  // Telefonnummer bereinigen\n  let telefon = schueler.telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) {\n    telefon = '+49' + telefon.replace(/^0/, '');\n  }\n\n  if (!datum) continue;\n\n  // Pruefungs-Zeitpunkt berechnen\n  let pruefungDatum;\n  try {\n    if (datum.includes('.')) {\n      const parts = datum.split('.');\n      pruefungDatum = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}T${zeit}:00`);\n    } else {\n      pruefungDatum = new Date(`${datum}T${zeit}:00`);\n    }\n  } catch(e) {\n    continue;\n  }\n\n  if (isNaN(pruefungDatum.getTime())) continue;\n\n  // Stunden bis zur Pruefung\n  const stundenBis = (pruefungDatum.getTime() - now.getTime()) / (1000 * 60 * 60);\n\n  // 24h Erinnerung (23-25h vorher)\n  if (stundenBis >= 23 && stundenBis <= 25) {\n    const key = `${telefon}_${datum}_${zeit}_pruefung_erinnerung_24h`;\n    if (!gesendet.has(key)) {\n      const optionen = { weekday: 'long', day: 'numeric', month: 'long' };\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          schuelerId: schueler.id,\n          pruefungId: data.id,\n          pruefungsTyp: pruefungsTypLabel,\n          terminDatum: datum,\n          terminZeit: zeit,\n          terminDatumFormatiert: pruefungDatum.toLocaleDateString('de-DE', optionen),\n          terminZeitFormatiert: zeit,\n          erinnerungsTyp: '24h',\n          logTyp: 'pruefung_erinnerung_24h',\n          stundenBisPruefung: Math.round(stundenBis * 10) / 10\n        }\n      });\n    }\n  }\n\n  // 2h Erinnerung (1.5-2.5h vorher)\n  if (stundenBis >= 1.5 && stundenBis <= 2.5) {\n    const key = `${telefon}_${datum}_${zeit}_pruefung_erinnerung_2h`;\n    if (!gesendet.has(key)) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          schuelerId: schueler.id,\n          pruefungId: data.id,\n          pruefungsTyp: pruefungsTypLabel,\n          terminDatum: datum,\n          terminZeit: zeit,\n          terminDatumFormatiert: pruefungDatum.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),\n          terminZeitFormatiert: zeit,\n          erinnerungsTyp: '2h',\n          logTyp: 'pruefung_erinnerung_2h',\n          stundenBisPruefung: Math.round(stundenBis * 10) / 10\n        }\n      });\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-pruefungen",
+      "name": "Pruefungen verarbeiten + Duplikate filtern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-pruefung",
+      "name": "Nur gueltige Erinnerungen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-24h",
+              "leftValue": "={{ $json.erinnerungsTyp }}",
+              "rightValue": "24h",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-pruefung-type",
+      "name": "24h oder 2h",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1140,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! \n\nMorgen ist es soweit - Ihre {{ $json.pruefungsTyp }}-Pruefung steht an!\n\n{{ $json.pruefungsTyp }}-Pruefung\n{{ $json.terminDatumFormatiert }}\n{{ $json.terminZeitFormatiert }} Uhr\n\n{{ $json.pruefungsTyp === 'Theorie' ? 'Tipps fuer morgen:\\n- Gehen Sie heute Abend die Fragen nochmal durch\\n- Schlafen Sie ausreichend\\n- Lesen Sie jede Frage sorgfaeltig\\n- Personalausweis nicht vergessen!' : 'Tipps fuer morgen:\\n- Kommen Sie ausgeruht und puenktlich\\n- Festes Schuhwerk anziehen\\n- Brille nicht vergessen (falls noetig)\\n- Personalausweis mitbringen\\n- Ruhig und konzentriert fahren' }}\n\nWir druecken Ihnen die Daumen!\n\n---\nAntworten Sie STOPP um keine Nachrichten mehr zu erhalten."
+      },
+      "id": "twilio-pruefung-24h",
+      "name": "WhatsApp 24h Pruefungserinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        200
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}!\n\nIhre {{ $json.pruefungsTyp }}-Pruefung beginnt in 2 Stunden!\n\n{{ $json.terminZeitFormatiert }} Uhr\n\nViel Erfolg! Sie schaffen das!\n\n---\nAntworten Sie STOPP um keine Nachrichten mehr zu erhalten."
+      },
+      "id": "twilio-pruefung-2h",
+      "name": "WhatsApp 2h Pruefungserinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        400
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"typ\": \"{{ $json.logTyp }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon }}\",\n  \"datum\": \"{{ $json.terminDatum }}\",\n  \"uhrzeit\": \"{{ $json.terminZeit }}\",\n  \"schueler_name\": \"{{ $json.schuelerName }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"referenz_id\": \"{{ $json.pruefungId }}\",\n  \"referenz_typ\": \"pruefung\",\n  \"status\": \"gesendet\",\n  \"kanal\": \"whatsapp\",\n  \"details\": \"{{ $json.erinnerungsTyp }} Pruefungserinnerung ({{ $json.pruefungsTyp }}) gesendet\"\n}",
+        "options": {}
+      },
+      "id": "log-pruefung-gesendet",
+      "name": "In automation_log schreiben",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.WEBHOOK_NOTIFY_URL }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "=Pruefungserinnerung gesendet!\n{{ $json.schuelerName }}\n{{ $json.schuelerTelefon }}\n{{ $json.terminDatumFormatiert }} {{ $json.terminZeitFormatiert }}\n{{ $json.pruefungsTyp }}-Pruefung\n{{ $json.erinnerungsTyp }} Erinnerung"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "notify-pruefung-owner",
+      "name": "Fahrschulinhaber benachrichtigen (optional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        500
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon || $json.telefon || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - Pruefungserinnerungen (Production)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-pruefung-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Alle 15 Min pruefen": {
+      "main": [
+        [
+          {
+            "node": "Pruefungen laden (Production)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bereits gesendete Erinnerungen laden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pruefungen laden (Production)": {
+      "main": [
+        [
+          {
+            "node": "Pruefungen verarbeiten + Duplikate filtern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bereits gesendete Erinnerungen laden": {
+      "main": [
+        [
+          {
+            "node": "Pruefungen verarbeiten + Duplikate filtern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pruefungen verarbeiten + Duplikate filtern": {
+      "main": [
+        [
+          {
+            "node": "Nur gueltige Erinnerungen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur gueltige Erinnerungen": {
+      "main": [
+        [
+          {
+            "node": "24h oder 2h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "24h oder 2h": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp 24h Pruefungserinnerung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WhatsApp 2h Pruefungserinnerung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp 24h Pruefungserinnerung": {
+      "main": [
+        [
+          {
+            "node": "In automation_log schreiben",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fahrschulinhaber benachrichtigen (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp 2h Pruefungserinnerung": {
+      "main": [
+        [
+          {
+            "node": "In automation_log schreiben",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fahrschulinhaber benachrichtigen (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "Pruefungserinnerungen",
+      "id": "10"
+    },
+    {
+      "name": "Supabase",
+      "id": "4"
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+{
+  "name": "Fahrschule Autopilot - Empfehlung & Glueckwuensche (Production)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "trigger-pruefung",
+      "name": "Alle 2 Stunden pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/pruefungen?tenant_id=eq.{{ $env.TENANT_ID }}&select=*,schueler:schueler_id(id,vorname,nachname,telefon,wa_opt_out,klasse)",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "load-pruefungen",
+      "name": "Pruefungen laden (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log?typ=in.(pruefung_bestaetigung,glueckwuensche,empfehlung)&tenant_id=eq.{{ $env.TENANT_ID }}&select=telefon,typ,created_at",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "load-log",
+      "name": "Bereits gesendete Nachrichten laden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pruefungs-Nachrichten: Bestaetigung, Glueckwuensche, Empfehlung\nconst pruefungen = $('Pruefungen laden (Production)').all();\nconst logItems = $('Bereits gesendete Nachrichten laden').all();\n\nconst gesendet = new Set();\nfor (const item of logItems) {\n  const key = `${item.json.telefon}_${item.json.typ}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of pruefungen) {\n  const p = item.json;\n  const schueler = p.schueler;\n  if (!schueler || schueler.wa_opt_out) continue;\n\n  const name = `${schueler.vorname} ${schueler.nachname}`;\n  const telefon = schueler.telefon;\n  const klasse = schueler.klasse || 'B';\n  const pruefungDatum = p.datum || '';\n  const pruefungErgebnis = (p.ergebnis || '').toLowerCase();\n  const pruefungTyp = p.typ || 'Praktische Pruefung';\n\n  if (!telefon || !name) continue;\n\n  // Pruefungstermin-Bestaetigung (1-2 Tage vorher)\n  if (pruefungDatum && pruefungErgebnis !== 'bestanden') {\n    let pruefung;\n    try {\n      pruefung = new Date(pruefungDatum + 'T09:00:00');\n    } catch(e) { continue; }\n\n    if (!isNaN(pruefung.getTime())) {\n      const stundenBis = (pruefung.getTime() - now.getTime()) / (1000 * 60 * 60);\n\n      if (stundenBis >= 20 && stundenBis <= 48) {\n        const key = `${telefon}_pruefung_bestaetigung`;\n        if (!gesendet.has(key)) {\n          results.push({\n            json: {\n              schuelerName: name,\n              schuelerTelefon: telefon,\n              schuelerId: schueler.id,\n              typ: 'pruefung_bestaetigung',\n              pruefungDatum,\n              pruefungTyp,\n              klasse\n            }\n          });\n        }\n      }\n    }\n  }\n\n  // Glueckwuensche + Empfehlung (nach bestandener Pruefung)\n  if (pruefungErgebnis === 'bestanden') {\n    const bestandenDatum = p.bestanden_am || p.datum;\n    let bestanden;\n    try {\n      bestanden = new Date(bestandenDatum);\n    } catch(e) { continue; }\n\n    if (!isNaN(bestanden.getTime())) {\n      const stundenSeit = (now.getTime() - bestanden.getTime()) / (1000 * 60 * 60);\n\n      // Glueckwuensche: 2-8h nach Bestehen\n      if (stundenSeit >= 2 && stundenSeit <= 8) {\n        const key = `${telefon}_glueckwuensche`;\n        if (!gesendet.has(key)) {\n          results.push({\n            json: {\n              schuelerName: name,\n              schuelerTelefon: telefon,\n              schuelerId: schueler.id,\n              typ: 'glueckwuensche',\n              klasse\n            }\n          });\n        }\n      }\n\n      // Empfehlung: 3-7 Tage nach Bestehen\n      if (stundenSeit >= 72 && stundenSeit <= 168) {\n        const key = `${telefon}_empfehlung`;\n        if (!gesendet.has(key)) {\n          results.push({\n            json: {\n              schuelerName: name,\n              schuelerTelefon: telefon,\n              schuelerId: schueler.id,\n              typ: 'empfehlung',\n              klasse\n            }\n          });\n        }\n      }\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-pruefung",
+      "name": "Pruefungs-Nachrichten ermitteln",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-pruefung",
+      "name": "Nur gueltige Nachrichten",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": [
+            {
+              "leftValue": "={{ $json.typ }}",
+              "rightValue": "pruefung_bestaetigung",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "fallbackOutput": "extra",
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.typ }}",
+                    "rightValue": "pruefung_bestaetigung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.typ }}",
+                    "rightValue": "glueckwuensche",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.typ }}",
+                    "rightValue": "empfehlung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 2
+            }
+          ]
+        }
+      },
+      "id": "switch-typ",
+      "name": "Nachrichtentyp bestimmen",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1140,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 📋\n\nErinnerung: Ihre {{ $json.pruefungTyp }} (Klasse {{ $json.klasse }}) ist morgen!\n\n📅 {{ $json.pruefungDatum }}\n\n✅ Checkliste fuer morgen:\n• Personalausweis mitbringen\n• Brille nicht vergessen (falls noetig)\n• Frueh genug da sein (15 Min vorher)\n• Ausreichend geschlafen?\n• Fruehstueck nicht vergessen\n\n💡 Tipp: Gehen Sie heute Abend nochmal die wichtigsten Verkehrszeichen durch und schlafen Sie frueh!\n\nSie schaffen das! 💪🚗\n\nIhre {{ $env.FAHRSCHUL_NAME }}"
+      },
+      "id": "send-pruefung-bestaetigung",
+      "name": "Pruefungstermin-Bestaetigung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        140
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=🎉🎉🎉 HERZLICHEN GLUECKWUNSCH, {{ $json.schuelerName }}! 🎉🎉🎉\n\nSie haben die Pruefung bestanden! 🏆\n\nWillkommen im Club der Autofahrer! 🚗💨\n\nWir sind unglaublich stolz auf Sie und es war uns eine Freude, Sie auf diesem Weg zu begleiten.\n\nEin paar Tipps fuer die ersten Fahrten alleine:\n🔑 Fahren Sie anfangs bekannte Strecken\n🔑 Meiden Sie Rush-Hour in der ersten Woche\n🔑 Ueben Sie Einparken auf leeren Parkplaetzen\n\nFahren Sie vorsichtig und geniessen Sie die Freiheit! 🎊\n\nIhr Team von {{ $env.FAHRSCHUL_NAME }} 🚗"
+      },
+      "id": "send-glueckwuensche",
+      "name": "Glueckwuensche senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        320
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nWie laeuft es mit dem eigenen Auto? Wir hoffen, Sie geniessen die Freiheit! 🚗\n\nKleine Frage: Kennen Sie jemanden, der auch den Fuehrerschein machen moechte? 🤔\n\nFuer jede erfolgreiche Empfehlung gibt es von uns:\n🎁 50 EUR Gutschrift auf Ihre Rechnung\n   (oder fuer die empfohlene Person)\n\nEinfach Ihrem Bekannten sagen:\n\"Melde dich bei {{ $env.FAHRSCHUL_NAME }} an und sag, dass {{ $json.schuelerName }} dich empfohlen hat!\"\n\nOder leiten Sie einfach diese Nachricht weiter! 📲\n\nVielen Dank und allzeit gute Fahrt! 🙏\n\nIhre {{ $env.FAHRSCHUL_NAME }}"
+      },
+      "id": "send-empfehlung",
+      "name": "Empfehlungsnachricht senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        500
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon }}\",\n  \"typ\": \"{{ $json.typ }}\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": { \"klasse\": \"{{ $json.klasse }}\" }\n}",
+        "options": {}
+      },
+      "id": "log-supabase",
+      "name": "In Supabase loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon || $json.telefon || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - Empfehlung & Glueckwuensche (Production)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Alle 2 Stunden pruefen": {
+      "main": [
+        [
+          {
+            "node": "Pruefungen laden (Production)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bereits gesendete Nachrichten laden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pruefungen laden (Production)": {
+      "main": [
+        [
+          {
+            "node": "Pruefungs-Nachrichten ermitteln",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bereits gesendete Nachrichten laden": {
+      "main": [
+        [
+          {
+            "node": "Pruefungs-Nachrichten ermitteln",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pruefungs-Nachrichten ermitteln": {
+      "main": [
+        [
+          {
+            "node": "Nur gueltige Nachrichten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur gueltige Nachrichten": {
+      "main": [
+        [
+          {
+            "node": "Nachrichtentyp bestimmen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nachrichtentyp bestimmen": {
+      "main": [
+        [
+          {
+            "node": "Pruefungstermin-Bestaetigung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Glueckwuensche senden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Empfehlungsnachricht senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pruefungstermin-Bestaetigung": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Glueckwuensche senden": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Empfehlungsnachricht senden": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "Empfehlung",
+      "id": "9"
+    },
+    {
+      "name": "Pruefung",
+      "id": "10"
+    },
+    {
+      "name": "Supabase",
+      "id": "20"
+    }
+  ]
+}

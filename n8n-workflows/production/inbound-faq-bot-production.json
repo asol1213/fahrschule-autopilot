@@ -1,0 +1,1256 @@
+{
+  "name": "Fahrschule Autopilot - Inbound FAQ-Bot (AI WhatsApp, Supabase)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-inbound",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-inbound",
+      "name": "Eingehende WhatsApp-Nachricht",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "whatsapp-inbound"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =====================================================\n// ZENTRALER INBOUND-ROUTER\n// Klassifiziert jede eingehende WhatsApp-Nachricht\n// und leitet sie an den richtigen Sub-Flow weiter.\n// =====================================================\nconst body = $input.first().json.body || $input.first().json;\nconst messageBody = (body.Body || body.body || body.message || '').trim();\nconst from = (body.From || body.from || '').replace('whatsapp:', '').trim();\nconst mediaUrl = body.MediaUrl0 || body.mediaUrl || '';\nconst mediaType = body.MediaContentType0 || body.mediaType || '';\n\nconst upper = messageBody.toUpperCase().trim();\nconst lower = messageBody.toLowerCase().trim();\n\n// --- 0. DSGVO OPT-OUT (STOP) ---\nconst stopKeywords = ['STOP', 'STOPP', 'ABMELDEN', 'OPT-OUT', 'OPTOUT', 'KEINE NACHRICHTEN', 'ABBESTELLEN', 'UNSUBSCRIBE'];\nif (stopKeywords.some(kw => upper === kw || upper === kw + ' BITTE')) {\n  return [{ json: { kategorie: 'opt_out', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 1. ABSAGE ---\nif (upper === 'ABSAGE' || upper === 'CANCEL' || upper === 'STORNIEREN' || upper === 'NEIN ABSAGE') {\n  return [{ json: { kategorie: 'absage', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 2. TERMINVERSCHIEBUNG (NEU) ---\nconst verschiebungKeywords = [\n  'verschieben', 'verschiebung', 'umbuchen', 'umbuchung',\n  'anderen termin', 'anderen tag', 'andere uhrzeit', 'andere zeit',\n  'neuer termin', 'neues datum', 'klappt leider nicht', 'kann leider nicht',\n  'passt nicht', 'nicht moeglich', 'verhindert'\n];\nconst isVerschiebung = verschiebungKeywords.some(kw => lower.includes(kw))\n  || upper.startsWith('VERSCHIEBEN')\n  || upper.startsWith('UMBUCHEN');\nif (isVerschiebung) {\n  return [{ json: { kategorie: 'verschiebung', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 3. BEWERTUNG (1-5 Sterne) ---\nconst bewertung = parseInt(messageBody);\nif (bewertung >= 1 && bewertung <= 5 && messageBody.trim().length === 1) {\n  return [{ json: { kategorie: 'bewertung', from, messageBody, bewertung, mediaUrl, mediaType } }];\n}\n\n// --- 4. BUCHUNGSBESTAETIGUNG ---\nif (upper === 'JA' || upper === 'OK' || upper === 'BESTAETIGEN' || upper === 'BESTÄTIGEN' || upper === 'YES') {\n  return [{ json: { kategorie: 'bestaetigung', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 5. DOKUMENT (Medien) ---\nif (mediaUrl || (mediaType && (\n  mediaType.includes('image') ||\n  mediaType.includes('pdf') ||\n  mediaType.includes('document') ||\n  mediaType.includes('application')\n))) {\n  return [{ json: { kategorie: 'dokument', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 6. BESCHWERDE ---\nconst beschwerdeKeywords = [\n  'beschwerde', 'unzufrieden', 'aerger', 'ärger', 'reklamation',\n  'wuetend', 'wütend', 'enttaeuscht', 'enttäuscht',\n  'katastrophe', 'frechheit', 'anwalt', 'rechtsanwalt',\n  'skandal', 'unmoeglich', 'unmöglich', 'zumutung', 'schande'\n];\nif (beschwerdeKeywords.some(kw => lower.includes(kw))) {\n  return [{ json: { kategorie: 'beschwerde', from, messageBody, mediaUrl, mediaType } }];\n}\n\n// --- 7. ALLES ANDERE → FAQ-BOT ---\nreturn [{ json: { kategorie: 'faq', from, messageBody, mediaUrl, mediaType } }];"
+      },
+      "id": "classify-message",
+      "name": "Nachricht klassifizieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": []
+        },
+        "fallbackOutput": "extra",
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "faq",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "absage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "dokument",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 2
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "beschwerde",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 3
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "verschiebung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 4
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "opt_out",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 5
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "bewertung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 6
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "bestaetigung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 7
+            }
+          ]
+        }
+      },
+      "id": "switch-kategorie",
+      "name": "Nach Kategorie routen",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/kommunikation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.from }}\",\n  \"kanal\": \"whatsapp\",\n  \"richtung\": \"eingehend\",\n  \"nachricht\": {{ JSON.stringify($json.messageBody) }},\n  \"kategorie\": \"{{ $json.kategorie }}\",\n  \"media_url\": \"{{ $json.mediaUrl || '' }}\",\n  \"media_typ\": \"{{ $json.mediaType || '' }}\",\n  \"erstellt_am\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "log-alle-nachrichten",
+      "name": "Alle Nachrichten loggen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        540
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schueler?telefon=eq.{{ $json.from }}&tenant_id=eq.{{ $env.TENANT_ID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"wa_opt_out\": true,\n  \"wa_opt_out_datum\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "set-opt-out",
+      "name": "DSGVO Opt-Out im CRM setzen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        1060
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "Sie wurden erfolgreich abgemeldet. ✅\n\nSie erhalten ab sofort keine WhatsApp-Nachrichten mehr von uns.\n\nFalls Sie sich umentscheiden, antworten Sie einfach mit START oder melden Sie sich im Buero.\n\nIhre Fahrschule"
+      },
+      "id": "confirm-opt-out",
+      "name": "Opt-Out Bestaetigung senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        1060
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"typ\": \"opt_out\",\n  \"telefon\": \"{{ $('Nachricht klassifizieren').first().json.from }}\",\n  \"nachricht\": {{ JSON.stringify($('Nachricht klassifizieren').first().json.messageBody) }},\n  \"kanal\": \"whatsapp\",\n  \"created_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "log-dsgvo",
+      "name": "DSGVO-Aktion loggen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        1060
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-opus-4-5\",\n  \"max_tokens\": 600,\n  \"system\": \"Du bist der freundliche WhatsApp-Assistent der Fahrschule {{ $env.FAHRSCHUL_NAME }}. Antworte auf Deutsch, kurz und praegnant (max 3-4 Saetze). Nutze Emojis nur sehr sparsam.\\n\\nWichtige Infos ueber uns:\\n- Name: {{ $env.FAHRSCHUL_NAME }}\\n- Adresse: {{ $env.FAHRSCHUL_ADRESSE || 'Bitte im Buero erfragen' }}\\n- Telefon: {{ $env.FAHRSCHUL_TELEFON || 'Bitte im Buero erfragen' }}\\n- Oeffnungszeiten: {{ $env.OEFFNUNGSZEITEN || 'Mo-Fr 9-18 Uhr, Sa 9-13 Uhr' }}\\n- Fuehrerschein Klasse B: {{ $env.KOSTEN_KLASSE_B || 'ca. 2.500-3.500 EUR (abhaengig von benotigten Stunden)' }}\\n- Theorie-Unterricht: {{ $env.THEORIE_ZEITEN || '2x woechentlich abends' }}\\n- Theorie-Pruefung: 30 Fragen, maximal 10 Fehlerpunkte erlaubt\\n- Benoetigte Unterlagen: Sehtest (max. 2 Jahre alt), Erste-Hilfe-Kurs, biometrisches Passfoto, Personalausweis\\n- Online Theorie-Trainer: {{ $env.WEBSITE_URL }}/theorie\\n- Website: {{ $env.WEBSITE_URL }}\\n\\nRegeln:\\n- Bei Fragen zu Terminen oder Buchungen: Bitte im Buero anrufen oder auf der Website buchen.\\n- Wenn du etwas nicht sicher weisst: Sage das ehrlich und verweise aufs Buero.\\n- Erfinde NIEMALS Informationen.\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.messageBody.replace(/\\\"/g, '\\\\\\\"').replace(/\\n/g, ' ') }}\"\n    }\n  ]\n}"
+      },
+      "id": "claude-faq",
+      "name": "Claude AI Antwort generieren",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        100
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Claude-Antwort extrahieren + Fallback bei Fehler\nconst response = $input.first().json;\nconst from = $('Nachricht klassifizieren').first().json.from;\nconst originalMessage = $('Nachricht klassifizieren').first().json.messageBody;\nlet antwort = '';\n\ntry {\n  if (response.content && response.content[0] && response.content[0].text) {\n    antwort = response.content[0].text.trim();\n  } else if (response.error) {\n    // API-Fehler\n    antwort = 'Entschuldigung, ich kann Ihre Frage gerade nicht beantworten. Bitte rufen Sie uns an oder schreiben Sie uns eine E-Mail.';\n  }\n} catch(e) {\n  antwort = 'Entschuldigung, ich konnte Ihre Frage gerade nicht verarbeiten. Bitte versuchen Sie es spaeter erneut.';\n}\n\nif (!antwort) {\n  antwort = 'Vielen Dank fuer Ihre Nachricht! Fuer eine genaue Antwort wenden Sie sich bitte direkt an uns: ' + ($env.FAHRSCHUL_TELEFON || 'Buero');\n}\n\n// WhatsApp-Limit: 4.096 Zeichen\nif (antwort.length > 1500) {\n  antwort = antwort.substring(0, 1497) + '...';\n}\n\nreturn [{ json: { antwort, from, originalMessage } }];"
+      },
+      "id": "parse-claude",
+      "name": "AI-Antwort aufbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "={{ $json.antwort }}"
+      },
+      "id": "send-faq-answer",
+      "name": "FAQ-Antwort senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        100
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_WEBHOOK_BASE_URL }}/webhook/termin-absage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefon",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "nachricht",
+              "value": "={{ $json.messageBody }}"
+            },
+            {
+              "name": "quelle",
+              "value": "whatsapp_antwort"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "forward-absage",
+      "name": "Absage an Wartelisten-Workflow weiterleiten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        280
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "=Ihre Absage wurde registriert. ✅\n\nWir haben Ihren Fahrlehrer informiert. Falls Sie einen neuen Termin buchen moechten, antworten Sie einfach mit UMBUCHEN oder melden Sie sich direkt bei uns.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "confirm-absage-schueler",
+      "name": "Absage-Bestaetigung an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        280
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "=Kein Problem! 📅\n\nSie moechten Ihren Termin verschieben. Bitte nennen Sie uns:\n\n1️⃣ Ihren gewuenschten neuen Tag (z.B. \"Dienstag 15.04\")\n2️⃣ Ihre gewuenschte Uhrzeit (z.B. \"14:00 oder 15:00 Uhr\")\n\nWir geben Ihr Wunschdatum an Ihren Fahrlehrer weiter und melden uns dann.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "ask-neue-zeit",
+      "name": "Neuen Wunschtermin anfragen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        920,
+        460
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRLEHRER_TELEFON }}",
+        "body": "=📅 Terminverschiebung angefragt!\n\n📱 Von: {{ $json.from }}\n💬 Nachricht: \"{{ $json.messageBody }}\"\n\nDer Schueler wurde gebeten, seinen Wunschtermin mitzuteilen. Bitte beobachten Sie eingehende Nachrichten von dieser Nummer."
+      },
+      "id": "notify-lehrer-verschiebung",
+      "name": "Fahrlehrer ueber Verschiebung informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        460
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/verschiebungen",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $('Nachricht klassifizieren').first().json.from }}\",\n  \"nachricht\": {{ JSON.stringify($('Nachricht klassifizieren').first().json.messageBody) }},\n  \"gemeldet_am\": \"{{ $now.toISO() }}\",\n  \"status\": \"warte_auf_wunschtermin\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "log-verschiebung",
+      "name": "Verschiebung loggen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        460
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn [{\n  json: {\n    from: data.from,\n    mediaUrl: data.mediaUrl,\n    mediaType: data.mediaType,\n    nachricht: data.messageBody || 'Dokument ohne Begleittext'\n  }\n}];"
+      },
+      "id": "process-dokument",
+      "name": "Dokument verarbeiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "=Vielen Dank! 📎 Wir haben Ihr Dokument erhalten und werden es pruefen.\n\nSie bekommen eine Bestaetigung, sobald es in Ihrer Akte vermerkt wurde.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "confirm-dokument",
+      "name": "Dokument-Empfang bestaetigen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        600
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=📎 Dokument empfangen!\n\n📱 Von: {{ $json.from }}\n📄 Typ: {{ $json.mediaType || 'unbekannt' }}\n🔗 URL: {{ $json.mediaUrl || 'kein Link' }}\n💬 {{ $json.nachricht }}\n\nBitte CRM-Akte pruefen und Status aktualisieren."
+      },
+      "id": "notify-inhaber-dokument",
+      "name": "Inhaber ueber Dokument informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        720
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/kommunikation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.from }}\",\n  \"kanal\": \"whatsapp\",\n  \"richtung\": \"eingehend\",\n  \"kategorie\": \"dokument\",\n  \"nachricht\": {{ JSON.stringify($json.nachricht) }},\n  \"media_url\": \"{{ $json.mediaUrl || '' }}\",\n  \"media_typ\": \"{{ $json.mediaType || '' }}\",\n  \"erstellt_am\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "log-dokument",
+      "name": "Dokument in Kommunikation loggen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        660
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=🔴 BESCHWERDE eingegangen!\n\n📱 Von: {{ $json.from }}\n💬 \"{{ $json.messageBody }}\"\n🕐 {{ $now.toLocaleString('de-DE') }}\n\nBitte SOFORT persoenlich zurueckrufen!"
+      },
+      "id": "escalate-beschwerde",
+      "name": "Beschwerde an Inhaber eskalieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        920,
+        860
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "Vielen Dank fuer Ihre Nachricht. Wir nehmen Ihr Anliegen sehr ernst und unser Inhaber wird sich persoenlich bei Ihnen melden. 🙏"
+      },
+      "id": "reply-beschwerde",
+      "name": "Beschwerde-Eingang bestaetigen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        900
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/beschwerden",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $('Nachricht klassifizieren').first().json.from }}\",\n  \"nachricht\": {{ JSON.stringify($('Nachricht klassifizieren').first().json.messageBody) }},\n  \"eingegangen_am\": \"{{ $now.toISO() }}\",\n  \"status\": \"eskaliert_an_inhaber\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "log-beschwerde",
+      "name": "Beschwerde loggen (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        860
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_WEBHOOK_BASE_URL }}/webhook/feedback-sammeln",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefon",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "bewertung",
+              "value": "={{ $json.bewertung }}"
+            },
+            {
+              "name": "nachricht",
+              "value": "={{ $json.messageBody }}"
+            },
+            {
+              "name": "quelle",
+              "value": "whatsapp_antwort"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "forward-bewertung",
+      "name": "Bewertung an Feedback-Workflow weiterleiten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        1220
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_WEBHOOK_BASE_URL }}/webhook/buchung-bestaetigung",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefon",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "nachricht",
+              "value": "={{ $json.messageBody }}"
+            },
+            {
+              "name": "quelle",
+              "value": "whatsapp_antwort"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "forward-bestaetigung",
+      "name": "Bestaetigung an Buchungs-Workflow weiterleiten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        1380
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-inbound",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon || $json.telefon || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - Inbound FAQ-Bot (AI WhatsApp, Supabase)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Eingehende WhatsApp-Nachricht": {
+      "main": [
+        [
+          {
+            "node": "Nachricht klassifizieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nachricht klassifizieren": {
+      "main": [
+        [
+          {
+            "node": "Nach Kategorie routen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alle Nachrichten loggen (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nach Kategorie routen": {
+      "main": [
+        [
+          {
+            "node": "Claude AI Antwort generieren",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Absage an Wartelisten-Workflow weiterleiten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dokument verarbeiten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Beschwerde an Inhaber eskalieren",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Neuen Wunschtermin anfragen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DSGVO Opt-Out im CRM setzen (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bewertung an Feedback-Workflow weiterleiten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bestaetigung an Buchungs-Workflow weiterleiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DSGVO Opt-Out im CRM setzen (Production)": {
+      "main": [
+        [
+          {
+            "node": "Opt-Out Bestaetigung senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Opt-Out Bestaetigung senden": {
+      "main": [
+        [
+          {
+            "node": "DSGVO-Aktion loggen (Production)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude AI Antwort generieren": {
+      "main": [
+        [
+          {
+            "node": "AI-Antwort aufbereiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI-Antwort aufbereiten": {
+      "main": [
+        [
+          {
+            "node": "FAQ-Antwort senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ-Antwort senden": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Absage an Wartelisten-Workflow weiterleiten": {
+      "main": [
+        [
+          {
+            "node": "Absage-Bestaetigung an Schueler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Absage-Bestaetigung an Schueler": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neuen Wunschtermin anfragen": {
+      "main": [
+        [
+          {
+            "node": "Fahrlehrer ueber Verschiebung informieren",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Verschiebung loggen (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fahrlehrer ueber Verschiebung informieren": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dokument verarbeiten": {
+      "main": [
+        [
+          {
+            "node": "Dokument-Empfang bestaetigen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Inhaber ueber Dokument informieren",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Dokument in Kommunikation loggen (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dokument-Empfang bestaetigen": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beschwerde an Inhaber eskalieren": {
+      "main": [
+        [
+          {
+            "node": "Beschwerde-Eingang bestaetigen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Beschwerde loggen (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beschwerde-Eingang bestaetigen": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bewertung an Feedback-Workflow weiterleiten": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bestaetigung an Buchungs-Workflow weiterleiten": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inhaber ueber Dokument informieren": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "FAQ-Bot",
+      "id": "13"
+    },
+    {
+      "name": "Inbound",
+      "id": "14"
+    },
+    {
+      "name": "Twilio",
+      "id": "3"
+    },
+    {
+      "name": "Supabase",
+      "id": "20"
+    }
+  ]
+}

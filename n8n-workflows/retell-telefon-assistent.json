@@ -1,0 +1,526 @@
+{
+  "name": "Fahrschule Autopilot - Telefon-Assistent (Retell.ai)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "retell-events",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-retell",
+      "name": "Retell Webhook Empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 400],
+      "webhookId": "retell-events"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, received: $json.type }) }}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Webhook Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [440, 400]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "call_started",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": "Call Started"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "call_ended",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": "Call Ended"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "call_analyzed",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": "Call Analyzed"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "event-router",
+      "name": "Event-Typ Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [660, 400]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Anrufe",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call_ID": "={{ $json.callId }}",
+            "Status": "gestartet",
+            "Anrufer_Nummer": "={{ $json.callerNumber }}",
+            "Richtung": "={{ $json.direction }}",
+            "Gestartet_Um": "={{ $json.timestamp }}",
+            "Agent_ID": "={{ $json.agentId }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-call-started",
+      "name": "Anruf in Sheet loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [920, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Anrufe",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call_ID": "={{ $json.callId }}",
+            "Status": "beendet",
+            "Dauer_Sekunden": "={{ $json.duration }}",
+            "Dauer_Formatiert": "={{ $json.durationFormatted }}",
+            "Transkription": "={{ $json.transcript }}",
+            "Recording_URL": "={{ $json.recordingUrl }}",
+            "Trennungsgrund": "={{ $json.disconnectionReason }}",
+            "Beendet_Um": "={{ $json.timestamp }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-call-ended",
+      "name": "Anruf-Ende loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [920, 400],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Anrufe",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call_ID": "={{ $json.callId }}",
+            "Status": "analysiert",
+            "Zusammenfassung": "={{ $json.summary }}",
+            "Stimmung": "={{ $json.sentiment }}",
+            "Intent": "={{ $json.intent }}",
+            "Anrufer_Name": "={{ $json.callerName }}",
+            "Anrufer_Telefon": "={{ $json.callerPhone }}",
+            "Anrufer_Email": "={{ $json.callerEmail }}",
+            "Fuehrerscheinklasse": "={{ $json.licenseClass }}",
+            "Bevorzugte_Zeit": "={{ $json.preferredTime }}",
+            "Dringlichkeit": "={{ $json.urgency }}",
+            "Braucht_FollowUp": "={{ $json.needsFollowUp }}",
+            "Braucht_Review": "={{ $json.needsHumanReview }}",
+            "Ist_Neuer_Lead": "={{ $json.isNewLead }}",
+            "Analysiert_Um": "={{ $json.timestamp }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-call-analyzed",
+      "name": "Analyse in Sheet loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [920, 600],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.isNewLead }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-new-leads",
+      "name": "Nur neue Leads",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1140, 500]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.callerName }}",
+            "Telefon": "={{ $json.callerPhone }}",
+            "Email": "={{ $json.callerEmail }}",
+            "Quelle": "Telefon-Assistent",
+            "Intent": "={{ $json.intent }}",
+            "Fuehrerscheinklasse": "={{ $json.licenseClass }}",
+            "Bevorzugte_Zeit": "={{ $json.preferredTime }}",
+            "Dringlichkeit": "={{ $json.urgency }}",
+            "Stimmung": "={{ $json.sentiment }}",
+            "Zusammenfassung": "={{ $json.summary }}",
+            "Call_ID": "={{ $json.callId }}",
+            "Erstellt_Am": "={{ $json.timestamp }}",
+            "Status": "neu",
+            "FollowUp_Gesendet": "nein"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-new-lead",
+      "name": "Neuen Lead anlegen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1360, 500],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.needsFollowUp }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            },
+            {
+              "leftValue": "={{ $json.callerPhone }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEquals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-followup",
+      "name": "Braucht Follow-Up?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1140, 700]
+    },
+    {
+      "parameters": {
+        "jsCode": "// WhatsApp Follow-Up Nachricht basierend auf Intent generieren\nconst data = $input.first().json;\nlet message = '';\nconst name = data.callerName ? ` ${data.callerName}` : '';\nconst fahrschulName = $env.FAHRSCHUL_NAME || 'Ihre Fahrschule';\nconst websiteUrl = $env.WEBSITE_URL || '';\n\nswitch (data.intent) {\n  case 'anmeldung':\n    message = `Hallo${name}, vielen Dank fuer Ihren Anruf! 🚗\\n\\nSie koennen sich direkt online anmelden --- das dauert nur 3 Minuten:\\n${websiteUrl}/anmeldung\\n\\nBei Fragen sind wir jederzeit erreichbar.\\n\\nIhr Team von ${fahrschulName}`;\n    break;\n  case 'termin':\n    message = `Hallo${name}, danke fuer Ihren Anruf! 📅\\n\\nUnser Buero meldet sich innerhalb von 24 Stunden bei Ihnen, um einen Termin zu vereinbaren.\\n\\nAlternativ: ${websiteUrl}/anmeldung\\n\\nIhr Team von ${fahrschulName}`;\n    break;\n  case 'beschwerde':\n    message = `Hallo${name}, vielen Dank fuer Ihr Feedback.\\n\\nWir nehmen Ihr Anliegen sehr ernst und ein Mitarbeiter wird sich persoenlich bei Ihnen melden.\\n\\nIhr Team von ${fahrschulName}`;\n    break;\n  default:\n    message = `Hallo${name}, vielen Dank fuer Ihren Anruf bei ${fahrschulName}! 🚗\\n\\nFalls Sie weitere Fragen haben, erreichen Sie uns jederzeit telefonisch oder ueber unsere Website:\\n${websiteUrl}\\n\\nIhr Team von ${fahrschulName}`;\n}\n\n// Telefonnummer fuer Twilio formatieren\nlet recipientPhone = (data.callerPhone || '').toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\nif (recipientPhone && !recipientPhone.startsWith('+')) {\n  recipientPhone = '+49' + recipientPhone.replace(/^0/, '');\n}\n\nreturn [{\n  json: {\n    ...data,\n    whatsappMessage: message,\n    recipientPhone\n  }\n}];"
+      },
+      "id": "generate-followup-msg",
+      "name": "Follow-Up Nachricht generieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1360, 700]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.recipientPhone }}",
+        "body": "={{ $json.whatsappMessage }}"
+      },
+      "id": "whatsapp-followup",
+      "name": "WhatsApp Follow-Up senden (Twilio)",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1580, 700],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.needsHumanReview }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-human-review",
+      "name": "Braucht menschliche Pruefung?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1140, 900]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=⚠️ ACHTUNG: Anruf braucht Nachbearbeitung!\n\n📱 Anrufer: {{ $json.callerName }} ({{ $json.callerPhone }})\n😊 Stimmung: {{ $json.sentiment }}\n🎯 Intent: {{ $json.intent }}\n📝 Zusammenfassung: {{ $json.summary }}\n\nBitte zurueckrufen!"
+      },
+      "id": "notify-owner",
+      "name": "Inhaber per WhatsApp benachrichtigen (Twilio)",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1360, 900],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Analytics_Telefon",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Datum": "={{ new Date().toISOString().split('T')[0] }}",
+            "Call_ID": "={{ $json.callId }}",
+            "Dauer_Sekunden": "={{ $json.duration }}",
+            "Intent": "={{ $json.intent }}",
+            "Stimmung": "={{ $json.sentiment }}",
+            "Ist_Lead": "={{ $json.isNewLead }}",
+            "FollowUp_Noetig": "={{ $json.needsFollowUp }}",
+            "Fuehrerscheinklasse": "={{ $json.licenseClass }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-analytics",
+      "name": "Analytics loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1140, 1100],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Fehler_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Datum": "={{ new Date().toISOString() }}",
+            "Typ": "whatsapp_followup_fehlgeschlagen",
+            "Empfaenger": "={{ $json.recipientPhone || $json.callerPhone || 'unbekannt' }}",
+            "Nachricht": "={{ $json.whatsappMessage || 'N/A' }}",
+            "Fehler": "={{ $json.error || JSON.stringify($json) }}",
+            "Call_ID": "={{ $json.callId || 'unbekannt' }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "gsheets-error-log",
+      "name": "Fehler loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1800, 700],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Retell Webhook Empfangen": {
+      "main": [
+        [
+          { "node": "Webhook Antwort", "type": "main", "index": 0 },
+          { "node": "Event-Typ Router", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Event-Typ Router": {
+      "main": [
+        [{ "node": "Anruf in Sheet loggen", "type": "main", "index": 0 }],
+        [{ "node": "Anruf-Ende loggen", "type": "main", "index": 0 }],
+        [
+          { "node": "Analyse in Sheet loggen", "type": "main", "index": 0 },
+          { "node": "Nur neue Leads", "type": "main", "index": 0 },
+          { "node": "Braucht Follow-Up?", "type": "main", "index": 0 },
+          { "node": "Braucht menschliche Pruefung?", "type": "main", "index": 0 },
+          { "node": "Analytics loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Nur neue Leads": {
+      "main": [
+        [{ "node": "Neuen Lead anlegen", "type": "main", "index": 0 }]
+      ]
+    },
+    "Braucht Follow-Up?": {
+      "main": [
+        [{ "node": "Follow-Up Nachricht generieren", "type": "main", "index": 0 }]
+      ]
+    },
+    "Follow-Up Nachricht generieren": {
+      "main": [
+        [{ "node": "WhatsApp Follow-Up senden", "type": "main", "index": 0 }]
+      ]
+    },
+    "WhatsApp Follow-Up senden": {
+      "main": [
+        [{ "node": "Fehler loggen", "type": "main", "index": 0 }]
+      ]
+    },
+    "Braucht menschliche Pruefung?": {
+      "main": [
+        [{ "node": "Inhaber benachrichtigen", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "agent-2-telefon" },
+    { "name": "retell" },
+    { "name": "live" }
+  ],
+  "triggerCount": 1,
+  "pinData": {}
+}

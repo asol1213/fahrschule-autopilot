@@ -1,0 +1,198 @@
+{
+  "name": "Fahrschule Autopilot - Ultimate V2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "name": "Jede Minute checken",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1LzHyPiEZAUhyXU-IKLus5tdzRUedz_KxfE085tp4zL0"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Termine"
+        },
+        "options": {}
+      },
+      "name": "Termine laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "r1JtS2lrcKPlMcGT",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const termine = $input.all();\nconst now = new Date();\nconst toSend = [];\n\n// CET/CEST timezone offset berechnen\nfunction getCETOffset(date) {\n  const y = date.getUTCFullYear();\n  // Letzter Sonntag im Maerz (DST start)\n  const mar = new Date(Date.UTC(y, 2, 31));\n  const dstStart = new Date(Date.UTC(y, 2, 31 - mar.getUTCDay(), 1, 0, 0));\n  // Letzter Sonntag im Oktober (DST end)\n  const oct = new Date(Date.UTC(y, 9, 31));\n  const dstEnd = new Date(Date.UTC(y, 9, 31 - oct.getUTCDay(), 1, 0, 0));\n  return (date >= dstStart && date < dstEnd) ? 2 : 1;\n}\nconst tzOffset = getCETOffset(now);\nconst tzSuffix = '+0' + tzOffset + ':00';\n\nfor (const item of termine) {\n  const d = item.json;\n  if (!d.Termin_Datum || !d.Termin_Uhrzeit || !d.Telefon) continue;\n  const status = (d.Status || '').toLowerCase();\n  if (status === 'abgesagt' || status === 'verschoben') continue;\n  const terminDate = new Date(d.Termin_Datum + 'T' + d.Termin_Uhrzeit + ':00' + tzSuffix);\n  const diffMs = terminDate - now;\n  const diffH = diffMs / (1000 * 60 * 60);\n  const diffDays = diffH / 24;\n  const uhrzeit = d.Termin_Uhrzeit;\n  const name = (d.Fahrschueler_Name || '').split(' ')[0];\n  const typ = d.Termin_Typ || 'Termin';\n  const rowNum = d.row_number;\n  const isPruefung = typ.toLowerCase().includes('pru');\n  const typLabels = {'Fahrstunde':'Fahrstunde','Theorie':'Theoriestunde','Pruefung_Theorie':'Theoriepruefung','Pruefung_Praktisch':'Praktische Pruefung','Autobahn':'Autobahnfahrt','Nachtfahrt':'Nachtfahrt'};\n  const typLabel = typLabels[typ] || typ;\n\n  if (isPruefung && diffDays > 6.5 && diffDays < 7.5 && d.Erinnerung_1w !== 'ja') {\n    const tipp = typ.toLowerCase().includes('theorie') ? 'Geh nochmal alle Pruefungsboegen durch.' : 'Uebe nochmal das Einparken und die Grundfahraufgaben.';\n    toSend.push({ json: { number: d.Telefon, message: 'Hallo ' + name + '! In genau einer Woche ist deine ' + typLabel + '! Termin: ' + d.Termin_Datum + ' um ' + uhrzeit + ' Uhr. Tipp: ' + tipp + ' Du schaffst das!', updateCell: 'Termine!J' + rowNum, logTyp: 'Erinnerung_1w', logName: d.Fahrschueler_Name }});\n  }\n\n  if (status === 'bestaetigt' && diffH > 47 && diffH < 49 && d.Erinnerung_48h !== 'ja') {\n    toSend.push({ json: { number: d.Telefon, message: 'Hallo ' + name + '! Erinnerung: Uebermorgen am ' + d.Termin_Datum + ' um ' + uhrzeit + ' Uhr hast du ' + typLabel + '. Bitte beachte: Absagen sind nur bis 48h vorher kostenlos moeglich. Kannst du den Termin wahrnehmen?', updateCell: 'Termine!K' + rowNum, logTyp: 'Erinnerung_48h', logName: d.Fahrschueler_Name }});\n  }\n\n  if (status === 'bestaetigt' && diffH > 23 && diffH < 25 && d.Erinnerung_24h !== 'ja') {\n    let extra = isPruefung ? ' Vergiss nicht: Personalausweis mitnehmen!' : '';\n    toSend.push({ json: { number: d.Telefon, message: 'Hallo ' + name + '! Erinnerung: Morgen um ' + uhrzeit + ' Uhr hast du ' + typLabel + '. Bitte sei 5 Minuten vorher da.' + extra + ' Falls du nicht kannst, sag bitte JETZT Bescheid!', updateCell: 'Termine!L' + rowNum, logTyp: 'Erinnerung_24h', logName: d.Fahrschueler_Name }});\n  }\n\n  if (status === 'bestaetigt' && diffH > 1.5 && diffH < 2.5 && d.Erinnerung_2h !== 'ja') {\n    const kurz = isPruefung ? 'Bleib ruhig und konzentriert. Du bist gut vorbereitet!' : 'Bis gleich!';\n    toSend.push({ json: { number: d.Telefon, message: 'Hi ' + name + '! In 2 Stunden gehts los: ' + typLabel + ' um ' + uhrzeit + ' Uhr. ' + kurz, updateCell: 'Termine!M' + rowNum, logTyp: 'Erinnerung_2h', logName: d.Fahrschueler_Name }});\n  }\n\n  const dauerMin = parseInt(d.Termin_Dauer_Min) || 90;\n  const terminEnde = new Date(terminDate.getTime() + dauerMin * 60000);\n  const nachDiffH = (now - terminEnde) / (1000 * 60 * 60);\n  if (status === 'abgeschlossen' && nachDiffH > 1.5 && nachDiffH < 3 && d.Nachbereitung_gesendet !== 'ja') {\n    if (isPruefung && d.Pruefung_Ergebnis === 'bestanden') {\n      toSend.push({ json: { number: d.Telefon, message: 'HERZLICHEN GLUECKWUNSCH ' + name + '! Du hast deine ' + typLabel + ' BESTANDEN! Wir sind mega stolz auf dich!', updateCell: 'Termine!N' + rowNum, logTyp: 'Pruefung_Bestanden', logName: d.Fahrschueler_Name }});\n    } else if (isPruefung && d.Pruefung_Ergebnis === 'nicht_bestanden') {\n      toSend.push({ json: { number: d.Telefon, message: 'Hi ' + name + ', Kopf hoch! Das passiert vielen. Wir bereiten dich noch besser vor. Beim naechsten Mal packst du das! Melde dich fuer einen neuen Termin.', updateCell: 'Termine!N' + rowNum, logTyp: 'Pruefung_Nicht_Bestanden', logName: d.Fahrschueler_Name }});\n    } else if (!isPruefung) {\n      toSend.push({ json: { number: d.Telefon, message: 'Hi ' + name + '! Wie war deine heutige ' + typLabel + '? Hast du Fragen oder Feedback? Uebung macht den Meister! Bis zum naechsten Mal!', updateCell: 'Termine!N' + rowNum, logTyp: 'Nachbereitung', logName: d.Fahrschueler_Name }});\n    }\n  }\n\n  if (status === 'bestaetigt' && diffH < -1 && diffH > -2 && d.No_Show_gesendet !== 'ja') {\n    toSend.push({ json: { number: d.Telefon, message: 'Hi ' + name + ', wir haben dich heute um ' + uhrzeit + ' Uhr zu deiner ' + typLabel + ' erwartet. Ist alles in Ordnung? Bitte melde dich bei uns fuer einen neuen Termin.', updateCell: 'Termine!Q' + rowNum, logTyp: 'No_Show', logName: d.Fahrschueler_Name }});\n  }\n\n  if (isPruefung && d.Pruefung_Ergebnis === 'bestanden' && d.Nachbereitung_gesendet === 'ja' && d.Bewertung_angefragt !== 'ja' && nachDiffH > 23 && nachDiffH < 25) {\n    toSend.push({ json: { number: d.Telefon, message: 'Hi ' + name + '! Nochmal herzlichen Glueckwunsch! Wuerdest du uns eine Google-Bewertung hinterlassen? https://g.page/r/DEINE-FAHRSCHULE/review Vielen Dank!', updateCell: 'Termine!P' + rowNum, logTyp: 'Bewertung_Angefragt', logName: d.Fahrschueler_Name }});\n  }\n}\n\nreturn toSend;"
+      },
+      "name": "Autopilot Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://whatsapp:3001/send",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.number }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "WhatsApp senden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst now = new Date().toLocaleString('de-DE', {timeZone: 'Europe/Berlin'});\nconst results = [];\nfor (const item of items) {\n  const d = item.json;\n  results.push({ json: { Timestamp: now, Typ: d.logTyp || '', Fahrschueler: d.logName || '', Telefon: d.number || '', Nachricht: (d.message || '').substring(0, 100) + '...', Status: 'gesendet' } });\n}\nreturn results;"
+      },
+      "name": "Log vorbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        450
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1LzHyPiEZAUhyXU-IKLus5tdzRUedz_KxfE085tp4zL0"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Log"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "name": "Log schreiben",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1180,
+        450
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "r1JtS2lrcKPlMcGT",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Jede Minute checken": {
+      "main": [
+        [
+          {
+            "node": "Termine laden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Termine laden": {
+      "main": [
+        [
+          {
+            "node": "Autopilot Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Autopilot Engine": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp senden",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log vorbereiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp senden": {
+      "main": [
+        []
+      ]
+    },
+    "Log vorbereiten": {
+      "main": [
+        [
+          {
+            "node": "Log schreiben",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

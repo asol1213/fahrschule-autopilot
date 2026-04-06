@@ -1,0 +1,381 @@
+{
+  "name": "Fahrschule Autopilot - Zahlungserinnerungen (3-stufig)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "trigger-zahl",
+      "name": "Alle 6 Stunden pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Zahlungen",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-zahlungen",
+      "name": "Offene Zahlungen laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Zahlungserinnerungen_Log",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-log",
+      "name": "Bereits gesendete Erinnerungen laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 420],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 3-stufige Zahlungserinnerungen: Tag 7, 14, 21 nach Faelligkeit\nconst zahlungen = $('Offene Zahlungen laden').all();\nconst logItems = $('Bereits gesendete Erinnerungen laden').all();\n\n// Set von bereits gesendeten Erinnerungen: telefon_rechnungsNr_stufe\nconst gesendet = new Set();\nfor (const item of logItems) {\n  const key = `${item.json.Telefon}_${item.json.Rechnungs_Nr}_${item.json.Stufe}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of zahlungen) {\n  const data = item.json;\n  \n  const status = (data.Status || data.status || '').toLowerCase();\n  // Nur offene/ueberfaellige Zahlungen\n  if (status === 'bezahlt' || status === 'storniert') continue;\n  \n  const name = data.Schueler || data.Name || data.name || '';\n  let telefon = data.Telefon || data.telefon || data.Handy || '';\n  const betrag = data.Betrag || data.betrag || '0';\n  const rechnungsNr = data.Rechnungs_Nr || data.rechnungs_nr || data.Rechnung || '';\n  const faelligDatum = data.Faellig || data.faellig || data.Faellig_am || '';\n  const beschreibung = data.Beschreibung || data.beschreibung || data.Leistung || 'Fahrschulleistung';\n  \n  if (!telefon || !name || !faelligDatum) continue;\n  \n  // Telefonnummer bereinigen\n  telefon = telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) {\n    telefon = '+49' + telefon.replace(/^0/, '');\n  }\n  \n  // Faelligkeitsdatum parsen\n  let faellig;\n  try {\n    if (faelligDatum.includes('.')) {\n      const parts = faelligDatum.split('.');\n      faellig = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}T00:00:00`);\n    } else {\n      faellig = new Date(faelligDatum + 'T00:00:00');\n    }\n  } catch(e) { continue; }\n  \n  if (isNaN(faellig.getTime())) continue;\n  \n  const tageUeberfaellig = Math.floor((now.getTime() - faellig.getTime()) / (1000 * 60 * 60 * 24));\n  \n  // Stufe 1: Tag 7 (freundliche Erinnerung)\n  if (tageUeberfaellig >= 7 && tageUeberfaellig < 14) {\n    const key = `${telefon}_${rechnungsNr}_stufe1`;\n    if (!gesendet.has(key)) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          betrag,\n          rechnungsNr,\n          faelligDatum,\n          beschreibung,\n          tageUeberfaellig,\n          stufe: 'stufe1',\n          stufeText: 'Freundliche Erinnerung'\n        }\n      });\n    }\n  }\n  \n  // Stufe 2: Tag 14 (dringende Mahnung)\n  if (tageUeberfaellig >= 14 && tageUeberfaellig < 21) {\n    const key = `${telefon}_${rechnungsNr}_stufe2`;\n    if (!gesendet.has(key)) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          betrag,\n          rechnungsNr,\n          faelligDatum,\n          beschreibung,\n          tageUeberfaellig,\n          stufe: 'stufe2',\n          stufeText: 'Dringende Mahnung'\n        }\n      });\n    }\n  }\n  \n  // Stufe 3: Tag 21 (letzte Warnung + Inhaber-Eskalation)\n  if (tageUeberfaellig >= 21) {\n    const key = `${telefon}_${rechnungsNr}_stufe3`;\n    if (!gesendet.has(key)) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          betrag,\n          rechnungsNr,\n          faelligDatum,\n          beschreibung,\n          tageUeberfaellig,\n          stufe: 'stufe3',\n          stufeText: 'Letzte Warnung'\n        }\n      });\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-zahlungen",
+      "name": "Zahlungen pruefen + Stufe bestimmen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-valid",
+      "name": "Nur faellige Zahlungen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [920, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-stufe1",
+              "leftValue": "={{ $json.stufe }}",
+              "rightValue": "stufe1",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "fallbackOutput": "extra",
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "stufe1",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "stufe2",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "stufe3",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 2
+            }
+          ]
+        }
+      },
+      "id": "switch-stufe",
+      "name": "Welche Mahnstufe",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1140, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nKurze Erinnerung: Fuer {{ $json.beschreibung }} steht noch ein Betrag von {{ $json.betrag }} EUR offen.\n\n📋 Rechnung: {{ $json.rechnungsNr }}\n📅 Faellig seit: {{ $json.faelligDatum }}\n\nSie koennen den Betrag bequem ueberweisen an:\n🏦 Kontodaten finden Sie auf Ihrer Rechnung\n\nBei Fragen antworten Sie einfach auf diese Nachricht.\n\nViele Gruesse,\nIhre Fahrschule 🚗"
+      },
+      "id": "twilio-stufe1",
+      "name": "Stufe 1 - Freundliche Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1380, 140],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }},\n\nleider ist die Zahlung fuer {{ $json.beschreibung }} weiterhin offen.\n\n⚠️ Offener Betrag: {{ $json.betrag }} EUR\n📋 Rechnung: {{ $json.rechnungsNr }}\n📅 Faellig seit: {{ $json.faelligDatum }} ({{ $json.tageUeberfaellig }} Tage)\n\nBitte ueberweisen Sie den Betrag zeitnah, damit Ihre Ausbildung ohne Unterbrechung weitergehen kann.\n\nFalls Sie bereits gezahlt haben, koennen Sie diese Nachricht ignorieren.\n\nBei Fragen oder Zahlungsschwierigkeiten melden Sie sich bitte bei uns.\n\nIhre Fahrschule"
+      },
+      "id": "twilio-stufe2",
+      "name": "Stufe 2 - Dringende Mahnung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1380, 320],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }},\n\ndies ist unsere letzte Erinnerung bezueglich der offenen Zahlung.\n\n🔴 Offener Betrag: {{ $json.betrag }} EUR\n📋 Rechnung: {{ $json.rechnungsNr }}\n📅 Ueberfaellig seit: {{ $json.tageUeberfaellig }} Tagen\n\nBitte begleichen Sie den Betrag innerhalb von 7 Tagen. Andernfalls muessen wir die Fahrausbildung leider pausieren und den Vorgang an unser Buero uebergeben.\n\nFalls es finanzielle Schwierigkeiten gibt, sprechen Sie uns bitte an. Wir finden gemeinsam eine Loesung.\n\nIhre Fahrschule"
+      },
+      "id": "twilio-stufe3",
+      "name": "Stufe 3 - Letzte Warnung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1380, 500],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Zahlungserinnerungen_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.schuelerTelefon }}",
+            "Rechnungs_Nr": "={{ $json.rechnungsNr }}",
+            "Betrag": "={{ $json.betrag }}",
+            "Stufe": "={{ $json.stufe }}",
+            "Stufe_Text": "={{ $json.stufeText }}",
+            "Gesendet_am": "={{ $now.toISO() }}",
+            "Tage_Ueberfaellig": "={{ $json.tageUeberfaellig }}"
+          }
+        }
+      },
+      "id": "log-zahlung",
+      "name": "Zahlungserinnerung loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1620, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=⚠️ Zahlungserinnerung gesendet!\n\n👤 {{ $json.schuelerName }}\n📱 {{ $json.schuelerTelefon }}\n💰 {{ $json.betrag }} EUR\n📋 {{ $json.rechnungsNr }}\n🔔 {{ $json.stufeText }} (Tag {{ $json.tageUeberfaellig }})\n\n{{ $json.stufe === 'stufe3' ? '🔴 ACHTUNG: Letzte Mahnstufe erreicht! Bitte persoenlich nachfassen.' : '' }}"
+      },
+      "id": "notify-inhaber-zahlung",
+      "name": "Inhaber bei Stufe 3 informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1620, 520],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Alle 6 Stunden pruefen": {
+      "main": [
+        [
+          { "node": "Offene Zahlungen laden", "type": "main", "index": 0 },
+          { "node": "Bereits gesendete Erinnerungen laden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Offene Zahlungen laden": {
+      "main": [
+        [
+          { "node": "Zahlungen pruefen + Stufe bestimmen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bereits gesendete Erinnerungen laden": {
+      "main": [
+        [
+          { "node": "Zahlungen pruefen + Stufe bestimmen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Zahlungen pruefen + Stufe bestimmen": {
+      "main": [
+        [
+          { "node": "Nur faellige Zahlungen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Nur faellige Zahlungen": {
+      "main": [
+        [
+          { "node": "Welche Mahnstufe", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Welche Mahnstufe": {
+      "main": [
+        [
+          { "node": "Stufe 1 - Freundliche Erinnerung", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Stufe 2 - Dringende Mahnung", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Stufe 3 - Letzte Warnung", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Stufe 1 - Freundliche Erinnerung": {
+      "main": [
+        [
+          { "node": "Zahlungserinnerung loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Stufe 2 - Dringende Mahnung": {
+      "main": [
+        [
+          { "node": "Zahlungserinnerung loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Stufe 3 - Letzte Warnung": {
+      "main": [
+        [
+          { "node": "Zahlungserinnerung loggen", "type": "main", "index": 0 },
+          { "node": "Inhaber bei Stufe 3 informieren", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Zahlungen", "id": "7" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

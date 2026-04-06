@@ -1,0 +1,216 @@
+{
+  "_description": "Test-Payloads für den Retell.ai Webhook Handler. Sende diese an POST /api/retell zum Testen.",
+  "_usage": "curl -X POST https://localhost:3000/api/retell -H 'Content-Type: application/json' -d @webhook-test-payloads.json",
+
+  "call_started": {
+    "event": "call_started",
+    "call": {
+      "call_id": "test_call_001",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "registered",
+      "from_number": "+4917612345678",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "start_timestamp": 1711900000000,
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_ended": {
+    "event": "call_ended",
+    "call": {
+      "call_id": "test_call_001",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4917612345678",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "start_timestamp": 1711900000000,
+      "end_timestamp": 1711900150000,
+      "duration_ms": 150000,
+      "recording_url": "https://storage.retellai.com/recordings/test_call_001.wav",
+      "transcript": "Agent: Guten Tag, Fahrschule Weber, mein Name ist Marie. Wie kann ich Ihnen helfen?\nUser: Hallo, ich würde gerne den Führerschein machen. Was kostet das bei Ihnen?\nAgent: Sehr gerne! Die Grundgebühr liegt bei 400 Euro, eine Fahrstunde bei 70 Euro. Insgesamt rechnen die meisten mit 2.800 bis 3.500 Euro.\nUser: Okay, und kann ich mich direkt anmelden?\nAgent: Natürlich! Darf ich kurz Ihren Namen fragen?\nUser: Ja, ich bin Max Mustermann.\nAgent: Und Ihre Telefonnummer für Rückfragen?\nUser: 0176 12345678\nAgent: Perfekt, Herr Mustermann! Ich leite Ihre Daten an unseren Fahrlehrer weiter. Sie hören innerhalb von 24 Stunden von uns.",
+      "transcript_object": [
+        { "role": "agent", "content": "Guten Tag, Fahrschule Weber, mein Name ist Marie. Wie kann ich Ihnen helfen?" },
+        { "role": "user", "content": "Hallo, ich würde gerne den Führerschein machen. Was kostet das bei Ihnen?" },
+        { "role": "agent", "content": "Sehr gerne! Die Grundgebühr liegt bei 400 Euro, eine Fahrstunde bei 70 Euro. Insgesamt rechnen die meisten mit 2.800 bis 3.500 Euro." },
+        { "role": "user", "content": "Okay, und kann ich mich direkt anmelden?" },
+        { "role": "agent", "content": "Natürlich! Darf ich kurz Ihren Namen fragen?" },
+        { "role": "user", "content": "Ja, ich bin Max Mustermann." },
+        { "role": "agent", "content": "Und Ihre Telefonnummer für Rückfragen?" },
+        { "role": "user", "content": "0176 12345678" },
+        { "role": "agent", "content": "Perfekt, Herr Mustermann! Ich leite Ihre Daten an unseren Fahrlehrer weiter. Sie hören innerhalb von 24 Stunden von uns." }
+      ],
+      "disconnection_reason": "agent_end_call",
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_analyzed_anmeldung": {
+    "_description": "Anmeldung mit vollständigen Kontaktdaten → erstellt neuen Lead",
+    "event": "call_analyzed",
+    "call": {
+      "call_id": "test_call_001",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4917612345678",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "start_timestamp": 1711900000000,
+      "end_timestamp": 1711900150000,
+      "duration_ms": 150000,
+      "recording_url": "https://storage.retellai.com/recordings/test_call_001.wav",
+      "transcript": "Agent: Guten Tag... User: Ich möchte den Führerschein machen...",
+      "call_analysis": {
+        "call_summary": "Anrufer Max Mustermann möchte Führerschein Klasse B machen. Hat sich nach Preisen erkundigt und Kontaktdaten hinterlassen. Sehtest vorhanden, Erste-Hilfe-Kurs steht noch aus.",
+        "user_sentiment": "positive",
+        "custom_analysis_data": {
+          "intent": "anmeldung",
+          "name": "Max Mustermann",
+          "phone": "017612345678",
+          "email": "",
+          "license_class": "B",
+          "preferred_time": "nachmittags ab 15 Uhr",
+          "urgency": "mittel",
+          "has_sehtest": "ja",
+          "has_erste_hilfe": "nein",
+          "recording_consent": "ja"
+        }
+      },
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_analyzed_preisanfrage": {
+    "_description": "Reine Preisanfrage ohne Anmeldung → Lead, aber kein Schüler",
+    "event": "call_analyzed",
+    "call": {
+      "call_id": "test_call_002",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4915198765432",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "duration_ms": 90000,
+      "call_analysis": {
+        "call_summary": "Anruferin hat sich nach Preisen für Klasse B erkundigt und möchte sich die Infos überlegen. Kein Beratungstermin vereinbart.",
+        "user_sentiment": "neutral",
+        "custom_analysis_data": {
+          "intent": "preisanfrage",
+          "name": "",
+          "phone": "",
+          "email": "",
+          "license_class": "B",
+          "preferred_time": "",
+          "urgency": "niedrig",
+          "recording_consent": "ja"
+        }
+      },
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_analyzed_beschwerde": {
+    "_description": "Beschwerde → needsHumanReview=true, Inhaber wird benachrichtigt",
+    "event": "call_analyzed",
+    "call": {
+      "call_id": "test_call_003",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4917699887766",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "duration_ms": 210000,
+      "call_analysis": {
+        "call_summary": "Bestehender Schüler ist unzufrieden mit der Terminvergabe. Fahrstunden werden kurzfristig abgesagt. Möchte mit dem Inhaber sprechen.",
+        "user_sentiment": "negative",
+        "custom_analysis_data": {
+          "intent": "beschwerde",
+          "name": "Anna Schmidt",
+          "phone": "017699887766",
+          "email": "anna.schmidt@email.de",
+          "license_class": "B",
+          "preferred_time": "",
+          "urgency": "hoch",
+          "recording_consent": "ja"
+        }
+      },
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_analyzed_bf17": {
+    "_description": "BF17-Anfrage von Jugendlichem → Information + Beratungstermin",
+    "event": "call_analyzed",
+    "call": {
+      "call_id": "test_call_004",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4916055443322",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "duration_ms": 120000,
+      "call_analysis": {
+        "call_summary": "16-jähriger Anrufer möchte BF17 machen. Hat Fragen zu den Voraussetzungen und ob seine Mutter als Begleitperson eingetragen werden kann. Beratungstermin vorgeschlagen.",
+        "user_sentiment": "positive",
+        "custom_analysis_data": {
+          "intent": "information",
+          "name": "Tim Becker",
+          "phone": "016055443322",
+          "email": "",
+          "license_class": "BF17",
+          "preferred_time": "nach der Schule, ab 15 Uhr",
+          "urgency": "mittel",
+          "has_sehtest": "nein",
+          "has_erste_hilfe": "nein",
+          "recording_consent": "ja"
+        }
+      },
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  },
+
+  "call_analyzed_no_consent": {
+    "_description": "Anrufer lehnt Aufnahme ab → recording_consent=nein",
+    "event": "call_analyzed",
+    "call": {
+      "call_id": "test_call_005",
+      "agent_id": "agent_fahrschule_test",
+      "call_status": "ended",
+      "from_number": "+4917711223344",
+      "to_number": "+499111234567",
+      "direction": "inbound",
+      "duration_ms": 80000,
+      "recording_url": null,
+      "call_analysis": {
+        "call_summary": "Anrufer hat der Aufnahme nicht zugestimmt. Hat sich nach Preisen erkundigt und einen Termin vereinbart.",
+        "user_sentiment": "neutral",
+        "custom_analysis_data": {
+          "intent": "termin",
+          "name": "Klaus Meyer",
+          "phone": "017711223344",
+          "email": "",
+          "license_class": "A2",
+          "preferred_time": "samstags",
+          "urgency": "mittel",
+          "recording_consent": "nein"
+        }
+      },
+      "metadata": {
+        "tenant_id": "demo-premium"
+      }
+    }
+  }
+}

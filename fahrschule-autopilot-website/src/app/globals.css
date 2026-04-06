@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Color tokens — raw values that change per theme                    */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --c-background: #0a0a0f;
+  --c-foreground: #f0f0f5;
+  --c-primary: #3b82f6;
+  --c-primary-light: #60a5fa;
+  --c-primary-dark: #2563eb;
+  --c-accent: #10b981;
+  --c-accent-light: #34d399;
+  --c-surface: #111118;
+  --c-surface-light: #1a1a24;
+  --c-surface-lighter: #23232f;
+  --c-border: #2a2a3a;
+  --c-muted: #8888a0;
+}
+
+html.light {
+  --c-background: #f8f9fc;
+  --c-foreground: #111118;
+  --c-primary: #2563eb;
+  --c-primary-light: #3b82f6;
+  --c-primary-dark: #1d4ed8;
+  --c-accent: #059669;
+  --c-accent-light: #10b981;
+  --c-surface: #ffffff;
+  --c-surface-light: #f1f3f8;
+  --c-surface-lighter: #e5e8ef;
+  --c-border: #d1d5e0;
+  --c-muted: #6b7280;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tailwind theme — reference the raw CSS vars                        */
+/* ------------------------------------------------------------------ */
+
+@theme inline {
+  --color-background: var(--c-background);
+  --color-foreground: var(--c-foreground);
+  --color-primary: var(--c-primary);
+  --color-primary-light: var(--c-primary-light);
+  --color-primary-dark: var(--c-primary-dark);
+  --color-accent: var(--c-accent);
+  --color-accent-light: var(--c-accent-light);
+  --color-surface: var(--c-surface);
+  --color-surface-light: var(--c-surface-light);
+  --color-surface-lighter: var(--c-surface-lighter);
+  --color-border: var(--c-border);
+  --color-muted: var(--c-muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--c-background);
+  color: var(--c-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--c-primary);
+  color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c-background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-muted);
+}
+
+/* Glow effects */
+.glow-blue {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), 0 0 80px rgba(59, 130, 246, 0.05);
+}
+.glow-green {
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.15), 0 0 80px rgba(16, 185, 129, 0.05);
+}
+html.light .glow-blue {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.08), 0 0 60px rgba(37, 99, 235, 0.02);
+}
+html.light .glow-green {
+  box-shadow: 0 0 30px rgba(5, 150, 105, 0.08), 0 0 60px rgba(5, 150, 105, 0.02);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(17, 17, 24, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(42, 42, 58, 0.5);
+}
+html.light .glass {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(209, 213, 224, 0.6);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, #3b82f6, #10b981, #3b82f6);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Hero gradient background */
+.hero-gradient {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
+              radial-gradient(ellipse 60% 40% at 80% 60%, rgba(16, 185, 129, 0.08), transparent);
+}
+html.light .hero-gradient {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.06), transparent),
+              radial-gradient(ellipse 60% 40% at 80% 60%, rgba(5, 150, 105, 0.04), transparent);
+}
+
+/* Grid pattern */
+.grid-pattern {
+  background-image: linear-gradient(rgba(42, 42, 58, 0.3) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(42, 42, 58, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+html.light .grid-pattern {
+  background-image: linear-gradient(rgba(209, 213, 224, 0.4) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(209, 213, 224, 0.4) 1px, transparent 1px);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Light mode: status color overrides for better contrast             */
+/* ------------------------------------------------------------------ */
+
+/* Greens (correct answers, success states) */
+html.light .text-green-300 { color: #15803d; }
+html.light .text-green-400 { color: #16a34a; }
+html.light .text-accent { color: #059669; }
+
+/* Reds (wrong answers, error states) */
+html.light .text-red-300 { color: #dc2626; }
+html.light .text-red-400 { color: #dc2626; }
+
+/* Oranges */
+html.light .text-orange-400 { color: #c2410c; }
+
+/* Yellows */
+html.light .text-yellow-400 { color: #a16207; }
+
+/* Purples (AI Tutor) */
+html.light .text-purple-400 { color: #7c3aed; }
+
+/* Cyans */
+html.light .text-cyan-400 { color: #0e7490; }
+
+/* Pinks */
+html.light .text-pink-400 { color: #be185d; }
+
+/* Blues */
+html.light .text-blue-400 { color: #2563eb; }
+
+/* Grays (badges) */
+html.light .text-gray-300 { color: #6b7280; }
+
+/* ------------------------------------------------------------------ */
+/*  Reduced motion: disable all animations for accessibility           */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Glass effect fallback for unsupported browsers */
+@supports not (backdrop-filter: blur(12px)) {
+  .glass {
+    background: rgba(17, 17, 24, 0.95);
+  }
+  html.light .glass {
+    background: rgba(255, 255, 255, 0.97);
+  }
+}
+
+/* Focus visible ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

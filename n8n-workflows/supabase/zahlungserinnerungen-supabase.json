@@ -1,0 +1,587 @@
+{
+  "name": "Fahrschule Autopilot - Zahlungserinnerungen (Supabase)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "trigger-zahl",
+      "name": "Alle 6 Stunden pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/zahlungen?status=in.(offen,ueberfaellig)&tenant_id=eq.{{ $env.TENANT_ID }}&select=*,schueler:schueler_id(id,vorname,nachname,telefon,email,wa_opt_out)",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "load-zahlungen",
+      "name": "Offene Zahlungen laden (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log?typ=like.zahlung_*&tenant_id=eq.{{ $env.TENANT_ID }}&select=telefon,typ,created_at",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "load-log",
+      "name": "Bereits gesendete Mahnungen laden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 3-stufige Zahlungserinnerungen: Tag 7, 14, 21\nconst zahlungen = $('Offene Zahlungen laden (Supabase)').all();\nconst logItems = $('Bereits gesendete Mahnungen laden').all();\n\nconst gesendet = new Set();\nfor (const item of logItems) {\n  const d = item.json;\n  const key = `${d.telefon}_${d.typ}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of zahlungen) {\n  const z = item.json;\n  const schueler = z.schueler;\n  if (!schueler || schueler.wa_opt_out) continue;\n\n  const telefon = schueler.telefon;\n  const name = `${schueler.vorname} ${schueler.nachname}`;\n  if (!telefon || !name) continue;\n\n  const faellig = new Date(z.faellig_am + 'T00:00:00');\n  if (isNaN(faellig.getTime())) continue;\n\n  const tage = Math.floor((now.getTime() - faellig.getTime()) / (1000*60*60*24));\n\n  const stufen = [\n    { min: 7, max: 14, stufe: 'zahlung_stufe1', text: 'Freundliche Erinnerung', mahnStufe: 1 },\n    { min: 14, max: 21, stufe: 'zahlung_stufe2', text: 'Dringende Mahnung', mahnStufe: 2 },\n    { min: 21, max: 9999, stufe: 'zahlung_stufe3', text: 'Letzte Warnung', mahnStufe: 3 }\n  ];\n\n  for (const s of stufen) {\n    if (tage >= s.min && tage < s.max) {\n      const key = `${telefon}_${s.stufe}`;\n      if (!gesendet.has(key)) {\n        results.push({ json: {\n          schuelerName: name, schuelerTelefon: telefon,\n          schuelerId: schueler.id, zahlungId: z.id,\n          betrag: z.betrag, beschreibung: z.beschreibung,\n          faelligAm: z.faellig_am, tageUeberfaellig: tage,\n          stufe: s.stufe, stufeText: s.text, mahnStufe: s.mahnStufe\n        }});\n      }\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-zahlungen",
+      "name": "Zahlungen pruefen + Stufe bestimmen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "f1",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-valid",
+      "name": "Nur faellige Zahlungen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "zahlung_stufe1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "zahlung_stufe2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.stufe }}",
+                    "rightValue": "zahlung_stufe3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "outputIndex": 2
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "switch-stufe",
+      "name": "Welche Mahnstufe",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1140,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nKurze Erinnerung: Fuer {{ $json.beschreibung }} steht noch ein Betrag von {{ $json.betrag }} EUR offen.\n\n📅 Faellig seit: {{ $json.faelligAm }}\n\nKontodaten finden Sie auf Ihrer Rechnung.\nBei Fragen antworten Sie einfach auf diese Nachricht.\n\nViele Gruesse,\nIhre {{ $env.FAHRSCHUL_NAME }} 🚗"
+      },
+      "id": "twilio-stufe1",
+      "name": "Stufe 1 - Freundliche Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        140
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }},\n\ndie Zahlung fuer {{ $json.beschreibung }} ist weiterhin offen.\n\n⚠️ Offener Betrag: {{ $json.betrag }} EUR\n📅 Faellig seit: {{ $json.faelligAm }} ({{ $json.tageUeberfaellig }} Tage)\n\nBitte ueberweisen Sie zeitnah, damit Ihre Ausbildung ohne Unterbrechung weitergeht.\n\nBei Zahlungsschwierigkeiten melden Sie sich bitte.\n\nIhre {{ $env.FAHRSCHUL_NAME }}"
+      },
+      "id": "twilio-stufe2",
+      "name": "Stufe 2 - Dringende Mahnung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        320
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }},\n\ndies ist unsere letzte Erinnerung.\n\n🔴 Offener Betrag: {{ $json.betrag }} EUR\n📅 Ueberfaellig seit: {{ $json.tageUeberfaellig }} Tagen\n\nBitte begleichen Sie innerhalb von 7 Tagen. Andernfalls muessen wir die Ausbildung pausieren.\n\nBei Schwierigkeiten sprechen Sie uns bitte an.\n\nIhre {{ $env.FAHRSCHUL_NAME }}"
+      },
+      "id": "twilio-stufe3",
+      "name": "Stufe 3 - Letzte Warnung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        500
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon }}\",\n  \"typ\": \"{{ $json.stufe }}\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": { \"betrag\": {{ $json.betrag }}, \"tage_ueberfaellig\": {{ $json.tageUeberfaellig }}, \"zahlung_id\": \"{{ $json.zahlungId }}\" }\n}",
+        "options": {}
+      },
+      "id": "log-supabase",
+      "name": "In Supabase loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/zahlungen?id=eq.{{ $json.zahlungId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"mahnungs_stufe\": {{ $json.mahnStufe }},\n  \"status\": \"ueberfaellig\",\n  \"letzte_mahnung_am\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "update-zahlung",
+      "name": "Zahlungs-Status updaten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=⚠️ Mahnung gesendet!\n\n👤 {{ $json.schuelerName }}\n💰 {{ $json.betrag }} EUR\n🔔 {{ $json.stufeText }} (Tag {{ $json.tageUeberfaellig }})\n\n{{ $json.stufe === 'zahlung_stufe3' ? '🔴 LETZTE STUFE! Bitte persoenlich nachfassen.' : '' }}"
+      },
+      "id": "notify-inhaber",
+      "name": "Inhaber informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        700
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon || $json.telefon || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - Zahlungserinnerungen (Supabase)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Alle 6 Stunden pruefen": {
+      "main": [
+        [
+          {
+            "node": "Offene Zahlungen laden (Supabase)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bereits gesendete Mahnungen laden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Offene Zahlungen laden (Supabase)": {
+      "main": [
+        [
+          {
+            "node": "Zahlungen pruefen + Stufe bestimmen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bereits gesendete Mahnungen laden": {
+      "main": [
+        [
+          {
+            "node": "Zahlungen pruefen + Stufe bestimmen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zahlungen pruefen + Stufe bestimmen": {
+      "main": [
+        [
+          {
+            "node": "Nur faellige Zahlungen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur faellige Zahlungen": {
+      "main": [
+        [
+          {
+            "node": "Welche Mahnstufe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Welche Mahnstufe": {
+      "main": [
+        [
+          {
+            "node": "Stufe 1 - Freundliche Erinnerung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stufe 2 - Dringende Mahnung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stufe 3 - Letzte Warnung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stufe 1 - Freundliche Erinnerung": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Zahlungs-Status updaten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stufe 2 - Dringende Mahnung": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Zahlungs-Status updaten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stufe 3 - Letzte Warnung": {
+      "main": [
+        [
+          {
+            "node": "In Supabase loggen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Zahlungs-Status updaten",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Inhaber informieren",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inhaber informieren": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "Zahlungen",
+      "id": "7"
+    },
+    {
+      "name": "Supabase",
+      "id": "20"
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "name": "Fahrschule Autopilot - Fahrlehrer-Zuweisung Notification",
+  "nodes": [
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fahrlehrer-zuweisung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-zuweisung",
+      "name": "Fahrlehrer-Zuweisung empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "fahrlehrer-zuweisung"
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// Zuweisungs-Payload normalisieren\nconst body = $input.first().json.body || $input.first().json;\n\nconst schuelerId   = body.schuelerId   || body.schueler_id   || '';\nlet   schuelerName = body.schuelerName || body.schueler_name || body.name || '';\nlet   schuelerTel  = (body.schuelerTelefon || body.telefon || body.Telefon || '').toString();\nconst schuelerEmail= body.email        || body.Email         || '';\nconst klasse       = body.klasse       || body.Klasse        || 'B';\n\nconst fahrlehrerName = body.fahrlehrerName || body.fahrlehrer || body.Fahrlehrer || '';\nlet   fahrlehrerTel  = (body.fahrlehrerTelefon || body.fahrlehrer_telefon || '').toString();\nconst fahrlehrerEmail= body.fahrlehrerEmail || body.fahrlehrer_email || '';\n\nconst ersterTheorieTermin = body.ersterTheorieTermin || body.theorieTermin || '';\nconst notizen             = body.notizen || body.Notizen || '';\n\n// Telefonnummern bereinigen\n[schuelerTel, fahrlehrerTel] = [schuelerTel, fahrlehrerTel].map(t => {\n  t = t.replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (t && !t.startsWith('+')) t = '+49' + t.replace(/^0/, '');\n  return t;\n});\n\nif (!schuelerTel || !fahrlehrerName) {\n  throw new Error('Pflichtfelder fehlen: schuelerTelefon und fahrlehrerName sind erforderlich');\n}\n\nreturn [{\n  json: {\n    schuelerId,\n    schuelerName,\n    schuelerTel,\n    schuelerEmail,\n    klasse,\n    fahrlehrerName,\n    fahrlehrerTel,\n    fahrlehrerEmail,\n    ersterTheorieTermin,\n    notizen,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "normalize-zuweisung",
+      "name": "Zuweisung normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Schueler",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Fahrlehrer": "={{ $json.fahrlehrerName }}"
+          }
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Schueler_ID",
+              "lookupValue": "={{ $json.schuelerId }}"
+            }
+          ]
+        }
+      },
+      "id": "update-crm-fahrlehrer",
+      "name": "Fahrlehrer im CRM eintragen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [660, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      },
+      "continueOnFail": true
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTel }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 🚗\n\nGute Neuigkeit: Ihr persoenlicher Fahrlehrer wurde zugewiesen!\n\n👤 {{ $json.fahrlehrerName }}\n{{ $json.fahrlehrerTel ? '📱 ' + $json.fahrlehrerTel : '' }}\n\nSie koennen sich bei Fragen direkt an {{ $json.fahrlehrerName }} wenden.\n\n{{ $json.ersterTheorieTermin ? '📅 Ihr erster Theorie-Termin: ' + $json.ersterTheorieTermin : 'Zum Theorie-Unterricht melden wir uns in Kuerze bei Ihnen.' }}\n\n{{ $json.notizen ? '💬 ' + $json.notizen : '' }}\n\nWir freuen uns auf eine erfolgreiche Zusammenarbeit! 💪\n\nIhre {{ $env.FAHRSCHUL_NAME }} 🚗"
+      },
+      "id": "notify-schueler-zuweisung",
+      "name": "Schueler ueber Fahrlehrer informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [900, 160],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "check-lehrer-tel",
+              "leftValue": "={{ $json.fahrlehrerTel }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEquals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-lehrer-hat-tel",
+      "name": "Hat Fahrlehrer Telefon?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [900, 360]
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.fahrlehrerTel }}",
+        "body": "=Hallo {{ $json.fahrlehrerName }}! 👋\n\nIhnen wurde ein neuer Fahrschueler zugewiesen:\n\n👤 {{ $json.schuelerName }}\n📱 {{ $json.schuelerTel }}\n🚗 Fuehrerschein Klasse {{ $json.klasse }}\n{{ $json.schuelerEmail ? '📧 ' + $json.schuelerEmail : '' }}\n{{ $json.ersterTheorieTermin ? '📅 Erster Theorie-Termin: ' + $json.ersterTheorieTermin : '' }}\n{{ $json.notizen ? '💬 Notizen: ' + $json.notizen : '' }}\n\nDer Schueler wurde bereits benachrichtigt und kennt Ihre Kontaktdaten.\n\nViel Erfolg! 🏆"
+      },
+      "id": "notify-fahrlehrer-zuweisung",
+      "name": "Fahrlehrer ueber neuen Schueler informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1120, 360],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Zuweisungen_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler_ID":        "={{ $json.schuelerId }}",
+            "Schueler":           "={{ $json.schuelerName }}",
+            "Schueler_Tel":       "={{ $json.schuelerTel }}",
+            "Klasse":             "={{ $json.klasse }}",
+            "Fahrlehrer":         "={{ $json.fahrlehrerName }}",
+            "Fahrlehrer_Tel":     "={{ $json.fahrlehrerTel }}",
+            "Erster_Theorietermin": "={{ $json.ersterTheorieTermin }}",
+            "Zugewiesen_am":      "={{ $now.toISO() }}",
+            "WA_Schueler":        "gesendet",
+            "WA_Fahrlehrer":      "={{ $json.fahrlehrerTel ? 'gesendet' : 'kein Telefon' }}"
+          }
+        }
+      },
+      "id": "log-zuweisung",
+      "name": "Zuweisung loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1340, 260],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"message\": \"Fahrlehrer-Zuweisung verarbeitet\", \"schueler\": \"{{ $json.schuelerName }}\", \"fahrlehrer\": \"{{ $json.fahrlehrerName }}\"}"
+      },
+      "id": "webhook-response-zuweisung",
+      "name": "API Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1560, 300]
+    }
+
+  ],
+  "connections": {
+    "Fahrlehrer-Zuweisung empfangen": {
+      "main": [[{ "node": "Zuweisung normalisieren", "type": "main", "index": 0 }]]
+    },
+    "Zuweisung normalisieren": {
+      "main": [[{ "node": "Fahrlehrer im CRM eintragen", "type": "main", "index": 0 }]]
+    },
+    "Fahrlehrer im CRM eintragen": {
+      "main": [
+        [
+          { "node": "Schueler ueber Fahrlehrer informieren", "type": "main", "index": 0 },
+          { "node": "Hat Fahrlehrer Telefon?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler ueber Fahrlehrer informieren": {
+      "main": [[{ "node": "Zuweisung loggen", "type": "main", "index": 0 }]]
+    },
+    "Hat Fahrlehrer Telefon?": {
+      "main": [[{ "node": "Fahrlehrer ueber neuen Schueler informieren", "type": "main", "index": 0 }]]
+    },
+    "Fahrlehrer ueber neuen Schueler informieren": {
+      "main": [[{ "node": "Zuweisung loggen", "type": "main", "index": 0 }]]
+    },
+    "Zuweisung loggen": {
+      "main": [[{ "node": "API Response", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Fahrlehrer-Zuweisung", "id": "16" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

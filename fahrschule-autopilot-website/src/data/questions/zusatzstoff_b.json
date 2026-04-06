@@ -1,0 +1,4111 @@
+[
+  {
+    "id": "2.6.01-001",
+    "category": "zusatzstoff_b",
+    "question": "Wann müssen Motorräder zur Hauptuntersuchung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Alle zwei Jahre",
+        "correct": true
+      },
+      {
+        "text": "Alle drei Jahre",
+        "correct": false
+      },
+      {
+        "text": "Vor jeder Wiederzulassung",
+        "correct": false
+      }
+    ],
+    "explanation": "Ähnlich wie Autos sollten Motorräder alle zwei Jahre inspiziert werden.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-003",
+    "category": "zusatzstoff_b",
+    "question": "Woran können Sie erkennen, wann Sie Ihr Fahrzeug zur nächsten Hauptuntersuchung vorführen müssen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "An der Prüfplakette auf dem hinteren amtlichen Kennzeichen",
+        "correct": true
+      },
+      {
+        "text": "An der Eintragung in der Zulassungsbescheinigung Teil I",
+        "correct": true
+      },
+      {
+        "text": "An der Eintragung in der Bedienungsanleitung meines Fahrzeugs",
+        "correct": false
+      }
+    ],
+    "explanation": "Zum einen kannst du es an der Eintragung in der Zulassungsbescheinigung Teil I erkennen und an der Prüfplakette auf dem hinteren amtlichen Kennzeichen. Die Bedienungsanleitung ist keine Hilfe dafür.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-105",
+    "category": "zusatzstoff_b",
+    "question": "Sie haben einen gebrauchten Pkw gekauft. Die Hauptuntersuchung ist neu. Wann ist die nächste Hauptuntersuchung fällig?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nach zwei Jahren",
+        "correct": true
+      },
+      {
+        "text": "Nach einem Jahr",
+        "correct": false
+      },
+      {
+        "text": "Nach drei Jahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Liegt die Hauptuntersuchung bei einem gebraucht gekauften Pkw gerade erst zurück, müssen Sie die nächste Hauptuntersuchung nach zwei Jahren durchführen lassen. Lediglich bei neu gekauften Pkws beträgt die Frist bis zur nächsten Hauptuntersuchung drei Jahre.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-106",
+    "category": "zusatzstoff_b",
+    "question": "Sie haben Ihren zugelassenen Wohnanhänger während des Winterhalbjahres auf einem Campingplatz abgestellt. Was gilt hinsichtlich der Hauptuntersuchung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der auf der Prüfplakette angegebene Termin ist einzuhalten",
+        "correct": true
+      },
+      {
+        "text": "Der auf der Prüfplakette angegebene Termin verschiebt sich um die Standzeit",
+        "correct": false
+      }
+    ],
+    "explanation": "Auch wenn Sie Ihren Wohnanhänger auf einem Campingplatz abgestellt haben, müssen Sie den Termin für die Hauptuntersuchung einhalten. Technische Mängel wie zum Beispiel Rost können jederzeit auftreten und sich zu einem Sicherheitsrisiko entwickeln, wenn sie nicht behoben werden.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-205",
+    "category": "zusatzstoff_b",
+    "question": "Sie sollen einen Lkw mit einer zulässigen Gesamtmasse von 18 t zur Hauptuntersuchung vorführen. Welche Fahrzeugdokumente benötigen Sie?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Prüfbuch",
+        "correct": true
+      },
+      {
+        "text": "Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw mit einer zulässigen Gesamtmasse von 18 t solltest du das Prüfbuch und die Zulassungsbescheinigung Teil I (auch Fahrzeugschein genannt) bei dir haben.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-206",
+    "category": "zusatzstoff_b",
+    "question": "Sie sollen einen Kraftomnibus zur Sicherheitsprüfung vorführen. Welche Fahrzeugdokumente benötigen Sie?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Prüfbuch",
+        "correct": true
+      },
+      {
+        "text": "Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-207",
+    "category": "zusatzstoff_b",
+    "question": "Sie sollen einen Anhänger mit einer zulässigen Gesamtmasse von 18 t zur Hauptuntersuchung vorführen. Welche Fahrzeugdokumente benötigen Sie?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Prüfbuch",
+        "correct": true
+      },
+      {
+        "text": "Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Beim Anhänger mit einer zulässigen Gesamtmasse von 18 t, welcher zur Hauptuntersuchung vorgeführt werden muss, benötigt die Zulassungsbescheinigung Teil I (Fahrzeugschein) und das Prüfbuch.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-208",
+    "category": "zusatzstoff_b",
+    "question": "Was wird im Prüfbuch eingetragen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Hauptuntersuchung",
+        "correct": true
+      },
+      {
+        "text": "- Sicherheitsprüfung",
+        "correct": true
+      },
+      {
+        "text": "- Fahrtenschreiberüberprüfung",
+        "correct": false
+      }
+    ],
+    "explanation": "Im Prüfbuch wird das Datum der Hauptuntersuchung und der Sicherheitsprüfung eingetragen. \nDas Datum der Fahrteinschreibeüberprüfung gehört nicht dazu.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.01-209",
+    "category": "zusatzstoff_b",
+    "question": "Woran können Sie erkennen, wann Ihr Fahrzeug zur nächsten Sicherheitsprüfung vorgeführt werden muss?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Am SP-Schild mit der Prüfmarke",
+        "correct": true
+      },
+      {
+        "text": "An der Eintragung in der Zulassungsbescheinigung Teil I",
+        "correct": false
+      },
+      {
+        "text": "An der Prüfplakette auf dem amtlichen Kennzeichen",
+        "correct": false
+      }
+    ],
+    "explanation": "Wann du das nächste Mal zu einer Sicherheitsprüfung vorgeführt werden musst, erkennst du am SP-Schild mit der Prüfmarke. Die anderen beiden Antworten sind falsch.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-002",
+    "category": "zusatzstoff_b",
+    "question": "Welche Veränderungen können zum Erlöschen der Betriebserlaubnis führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Anbau eines Beiwagens",
+        "correct": true
+      },
+      {
+        "text": "Verwendung von Reifen einer anderen Größe",
+        "correct": true
+      },
+      {
+        "text": "Anbau einer Nebelschlussleuchte",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Hinzufügen eines Beiwagens oder das Aufziehen von Reifen anderer Größe wirkt sich auf das Verhalten Ihres Fahrzeugs aus und führt somit zum Entzug Ihrer Betriebserlaubnis. Das Anbringen einer Nebelschlussleuchte ändert nicht die Art und Weise, wie sich Ihr Fahrzeug verhält, und ist daher zulässig.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-003",
+    "category": "zusatzstoff_b",
+    "question": "Welche Veränderungen können zum Erlöschen der Betriebserlaubnis führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Einbau eines Motors anderer Leistung",
+        "correct": true
+      },
+      {
+        "text": "Anbau einer Verkleidung",
+        "correct": true
+      },
+      {
+        "text": "Einbau eines Radios",
+        "correct": false
+      }
+    ],
+    "explanation": "Durch den Einbau eines Motors mit anderer Leistung verliert die Betriebserlaubnis Ihre Gültigkeit. Gleiches gilt auch für den Anbau einer Verkleidung. Der Einbau eines Radio ist davon unabhängig.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-005",
+    "category": "zusatzstoff_b",
+    "question": "Welche Veränderungen können zum Erlöschen der Betriebserlaubnis führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Änderungen des Übersetzungsverhältnisses",
+        "correct": true
+      },
+      {
+        "text": "Änderungen am Motor zur Leistungssteigerung",
+        "correct": true
+      },
+      {
+        "text": "Einbau eines elektrischen Anlassers",
+        "correct": false
+      }
+    ],
+    "explanation": "Eine Änderung des Übersetzungsverhältnisses oder der Motorleistung wirkt sich auf das Verhalten Ihres Fahrzeugs aus und führt somit zum Entzug Ihrer Betriebserlaubnis.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-007",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen die Fahrerlaubnis der Klasse A1. Welches der beschriebenen Krafträder dürfen Sie fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Hubraum: 120 cm³; Leistung: 11 kW; bauartbedingte Höchstgeschwindigkeit: 80 km/h",
+        "correct": true
+      },
+      {
+        "text": "Hubraum: 100 cm³; Leistung: 12 kW; bauartbedingte Höchstgeschwindigkeit: 90 km/h",
+        "correct": false
+      },
+      {
+        "text": "Hubraum: 150 cm³; Leistung: 10 kW; bauartbedingte Höchstgeschwindigkeit: 80 km/h",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit einem A1-Führerschein können Sie ein Fahrzeug mit einer Höchstgeschwindigkeit von 80 km/h, 120cm3 Kapazität und 11kW Leistung fahren.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-010",
+    "category": "zusatzstoff_b",
+    "question": "Was ist vorgeschrieben, wenn die Haftpflichtversicherung Ihres Fahrzeugs erloschen ist?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- darf im Straßenverkehr nicht mehr benutzt werden",
+        "correct": true
+      },
+      {
+        "text": "- muss bei der Zulassungsstelle abgemeldet werden",
+        "correct": false
+      },
+      {
+        "text": "- muss bei der Technischen Prüfstelle vorgeführt werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Es ist erforderlich, eine Versicherung für Ihr Fahrzeug zu haben, ohne die Sie es nicht fahren dürfen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-011",
+    "category": "zusatzstoff_b",
+    "question": "Wann dürfen Sie mit einem Mofa auf öffentlichen Straßen nicht fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn keine Haftpflichtversicherung besteht",
+        "correct": true
+      },
+      {
+        "text": "Wenn das Mofa nicht verkehrssicher ist",
+        "correct": true
+      },
+      {
+        "text": "Wenn keine Kraftfahrzeugsteuer bezahlt wurde",
+        "correct": false
+      }
+    ],
+    "explanation": "Ein motorisiertes Fahrrad muss gegen Schäden Dritter bei Unfällen versichert sein und das Fahrzeug muss verkehrssicher sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-013",
+    "category": "zusatzstoff_b",
+    "question": "Welche Folgen hat es, wenn Sie mit einem Mofa fahren, das durch \"Frisieren\" schneller als 25 km/h läuft?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Bestrafung wegen Fahrens ohne Fahrerlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Bußgeld und Bestrafung, weil Betriebserlaubnis und Versicherungsschutz erloschen sind",
+        "correct": true
+      },
+      {
+        "text": "Es hat keine nachteiligen Folgen, solange man mit diesem Mofa nicht schneller als 25 km/h fährt",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie Ihr motorisiertes Fahrrad so einstellen, dass es schneller als 25 km/h fährt, erlischt Ihre Benutzungserlaubnis, Ihre Versicherung und Sie können mit einer Geldstrafe belegt werden, wenn Sie ohne die richtige Erlaubnis fahren.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-014",
+    "category": "zusatzstoff_b",
+    "question": "Wodurch erlischt die Betriebserlaubnis eines Mofas?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Durch „Ausräumen“ des Schalldämpfers",
+        "correct": true
+      },
+      {
+        "text": "Durch Änderung des Übersetzungsverhältnisses",
+        "correct": true
+      },
+      {
+        "text": "Durch Anbringung eines zweiten Rückspiegels",
+        "correct": false
+      }
+    ],
+    "explanation": "Änderungen, die sich auf das Verhalten Ihres Motorrads auswirken, wie z. B. Getriebeübersetzung, Schalldämpfer, können zum Erlöschen der Betriebserlaubnis führen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-015",
+    "category": "zusatzstoff_b",
+    "question": "Welche Papiere müssen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Betriebserlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Prüfbescheinigung",
+        "correct": true
+      },
+      {
+        "text": "Versicherungsnachweis",
+        "correct": true
+      }
+    ],
+    "explanation": "Beim Fahren müssen Sie immer einen Versicherungsnachweis, eine Benutzungserlaubnis und eine Prüfbescheinigung mit sich führen, falls es von der Polizei kontrolliert wird.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-016",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen auf öffentlichen Straßen fahren. Welche Versicherung muss für Ihr Fahrzeug abgeschlossen werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Kraftfahrzeug-Haftpflichtversicherung",
+        "correct": true
+      },
+      {
+        "text": "Vollkaskoversicherung",
+        "correct": false
+      },
+      {
+        "text": "Rechtsschutzversicherung",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie sind gesetzlich verpflichtet, eine Kfz-Haftpflichtversicherung für das Führen Ihres Fahrzeugs abzuschließen, die Schäden an Dritten bei Unfällen abdeckt.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-017",
+    "category": "zusatzstoff_b",
+    "question": "Wodurch weisen Sie nach, dass Sie eine Haftpflichtversicherung für Ihr Fahrzeug abgeschlossen haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Durch ein gültiges Versicherungskennzeichen",
+        "correct": true
+      },
+      {
+        "text": "Durch die Versicherungsbescheinigung",
+        "correct": true
+      },
+      {
+        "text": "Durch die Betriebserlaubnis",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie können eine Versicherungsbescheinigung vorlegen oder ein gültiges Versicherungskennzeichen haben.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-018",
+    "category": "zusatzstoff_b",
+    "question": "Wie lange ist das Versicherungskennzeichen höchstens gültig?",
+    "image": null,
+    "answers": [
+      {
+        "text": "1 Jahr",
+        "correct": true
+      },
+      {
+        "text": "2 Jahre",
+        "correct": false
+      },
+      {
+        "text": "Für die gesamte Lebensdauer des Fahrzeugs",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Versicherungsnummernschild ist maximal 1 Jahr gültig.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-023",
+    "category": "zusatzstoff_b",
+    "question": "Das Versicherungskennzeichen Ihres Zweirades ist nicht mehr gültig. Welche Folgen hat es, wenn Sie damit weiterhin fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ich muss mit einer Geldstrafe oder Freiheitsstrafe rechnen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss ggf. für entstehende Unfallschäden selbst aufkommen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf nur noch Schrittgeschwindigkeit fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Es ist gesetzlich vorgeschrieben, eine Versicherung für das Fahren zu haben. Ohne eine solche Versicherung riskieren Sie eine Geldstrafe oder eine Gefängnisstrafe. Wenn Sie ohne Versicherung einen Unfall haben, müssen Sie für eventuelle Schäden Dritter selbst aufkommen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-024",
+    "category": "zusatzstoff_b",
+    "question": "Welche Dokumente müssen Sie mitführen, wenn Sie ein Motorrad mit einem Hubraum von 200 cm³ fahren möchten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Den Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Um fahren zu können, benötigen Sie Ihren Führerschein und den Teil 1 Ihrer Zulassungsbescheinigung, um nachzuweisen, dass Sie und das Motorrad zum Fahren berechtigt sind.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-025",
+    "category": "zusatzstoff_b",
+    "question": "Welche Dokumente müssen Sie mitführen, wenn Sie ein Leichtkraftrad fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Den Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Die Betriebserlaubnis oder die Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Um fahren zu können, benötigen Sie Ihren Führerschein und den Teil 1 Ihrer Zulassungsbescheinigung, um nachzuweisen, dass Sie und das Motorrad zum Fahren berechtigt sind.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-026",
+    "category": "zusatzstoff_b",
+    "question": "Welche Dokumente müssen Sie mitführen, wenn Sie ein Kleinkraftrad fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Den Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Die Betriebserlaubnis oder die Übereinstimmungserklärung (COC-Papier)",
+        "correct": true
+      },
+      {
+        "text": "Die Versicherungsbescheinigung",
+        "correct": true
+      }
+    ],
+    "explanation": "Sie benötigen alle drei Dokumente, Ihren Führerschein, eine Versicherungsbescheinigung und eine Betriebserlaubnis oder Übereinstimmungsbescheinigung.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-027",
+    "category": "zusatzstoff_b",
+    "question": "Welche Dokumente müssen Sie mitführen, wenn Sie ein zulassungspflichtiges Kraftfahrzeug führen möchten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Den Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Als Kfz-FahrerIn müssen Sie immer Ihren Führerschein und Ihren Fahrzeugschein (Zulassungsbescheinigung Teil 1) bei sich haben. Den Fahrzeugbrief (Zulassungsbescheinigung Teil 2) sollten Sie sicher zu Hause aufbewahren. Er dient als Eigentumsnachweis und wird unterwegs nicht benötigt.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-028",
+    "category": "zusatzstoff_b",
+    "question": "Welche der aufgeführten Dokumente müssen Sie mitführen, wenn Sie einen Bus im Gelegenheitsverkehr im Inland führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Genehmigungsurkunde",
+        "correct": true
+      },
+      {
+        "text": "Den Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Die Versicherungsbescheinigung",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-030",
+    "category": "zusatzstoff_b",
+    "question": "Durch eine technische Änderung an Ihrem Fahrzeug ist die Betriebserlaubnis erloschen. Mit welchen Folgen müssen Sie rechnen, wenn Sie das Fahrzeug dennoch auf öffentlichen Straßen benutzen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Mit einem Bußgeld",
+        "correct": true
+      },
+      {
+        "text": "Mit einem Eintrag im Fahreignungsregister",
+        "correct": true
+      },
+      {
+        "text": "Mit dem Verlust meines Versicherungsschutzes",
+        "correct": true
+      }
+    ],
+    "explanation": "Wenn Sie Ihr Fahrzeug trotz erloschener Betriebserlaubnis auf öffentlichen Straßen nutzen, verlieren Sie Ihren Versicherungsschutz, da das Fahrzeug nicht mehr das ist welches ursprünglich versichert wurde. Da in Deutschland Versicherungspflicht besteht resultiert daraus eine Ordnungswidrigkeit durch das fahren ohne Versicherungsschutz. Bei einer Kontrolle durch die Polizei wird ein Bußgeld verhängt und Sie müssen mit einem Eintrag ins Fahreignungsregister rechnen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-031",
+    "category": "zusatzstoff_b",
+    "question": "Welche land- oder forstwirtschaftlich genutzten Anhänger müssen kein eigenes Kennzeichen führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- die hinten ein Geschwindigkeitsschild „25“ führen",
+        "correct": true
+      },
+      {
+        "text": "- mit denen landwirtschaftliche Güter befördert werden",
+        "correct": false
+      },
+      {
+        "text": "- die schneller als 25 km/h fahren dürfen",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-032",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen Gefahrgut transportieren und überschreiten dabei die zulässige Freimenge. Welche Voraussetzungen müssen Sie für den Transport erfüllen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- eine Fahrerlaubnis für die entsprechende Fahrzeugklasse besitzen",
+        "correct": true
+      },
+      {
+        "text": "- eine ADR-Bescheinigung mitführen",
+        "correct": true
+      },
+      {
+        "text": "- mindestens 25 Jahre alt sein",
+        "correct": false
+      }
+    ],
+    "explanation": "Weil du die Freimenge überschritten hast, musst du für deine Fahrerlaubnis die erforderliche Klasse besitzen und eine ADR-Bescheinigung (Gefahrgut) mitführen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.02-034",
+    "category": "zusatzstoff_b",
+    "question": "Was bedeuten die Zahlen auf einer solchen Tafel?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.02-034.png",
+    "answers": [
+      {
+        "text": "- geben Auskunft über das transportierte Gefahrgut",
+        "correct": true
+      },
+      {
+        "text": "- sind Angaben des Fahrzeugherstellers",
+        "correct": false
+      },
+      {
+        "text": "- stehen für die maximale Zuladung",
+        "correct": false
+      }
+    ],
+    "explanation": "Diese Zahlen geben Auskunft über das transportierte Gefahrgut. 33 ist die Gefahrennummer (leicht entzündbarer flüssiger Stoff) (Flammpunkt unter 23 °C) uns 1203 die UN-Nummer (auch Stoffnummer genannt) (Benzin oder Ottokraftstoff)",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-035",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen Lkw mit 8,0 t zulässiger Gesamtmasse führen, der mit orangefarbenen Warntafeln gekennzeichnet ist. Welche der folgenden Bedingungen müssen Sie erfüllen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- eine ADR-Bescheinigung mitführen",
+        "correct": true
+      },
+      {
+        "text": "- eine Fahrerlaubnis der Klasse C besitzen",
+        "correct": true
+      },
+      {
+        "text": "- mindestens 3 Jahre unfallfrei gefahren sein",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw mit 8,0 t zulässiger Gesamtmasse, musst du folgende Bedingungen erfüllen: Du musst eine ADR-Bescheinigung (Gefahrengut-Bescheinigung) mitführen und eine Fahrerlaubnis der Klasse C besitzen. Unfallfreiheit hat damit nichts zu tun.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-036",
+    "category": "zusatzstoff_b",
+    "question": "Wegen einer technischen Änderung an Ihrem Fahrzeug ist eine Begutachtung erfolgt. Wozu sind Sie verpflichtet?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- mitführen und gegebenenfalls die Zulassungsbescheinigung Teil I berichtigen lassen",
+        "correct": true
+      },
+      {
+        "text": "- dem Fahrzeughersteller übersenden",
+        "correct": false
+      },
+      {
+        "text": "- an der dafür vorgesehenen Stelle in der Zulassungsbescheinigung Teil II einkleben",
+        "correct": false
+      }
+    ],
+    "explanation": "Nach der technischen Veränderung eines Fahrzeugs wird bei der Begutachtung in der Regel ein Abnahmeprotokoll erstellt. Es kann jedoch auch eine Eintragung im Teil 1 der Zulassungsbescheinigung erfolgen. Das Protokoll ist durch den/die Kfz-FahrerIn während jeder Fahrt mitzuführen. Auf Verlangen muss das Protokoll beispielsweise bei einer Polizeikontrolle vorgezeigt werden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-037",
+    "category": "zusatzstoff_b",
+    "question": "Die bauartbedingte Höchstgeschwindigkeit eines Mofas beträgt durch eine unzulässige technische Änderung mehr als 25 km/h. Welche Folge hat die Nutzung eines solchen Mofas im öffentlichen Straßenverkehr für Sie?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ich begehe eine Straftat wegen Fahrens ohne Fahrerlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Ich begehe eine Ordnungswidrigkeit wegen Erlöschens der Betriebserlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Keine, solange ich mit diesem Mofa nicht schneller als 25 km/h fahre",
+        "correct": false
+      }
+    ],
+    "explanation": "Sobald Sie etwas ohne allgemeine Betriebserlaubnis oder Abnahme an Ihrem Fahrzeug verändern erlischt die Betriebserlaubnis. Da das Fahren mit einem Mofa über 25 km/h schon der Klasse AM oder höher angehört fahren Sie ohne gültiger Fahrerlaubnis.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-038",
+    "category": "zusatzstoff_b",
+    "question": "Nach Umbauten an Ihrem Fahrzeug ist eine Begutachtung erforderlich. Wann muss diese erfolgen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Unverzüglich nach dem Umbau",
+        "correct": true
+      },
+      {
+        "text": "Bei der nächsten Inspektion",
+        "correct": false
+      },
+      {
+        "text": "Nach Aufforderung durch die Zulassungsstelle",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Begutachtung muss umgehend nach dem Umbau erfolgen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-039",
+    "category": "zusatzstoff_b",
+    "question": "Welche technische Änderung führt bei einem Zweirad im Regelfall zum Erlöschen einer erteilten Betriebserlaubnis?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Eine Änderung des Übersetzungsverhältnisses von Ritzel und Kettenrad",
+        "correct": true
+      },
+      {
+        "text": "Eine Änderung der Motorleistung",
+        "correct": true
+      },
+      {
+        "text": "Ein Anbau eines Tankrucksacks",
+        "correct": false
+      }
+    ],
+    "explanation": "Das ursprüngliche Übersetzungsverhältnis von Ritzel und Kettenrad ist Bestandteil der erteilten Betriebserlaubnis. Alle Änderungen, die den Antrieb deines Fahrzeuges betreffen, sind eintragungspflichtig. Somit erlischt die Betriebserlaubnis, wenn du das Übersetzungsverhältnis änderst.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-040",
+    "category": "zusatzstoff_b",
+    "question": "Welche technische Änderung am Zweirad kann zum Erlöschen der Betriebserlaubnis führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der Anbau eines Sonderlenkers",
+        "correct": true
+      },
+      {
+        "text": "Die Änderung der Rad-Reifen-Kombination",
+        "correct": true
+      },
+      {
+        "text": "Der Einbau eines baugleichen Motors",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Betriebserlaubnis erlischt, wenn Änderungen am Fahrzeug vorgenommen wurden, durch welche sich die Fahrzeugart ändert, die eine Gefährdung hervorrufen könnten oder durch die sich die Abgas- oder Geräuschwerte verschlechtern.\nDie Betriebserlaubnis deines Zweirads kann ihre Gültigkeit verlieren, wenn du zb einen Sonderlenker anbaust oder du eine Rad-Reifen-Kombination verwendest, die nicht expliziert für dein. Zweirad genehmigt ist.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-041",
+    "category": "zusatzstoff_b",
+    "question": "Wann müssen Sie spätestens ein neues Versicherungskennzeichen an Ihrem Zweirad anbringen, um übergangslos weiterfahren zu dürfen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- 1. März",
+        "correct": true
+      },
+      {
+        "text": "- 1. Januar",
+        "correct": false
+      },
+      {
+        "text": "- 1. Juni",
+        "correct": false
+      }
+    ],
+    "explanation": "Ab dem 1. März 2023 werden die neuen Versicherungskennzeichen ungültig. Um übergangslos weiterfahren zu dürfen, kümmere dich rechtzeitig um ein neues Kennzeichen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-042",
+    "category": "zusatzstoff_b",
+    "question": "Die Gültigkeit des Versicherungskennzeichens Ihres Zweirads ist abgelaufen. Welche Folge hat dies für dessen Benutzung im öffentlichen Straßenverkehr?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- nicht mehr fahren",
+        "correct": true
+      },
+      {
+        "text": "- auf einem Gehweg schieben",
+        "correct": true
+      },
+      {
+        "text": "- auf einem Parkplatz parken",
+        "correct": false
+      }
+    ],
+    "explanation": "Es ist verboten, ein Zweirad ohne gültiges Versicherungskennzeichen im öffentlichen Straßenverkehr zu nutzen. Der Gesetzgeber setzt eine Pflichtversicherung voraus, damit mögliche Unfallkosten gedeckt sind. \nDu darfst dein Zweirad ohne gültiges Versicherungskennzeichen auf einem Gehweg schieben, da dies nicht als „fahren“ zählt.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-101",
+    "category": "zusatzstoff_b",
+    "question": "Wegen \"Tieferlegung\" Ihres Pkw ist eine Begutachtung erforderlich. Wann muss diese erfolgen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Unverzüglich nach dem Umbau",
+        "correct": true
+      },
+      {
+        "text": "Zusammen mit der nächsten Hauptuntersuchung, spätestens 1 Jahr nach Umbau",
+        "correct": false
+      },
+      {
+        "text": "Nach Aufforderung durch die Zulassungsstelle",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Tieferlegen eines Pkws ist eine abnahmepflichtige Änderung, weil Veränderungen am Fahrwerk vorgenommen wurden. Daher muss die Begutachtung unverzüglich erfolgen. Sie müssen das Gutachten oder die Bestätigung immer mitführen und gegebenenfalls diese technische Änderung in die Zulassungsbescheinigung Teil I, den Fahrzeugschein, eintragen lassen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-104",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen die Fahrerlaubnis der Klasse B. Ihr Pkw hat folgende Daten: - Leermasse 1.900 kg - zulässige Gesamtmasse 2.400 kg - zulässige Anhängelast 1.500 kg Welchen Anhänger dürfen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "1.000 kg",
+        "correct": true
+      },
+      {
+        "text": "1.200 kg",
+        "correct": false
+      },
+      {
+        "text": "1.500 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Unabhängig von den Angaben darf ein Fahrzeug plus Anhänger bei Fahrerlaubnis Klasse B nur ein beschränktes Gesamtgewicht von 3.500 kg aufweisen. Bei voller Beladung des Pkws darf der beladene Anhänger also nicht mehr als 1.100 kg wiegen. Ausnahme: Der Pkw hat eine zulässige Gesamtmasse von 3.500 kg und der Anhänger wiegt unter 750 kg.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-201",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen die Fahrerlaubnis der Klasse C. Ihr Lkw hat folgende Daten: - Leermasse 9.000 kg - zulässige Gesamtmasse 18.000 kg - zulässige Anhängelast 22.000 kg Welchen Anhänger dürfen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "750 kg",
+        "correct": true
+      },
+      {
+        "text": "18.000 kg",
+        "correct": false
+      },
+      {
+        "text": "22.000 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Der Anhänger mit einer zulässigen Gesamtmasse von 750 kg darf bei Klasse C nicht überschritten werden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-202",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen die Fahrerlaubnis der Klasse C1. Ihr Lkw hat folgende Daten: - Leermasse 3.500 kg - zulässige Gesamtmasse 6.200 kg - zulässige Anhängelast 9.300 kg Welchen Anhänger dürfen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "750 kg",
+        "correct": true
+      },
+      {
+        "text": "3.500 kg",
+        "correct": false
+      },
+      {
+        "text": "6.200 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit den genannten Daten darf dein Anhänger nicht mehr als 750 kg wiegen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-203",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen die Fahrerlaubnis der Klasse D. Ihr Bus hat folgende Daten: - Leermasse 13.000 kg - zulässige Gesamtmasse 18.000 kg - zulässige Anhängelast 2.000 kg Welchen Anhänger dürfen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "750 kg",
+        "correct": true
+      },
+      {
+        "text": "1.000 kg",
+        "correct": false
+      },
+      {
+        "text": "2.000 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-206",
+    "category": "zusatzstoff_b",
+    "question": "Was kann dazu führen, dass Ihre Eignung als Busfahrer überprüft werden muss?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Ihren Kenntnissen und Fähigkeiten als Busfahrer",
+        "correct": true
+      },
+      {
+        "text": "- Ihrer körperlichen oder geistigen Eignung",
+        "correct": true
+      },
+      {
+        "text": "- der Zuverlässigkeit Ihres Arbeitgebers",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-207",
+    "category": "zusatzstoff_b",
+    "question": "Wann erlischt eine Fahrerlaubnis der Klasse D oder D1?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn die Geltungsdauer nicht rechtzeitig verlängert wurde",
+        "correct": true
+      },
+      {
+        "text": "Wenn man länger als 1 Jahr keinen Bus gefahren hat",
+        "correct": false
+      },
+      {
+        "text": "Wenn das Beschäftigungsverhältnis als Busfahrer endet",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-209",
+    "category": "zusatzstoff_b",
+    "question": "Wann darf ein Busfahrer den Fahrdienst nicht ausüben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn er an einer meldepflichtigen, übertragbaren Krankheit leidet",
+        "correct": true
+      },
+      {
+        "text": "Wenn ein Mitglied seiner häuslichen Gemeinschaft an einer meldepflichtigen, übertragbaren Krankheit leidet",
+        "correct": true
+      },
+      {
+        "text": "Wenn er unter starkem Unwohlsein leidet",
+        "correct": true
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-210",
+    "category": "zusatzstoff_b",
+    "question": "Ihr Bus ist an allen Sitzplätzen mit vorgeschriebenen Sicherheitsgurten ausgerüstet. Sie fahren im Gelegenheitsverkehr. Was ist richtig?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Sie sind verpflichtet, Ihren Sicherheitsgurt anzulegen",
+        "correct": true
+      },
+      {
+        "text": "Die Fahrgäste müssen auf die Anlegepflicht hingewiesen werden",
+        "correct": true
+      },
+      {
+        "text": "Sicherheitsgurte brauchen innerorts nicht angelegt zu werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-215",
+    "category": "zusatzstoff_b",
+    "question": "Welches Dokument ist im grenzüberschreitenden Verkehr mit einem Bus innerhalb der EU-Staaten mitzuführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Eine beglaubigte Kopie der gültigen Lizenz für den gewerblichen grenzüberschreitenden Personenverkehr mit Kraftomnibussen",
+        "correct": true
+      },
+      {
+        "text": "Ein genehmigter Fahrplan",
+        "correct": false
+      },
+      {
+        "text": "Eine gültige Standortbescheinigung",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-225",
+    "category": "zusatzstoff_b",
+    "question": "Was regelt das Güterkraftverkehrsgesetz?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die geschäftsmäßige Güterbeförderung",
+        "correct": true
+      },
+      {
+        "text": "Die entgeltliche Güterbeförderung",
+        "correct": true
+      },
+      {
+        "text": "Die private Güterbeförderung",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Güterkraftverkehrsgesetz regelt die entgeltliche Güterbeförderung & die geschäftsmäßige Güterbeförderung. Private Güterbeförderung gehört nicht dazu.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-227",
+    "category": "zusatzstoff_b",
+    "question": "Sie führen einen internationalen Möbeltransport durch. Welches Beförderungsdokument müssen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Den CMR-Frachtbrief",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil II",
+        "correct": false
+      },
+      {
+        "text": "Den Versicherungsnachweis",
+        "correct": false
+      }
+    ],
+    "explanation": "Du musst bei einem internationalen Möbeltransport den CMR-Frachtbrief mitführen. CRM ist eine internationale Vereinbarung über Beförderungsverträge auf Straßen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-228",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen eine Genehmigungsurkunde gemäß Personenbeförderungsgesetz. Wann ist diese im Gelegenheitsverkehr mitzuführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- innerhalb Deutschlands",
+        "correct": true
+      },
+      {
+        "text": "- außerhalb Deutschlands in der EU",
+        "correct": true
+      },
+      {
+        "text": "- außerhalb der EU",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-229",
+    "category": "zusatzstoff_b",
+    "question": "Sie nehmen gegen Entgelt eine Wohnungsauflösung vor. Für den Möbeltransport nutzen Sie ein Kraftfahrzeug mit einer zulässigen Gesamtmasse von 4,5 t. Benötigen Sie für den Transport eine Erlaubnis nach dem Güterkraftverkehrsgesetz?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ja, weil das Kraftfahrzeug eine zulässige Gesamtmasse von mehr als 3,5 t hat",
+        "correct": true
+      },
+      {
+        "text": "Nein, weil der eigentliche Zweck der Arbeit die Wohnungsauflösung ist",
+        "correct": false
+      },
+      {
+        "text": "Nein, weil Kleinunternehmer keine Erlaubnis benötigen",
+        "correct": false
+      }
+    ],
+    "explanation": "Da dein Lkw eine zulässige Gesamtmasse von 3,5 t hat, benötigst du bei einem Möbeltransport mit einer Gesamtmasse von 4,5 t eine Erlaubnis nach dem Güterkraftverkehrsgesetz.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-230",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie bezüglich der Fahrerlaubnis der Klassen C, C1, D und D1 beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Fahrerlaubnis wird längstens für 5 Jahre befristet erteilt",
+        "correct": true
+      },
+      {
+        "text": "Die Verlängerung der Fahrerlaubnis kann frühestens 6 Monate vor Ablauf der Geltungsdauer beantragt werden",
+        "correct": true
+      },
+      {
+        "text": "Das Ende der Geltungsdauer der Fahrerlaubnis ist auf dem Führerschein vermerkt",
+        "correct": true
+      }
+    ],
+    "explanation": "Alle 3 Antworten sind richtig. Die genannten Klassen sind alle auf 5 Jahre längstens befristet. Die Verlängerung der Fahrerlaubnis kann frühstens 6 Monate vor Ablauf der Geltungsdauer (5 Jahre) beantragt werden und das Ende der Geltungsdauer ist auf dem Führerschein vermerkt.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-231",
+    "category": "zusatzstoff_b",
+    "question": "Sie sollen Gefahrgut transportieren und überschreiten dabei die freigestellte Menge. Welchen Nachweis müssen Sie für den Transport mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Eine gültige ADR-Schulungsbescheinigung",
+        "correct": true
+      },
+      {
+        "text": "Eine gültige Fahrerlaubnis für die Fahrzeugklasse",
+        "correct": true
+      },
+      {
+        "text": "Einen gültigen Nachweis über den letzten Gefahrguttransport",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.02-232",
+    "category": "zusatzstoff_b",
+    "question": "Wo finden Sie die Angaben zur Geltungsdauer Ihrer Fahrerlaubnis?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf dem Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Auf der Fahrerkarte",
+        "correct": false
+      },
+      {
+        "text": "Auf dem Fahrerqualifizierungsnachweis",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-233",
+    "category": "zusatzstoff_b",
+    "question": "Welchen Nachweis benötigen Sie zur Verlängerung der Geltungsdauer Ihrer Fahrerlaubnis?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- meine Eignung",
+        "correct": true
+      },
+      {
+        "text": "- mein Sehvermögen",
+        "correct": true
+      },
+      {
+        "text": "- meine Schulung in Erster Hilfe",
+        "correct": false
+      }
+    ],
+    "explanation": "Zur Verlängerung der Geltungsdauer deiner Fahrerlaubnis benötigst du einen erneuten Nachweis über die Eignung und das Sehvermögen. Eine Schulung in Erster Hilfe muss nicht wiederholt werden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-234",
+    "category": "zusatzstoff_b",
+    "question": "Sie führen einen Lkw im gewerblichen Güterkraftverkehr. Was müssen Sie auf Verlangen nachweisen können?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Dokumentation zur Beförderung",
+        "correct": true
+      },
+      {
+        "text": "Eine gültige Berufskraftfahrerqualifikation",
+        "correct": true
+      },
+      {
+        "text": "Eine gültige Güterschaden-Haftpflichtversicherung",
+        "correct": true
+      }
+    ],
+    "explanation": "Als Fahrer eines Lkw im gewerblichen Güterverkehr müssen Sie folgende Dokumente mitführen:\n        1.        Dokumentation zur Beförderung: Nach § 7 Abs. 1 Nr. 3 des Güterkraftverkehrsgesetzes (GüKG) ist ein Beförderungspapier mitzuführen, das Angaben über das beförderte Gut, den Absender und den Empfänger enthält.\n        2.        Gültige Berufskraftfahrerqualifikation: Gemäß Berufskraftfahrer-Qualifikations-Gesetz (BKrFQG) müssen Sie eine entsprechende Qualifikation nachweisen, etwa durch den Eintrag der Schlüsselzahl “95” im Führerschein.\n        3.        Gültige Güterschaden-Haftpflichtversicherung: Nach § 7a GüKG ist der Nachweis einer Güterschaden-Haftpflichtversicherung erforderlich, um die Haftung für transportierte Güter abzudecken.\n\nDas Mitführen dieser Dokumente ist gesetzlich vorgeschrieben und dient der Sicherstellung eines ordnungsgemäßen und sicheren Güterkraftverkehrs.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-235",
+    "category": "zusatzstoff_b",
+    "question": "Wann benötigen Sie für die Beförderung von Gütern eine Berechtigung nach dem Güterkraftverkehrsgesetz?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- die Beförderung geschäftsmäßig durchgeführt wird",
+        "correct": true
+      },
+      {
+        "text": "- die Beförderungsstrecke mehr als 100 km beträgt",
+        "correct": false
+      },
+      {
+        "text": "- für die Beförderung eine Fahrzeugkombination benutzt wird",
+        "correct": false
+      }
+    ],
+    "explanation": "Du benötigst diese Berechtigung ausschließlich für die Beförderung von Gütern im gewerblichen Güterverkehr.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-301",
+    "category": "zusatzstoff_b",
+    "question": "Welches Dokument müssen Sie im Gelegenheitsverkehr auf Verlangen zuständigen Personen zur Prüfung aushändigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Zulassungsbescheinigung Teil I",
+        "correct": true
+      },
+      {
+        "text": "Die Genehmigung für den Gelegenheitsverkehr",
+        "correct": true
+      },
+      {
+        "text": "Den Versicherungsschein der Insassen-Unfallversicherung",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-302",
+    "category": "zusatzstoff_b",
+    "question": "Als Busfahrer befördern Sie Fahrgäste im grenzüberschreitenden Linienverkehr. Welche Dokumente müssen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Zulassungsbescheinigung Teil I",
+        "correct": true
+      },
+      {
+        "text": "Die für das Einreiseland erforderlichen Genehmigungen",
+        "correct": true
+      },
+      {
+        "text": "Die Zulassungsbescheinigung Teil II",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-403",
+    "category": "zusatzstoff_b",
+    "question": "Welche Bedingungen müssen erfüllt sein, damit ein landwirtschaftlicher Anhänger zulassungsfrei bleibt?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der Anhänger darf nur hinter Zugmaschinen oder selbstfahrenden Arbeitsmaschinen mitgeführt und nicht schneller als 25 km/h gefahren werden",
+        "correct": true
+      },
+      {
+        "text": "Der Anhänger darf nur für land- oder forstwirtschaftliche Zwecke verwendet werden",
+        "correct": true
+      },
+      {
+        "text": "Der Anhänger muss im Abstand von 12 Monaten zur Hauptuntersuchung",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-406",
+    "category": "zusatzstoff_b",
+    "question": "Welche Folgen hat ein ungültiges Versicherungskennzeichen für die Benutzung eines Fahrzeugs auf öffentlichen Straßen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- nicht mehr benutzt werden",
+        "correct": true
+      },
+      {
+        "text": "- weiter benutzt werden, wenn man bereit ist, Schäden selbst zu zahlen",
+        "correct": false
+      },
+      {
+        "text": "- weiter benutzt werden, wenn man nicht schneller als Radfahrer fährt",
+        "correct": false
+      }
+    ],
+    "explanation": "Es ist gesetzlich vorgeschrieben, eine Versicherung für das Fahren zu haben. Ohne eine solche Versicherung darf man nicht fahren und riskiert eine Geldstrafe oder eine Gefängnisstrafe. Wenn Sie ohne Versicherung einen Unfall haben, müssen Sie für eventuelle Schäden Dritter selbst aufkommen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-407",
+    "category": "zusatzstoff_b",
+    "question": "Welche der aufgeführten Dokumente müssen Sie mitführen, wenn Sie einen Bus im grenzüberschreitenden Gelegenheitsverkehr innerhalb der EU-Staaten fahren möchten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Das EU-Fahrtenblatt",
+        "correct": true
+      },
+      {
+        "text": "Das persönliche Kontrollbuch",
+        "correct": false
+      },
+      {
+        "text": "Keine besonderen Dokumente",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-408",
+    "category": "zusatzstoff_b",
+    "question": "Wie lange ist eine ADR-Bescheinigung über die Schulung der Fahrzeugführer zur Beförderung gefährlicher Güter gültig?",
+    "image": null,
+    "answers": [
+      {
+        "text": "5 Jahre",
+        "correct": true
+      },
+      {
+        "text": "3 Jahre",
+        "correct": false
+      },
+      {
+        "text": "Unbegrenzt",
+        "correct": false
+      }
+    ],
+    "explanation": "Die ADR-Bescheinigung (Schulung der Fahrzeugführer zur Beförderung gefährlicher Güter) ist 5 Jahre gültig und muss dann erneuert werden.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-409",
+    "category": "zusatzstoff_b",
+    "question": "Welche Pflichten haben Sie, wenn Sie ein Kraftfahrzeug im gewerblichen Güterverkehr führen möchten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- alle für die Sicherung der Ladung notwendigen Maßnahmen treffen",
+        "correct": true
+      },
+      {
+        "text": "- ein Begleitpapier mitführen, in dem das beförderte Gut, der Be- und Entladeort und der Auftraggeber angegeben sind",
+        "correct": true
+      },
+      {
+        "text": "- ein Begleitpapier für die Ladung erstellen",
+        "correct": false
+      }
+    ],
+    "explanation": "Deine Pflichten bei einem gewerblichen Güterverkehr sind alle für die Sicherung der Ladung notwendigen Maßnahmen zu treffen und ein Begleitpapier mitführen, in dem das beförderte Gut, der Be- und Entladeort und der Auftraggeber angegeben sind.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.02-410",
+    "category": "zusatzstoff_b",
+    "question": "Welche Kraftfahrzeuge - auch mit Anhänger - dürfen mit einer Fahrerlaubnis der Klasse T bereits vor Vollendung des 18. Lebensjahres gefahren werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "40 km/h",
+        "correct": true
+      },
+      {
+        "text": "50 km/h",
+        "correct": false
+      },
+      {
+        "text": "60 km/h",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-411",
+    "category": "zusatzstoff_b",
+    "question": "Welche Kraftfahrzeuge - auch mit Anhänger - dürfen mit einer Fahrerlaubnis der Klasse T nach Vollendung des 18. Lebensjahres gefahren werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "60 km/h",
+        "correct": true
+      },
+      {
+        "text": "70 km/h",
+        "correct": false
+      },
+      {
+        "text": "80 km/h",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.02-412",
+    "category": "zusatzstoff_b",
+    "question": "Welche Veränderungen am Fahrzeug können zum Erlöschen der Betriebserlaubnis führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Anbau eines Lenkers anderer Bauart",
+        "correct": true
+      },
+      {
+        "text": "Veränderung der Auspuffanlage",
+        "correct": true
+      },
+      {
+        "text": "Einbau eines Austauschmotors",
+        "correct": false
+      }
+    ],
+    "explanation": "Eine Änderung des Lenkradtyps oder der Auspuffanlage wirkt sich auf das Verhalten Ihres Fahrzeugs aus und führt somit zum Entzug Ihrer Betriebserlaubnis. Das Ersetzen eines Motors durch einen ähnlichen ändert nicht die Art und Weise, wie sich Ihr Fahrzeug verhält, und ist daher erlaubt.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-413",
+    "category": "zusatzstoff_b",
+    "question": "Welche der genannten Vorschriften regeln die Beförderung gefährlicher Güter auf der Straße?",
+    "image": null,
+    "answers": [
+      {
+        "text": "GGVSEB",
+        "correct": true
+      },
+      {
+        "text": "ADR",
+        "correct": true
+      },
+      {
+        "text": "BGB",
+        "correct": false
+      }
+    ],
+    "explanation": "Diese Vorschriften regeln  die Beförderung und sind enthalten in der  Gefahrgutverordnung (GGVSEB) und ADR (Europäisches Übereinkommen über die internationale Beförderung gefährlicher Güter auf der Straße)",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.02-414",
+    "category": "zusatzstoff_b",
+    "question": "Welche Gültigkeitsdauer besitzt die Genehmigung für Gelegenheitsverkehr (national) mit Kraftomnibussen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Höchstens 10 Jahre",
+        "correct": true
+      },
+      {
+        "text": "Höchstens 5 Jahre",
+        "correct": false
+      },
+      {
+        "text": "Höchstens 2 Jahre",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.02-416",
+    "category": "zusatzstoff_b",
+    "question": "Welche Nachweise können für den grenzüberschreitenden Güterverkehr erforderlich sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- CEMT-Genehmigung",
+        "correct": true
+      },
+      {
+        "text": "- bilaterale Genehmigung",
+        "correct": true
+      },
+      {
+        "text": "- Gemeinschaftslizenz",
+        "correct": true
+      }
+    ],
+    "explanation": "3 Antworten sind richtig. Als Nachweise für den grenzüberschreitenden Güterverkehr gelten CEMT-Genehmigung, die bilaterale Genehmigung und die Gemeinschaftslizenz.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.03-001",
+    "category": "zusatzstoff_b",
+    "question": "Was ist beim Rückwärtsfahren mit einer Fahrzeugkombination richtig, wenn die Sicht nach hinten beeinträchtigt ist?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn die Sichtverbindung zur einweisenden Person abreißt, muss angehalten werden",
+        "correct": true
+      },
+      {
+        "text": "Nur beim Einfahren in eine Vorfahrtstraße ist Einweisung erforderlich",
+        "correct": false
+      },
+      {
+        "text": "Auf einem Betriebsgelände kann auf Einweisung verzichtet werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Fahren Sie mit einer Fahrzeugkombination rückwärts und ist Ihre Sicht nach hinten eingeschränkt, müssen Sie darauf achten, dass Sie andere Verkehrsteilnehmer nicht gefährden. Sie sollten sich daher in den Straßenverkehr einweisen lassen. Das gilt auch für das Betriebsgelände.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.03-002",
+    "category": "zusatzstoff_b",
+    "question": "Welche Gültigkeitsdauer besitzt die Genehmigung für sonstigen Gelegenheitsverkehr (national) mit Kraftfahrzeugen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Höchstens 5 Jahre",
+        "correct": true
+      },
+      {
+        "text": "Höchstens 10 Jahre",
+        "correct": false
+      },
+      {
+        "text": "Höchstens 2 Jahre",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.03-102",
+    "category": "zusatzstoff_b",
+    "question": "Auf einer Straße mit Schlaglöchern kommt Ihr Anhänger ins \"Springen\". Wie müssen Sie sich verhalten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Geschwindigkeit vermindern, um Schleudern zu verhindern",
+        "correct": true
+      },
+      {
+        "text": "Beschleunigen, um den Zug gestreckt zu halten",
+        "correct": false
+      },
+      {
+        "text": "Mit gleich bleibender Geschwindigkeit den Schlaglöchern ausweichen",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie sollten nicht weiter beschleunigen, da dadurch der Anhänger aufschaukeln würde. Bremsen Sie stattdessen leicht ab. Eine verringerte Geschwindigkeit bringt den Anhänger wieder unter Kontrolle.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-105",
+    "category": "zusatzstoff_b",
+    "question": "Worauf müssen Sie achten, wenn Sie hinter Ihrem Pkw einen Anhänger mit Auflaufbremse mitführen wollen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Dass die tatsächliche Gesamtmasse des Anhängers nicht größer ist als die für den Pkw zugelassene Anhängelast",
+        "correct": true
+      },
+      {
+        "text": "Dass das Abreißseil mit dem Zugfahrzeug verbunden ist",
+        "correct": true
+      },
+      {
+        "text": "Dass die zulässige Höchstgeschwindigkeit dieses Zuges auch auf Autobahnen 60 km/h beträgt",
+        "correct": false
+      }
+    ],
+    "explanation": "Achten Sie darauf, dass das Abreißseil ordnungsgemäß befestigt ist. Es bewirkt, dass im Falle des Ablösens die Bremse des Anhängers automatisch anzieht und den Anhänger zum Stehen bringt. Die Auflaufbremse hat mit der zulässigen Höchstgeschwindigkeit nichts zu tun.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-106",
+    "category": "zusatzstoff_b",
+    "question": "Was bezeichnet man als Anhängelast?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die tatsächlich gezogene Last",
+        "correct": true
+      },
+      {
+        "text": "Die zulässige Gesamtmasse des Anhängers",
+        "correct": false
+      },
+      {
+        "text": "Die Nutzlast des Anhängers",
+        "correct": false
+      }
+    ],
+    "explanation": "Als Anhängelast wird nur die tatsächlich gezogene Last bezeichnet, also das Gewicht des Anhängers. Der Hersteller legt diesen Wert fest für das Mitführen eines Anhängers.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-111",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen Anhänger mitführen. Wann müssen zusätzliche Rückspiegel an Ihrem Kraftfahrzeug angebracht werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn nicht alle wesentlichen Verkehrsvorgänge ohne zusätzliche Rückspiegel beobachtet werden können",
+        "correct": true
+      },
+      {
+        "text": "Wenn die Ladefläche des Anhängers eine Breite von 1,5 m und eine Höhe von 1 m überschreitet",
+        "correct": false
+      },
+      {
+        "text": "Wenn es sich um einen Wohnanhänger oder um einen land- und forstwirtschaftlich genutzten Anhänger handelt",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie als Kfz-FahrerIn sind für ausreichende Sicht am Fahrzeug verantwortlich. Wird die Sicht durch einen Anhänger beeinträchtigt und reichen die vorgeschriebenen Spiegel nicht mehr aus, müssen Sie zusätzliche Spiegel anbringen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-112",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen gebremsten Anhänger mitführen. Wo finden Sie Angaben bzw. Hinweise zur zulässigen Anhängelast Ihres Pkws?",
+    "image": null,
+    "answers": [
+      {
+        "text": "In der Zulassungsbescheinigung Teil I meines Pkws",
+        "correct": true
+      },
+      {
+        "text": "In der Zulassungsbescheinigung Teil I meines Anhängers",
+        "correct": false
+      },
+      {
+        "text": "Im Versicherungsschein",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Information, wie viel Anhängelast ein Zugfahrzeug ziehen kann, befindet sich in der Zulassungsbescheinigung (1. Teil) und in der Betriebsanleitung des Fahrzeugs.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.03-113",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten an Ihren Pkw einen Anhänger ankuppeln. Wo können Sie die Angabe über die zulässige Stützlast Ihres Pkws finden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Betriebsanleitung",
+        "correct": true
+      },
+      {
+        "text": "- Zulassungsbescheinigung Teil I",
+        "correct": true
+      },
+      {
+        "text": "- Zulassungsbescheinigung Teil II",
+        "correct": false
+      }
+    ],
+    "explanation": "Informationen über die zulässige Anhängelast finden Sie in Teil 1 der Zulassungsbescheinigung des Pkws als Zufahrzeug und in dessen Betriebsanleitung.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.03-114",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen Anhänger mitführen. Was müssen Sie beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Anhängelast des Zugfahrzeugs",
+        "correct": true
+      },
+      {
+        "text": "- Stützlast an der Anhängekupplung",
+        "correct": true
+      },
+      {
+        "text": "- Zuladung des Anhängers",
+        "correct": true
+      }
+    ],
+    "explanation": "Der Hersteller gibt vor wir hoch die maximale Stützlast, die Zuladung und die Anhängelast sein darf. Werden die Werte nicht eingehalten kann es Auswirkungen auf das Fahrverhalten haben und somit zu einem Unfall führen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-115",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren mit einem Anhänger auf einer Straße mit Schlaglöchern. Ihre Fahrzeugkombination schaukelt sich auf. Wie müssen Sie sich jetzt verhalten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- die Geschwindigkeit verringern, um ein Schleudern zu verhindern",
+        "correct": true
+      },
+      {
+        "text": "- beschleunigen, um die Fahrzeugkombination gestreckt zu halten",
+        "correct": false
+      },
+      {
+        "text": "- schnell gegenlenken, um ein Schleudern zu verhindern",
+        "correct": false
+      }
+    ],
+    "explanation": "Durch das Verringern der Geschwindigkeit kannst du das Schleudern verhindern.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-117",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen Anhänger mit einer zulässigen Gesamtmasse über 750 kg mit Ihrem Pkw verbinden. Was müssen Sie dabei beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der Handgriff der Zugkugelkupplung muss mechanisch und optisch überprüft werden",
+        "correct": true
+      },
+      {
+        "text": "Das Abreißseil muss sachgerecht angebracht sein",
+        "correct": true
+      },
+      {
+        "text": "Die Beleuchtungseinrichtung des Anhängers muss nach dem Ankuppeln auf ihre Funktion hin überprüft werden",
+        "correct": true
+      }
+    ],
+    "explanation": "Damit der Anhänger richtig angeschlossen ist, muss die Kupplungsklaue den Kugelkopf vollständig umschließen. Wenn die Sicherung einrastet, ist gewährleistet, dass sich die Kupplungsklaue nicht selbstständig lösen kann. Prüfe dies mit Hand und Auge. Zusätzlich müssen Anhänger mit einer zulässigen Gesamtmasse von über 750 kg zusätzlich mit einem Abreißseil gesichert werden. Prüfe vor Fahrtantritt, ob es sachgerecht angebracht ist. \nNachdem du alle Verbindungen geprüft hast, musst du vor Fahrtantritt auch noch die Beleuchtung kontrollieren.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.03-118",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Pkw mit einem voll beladenen auflaufgebremsten Anhänger. Welche Besonderheit ist zu beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Bei längeren Bergabfahrten kann es zur Überhitzung der Anhängerbremse kommen",
+        "correct": true
+      },
+      {
+        "text": "Die Auflaufbremse ist bei einer bergauf stehenden Fahrzeugkombination unwirksam",
+        "correct": true
+      },
+      {
+        "text": "Vor dem Trennen der Fahrzeugkombination muss die Feststellbremse des Anhängers angezogen werden",
+        "correct": true
+      }
+    ],
+    "explanation": "Damit der Anhänger nicht wegrollt, wenn du ihn vom Zugfahrzeug trennst, solltest du die Feststellbremse des Anhängers anziehen. Die Anhängerbremse kann bei längeren Bergabfahrten überhitzen. Möglicherweise musst du in dem Fall Pausen bei der Abfahrt einlegen.\nDie Auflaufbremse wird nur aktiviert, wenn der Anhänger auf das Zugfahrzeug aufläuft. Wenn du bergauf fährst, ist das beim Bremsen möglicherweise nicht der Fall, je nachdem wie stark du bremst.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-119",
+    "category": "zusatzstoff_b",
+    "question": "Was ist beim Führen eines Pkws zu beachten, nachdem Sie einen Wohnanhänger angekuppelt haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- verlängert sich der Überholweg",
+        "correct": true
+      },
+      {
+        "text": "- verschlechtert sich das Beschleunigungsvermögen",
+        "correct": true
+      },
+      {
+        "text": "- verkleinert sich der benötigte Kurvenradius beim Abbiegen",
+        "correct": false
+      }
+    ],
+    "explanation": "Beim Überholen verlängert sich dein Überholweg um die Länge des Wohnanhängers. Da dein Fahrzeug durch das Gewicht des Wohnanhängers schlechter beschleunigt, verlängert sich der Überholweg zusätzlich.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-120",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen eine Fahrerlaubnis der Klasse B. Welchen Anhänger dürfen Sie mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- bis 750 kg",
+        "correct": true
+      },
+      {
+        "text": "- über 750 kg, wenn die zulässige Gesamtmasse der Fahrzeugkombination 3.500 kg nicht überschreitet",
+        "correct": true
+      },
+      {
+        "text": "- von 3.500 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Fahrer mit der Führerscheinklasse B dürfen einen Anhänger mit einer zulässigen Gesamtmasse von 750 kg mitführen. Solange die zulässige Gesamtmasse der Fahrzeugkombination 3.500 kg nicht überschreitet, darf die zulässige Gesamtmasse deines Anhängers auch größer als 750 kg sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-121",
+    "category": "zusatzstoff_b",
+    "question": "Was kann die Fahrstabilität eines mitgeführten Anhängers beeinträchtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ein weit hinten im Anhänger liegender Ladungsschwerpunkt",
+        "correct": true
+      },
+      {
+        "text": "Ein zu niedriger Reifenfülldruck der Anhängerreifen",
+        "correct": true
+      },
+      {
+        "text": "Ein undichter Stoßdämpfer",
+        "correct": true
+      }
+    ],
+    "explanation": "Die Ladung eines Anhängers sollte so verteilt sein, dass der Ladungsschwerpunkt möglichst nah an der Achse des Anhängers liegt. Das sorgt für eine optimale Fahrstabilität und Kontrollierbarkeit des Anhängers.\nEin weit hinten liegender Ladungsschwerpunkt kann die Fahrstabilität deines Anhängers stark beeinträchtigen. Dadurch kann der Anhänger bei plötzlichen Lenkbewegungen oder höheren Geschwindigkeiten leichter ins Schlingern geraten und die Unfallgefahr erhöhen.\nEin zu niedriger Reifendruck beim Anhänger kann die Fahrstabilität deines Anhängers beeinträchtigen. Zum einen führt der niedrige Reifendruck zu einer schlechteren Straßenhaftung, was deinen Anhänger in Kurven unkontrollierbarer macht. Zum anderen führt der niedrige Reifendruck zu einem erhöhtem Reifenverschleiß, welcher Reifenschäden während der Fahrt begünstigt.\nAuch ein bereits undichter Stoßdämpfer kann die Fahrstabilität deines Anhängers negativ beeinflussen. Der undichte Stoßdämpfer an deinem Anhänger verliert seine Dämpfungseigenschaft, was zu einem unruhigen Fahrverhalten und zu schwer kontrollierbaren Gefahrensituationen führen kann.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-301",
+    "category": "zusatzstoff_b",
+    "question": "Wie schwer darf ein Anhänger hinter einem Lkw mit 10 t zulässiger Gesamtmasse bei durchgehender Bremsanlage höchstens sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "15 t",
+        "correct": true
+      },
+      {
+        "text": "10 t",
+        "correct": false
+      },
+      {
+        "text": "20 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Ein Anhänger hinter einem Lkw mit 10 t zulässiger Gesamtmasse mit einer durchgehender Bremsanlage darf höchstens 15 t wiegen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-302",
+    "category": "zusatzstoff_b",
+    "question": "Welche Massen (Gewichte) sind für die Berechnung der höchstzulässigen Anhängelast hinter einem Lkw (durchgehende Bremsanlage) ins Verhältnis zu setzen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zulässige Gesamtmasse des Lkws zur tatsächlichen Masse des Anhängers",
+        "correct": true
+      },
+      {
+        "text": "Tatsächliche Masse des Lkws zur zulässigen Gesamtmasse des Anhängers",
+        "correct": false
+      },
+      {
+        "text": "Zulässige Gesamtmasse des Lkws zur zulässigen Gesamtmasse des Anhängers",
+        "correct": false
+      }
+    ],
+    "explanation": "Hier musst du die zulässige Gesamtmasse des Lkw zur tatsächlichen Masse des Anhängers berechnen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-303",
+    "category": "zusatzstoff_b",
+    "question": "Wie groß darf die Anhängelast hinter einem Lkw (durchgehende Bremsanlage) höchstens sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nicht größer als das 1,5-Fache der zulässigen Gesamtmasse des Lkws",
+        "correct": true
+      },
+      {
+        "text": "Nicht größer als die zulässige Gesamtmasse des Lkws",
+        "correct": false
+      },
+      {
+        "text": "Nicht größer als die Leermasse des Lkws",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Anhängelast hinter einem Lkw darf nicht größer als das 1,5 fache der zulässigen Gesamtmasse des Lkw sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-306",
+    "category": "zusatzstoff_b",
+    "question": "Welche Besonderheiten weisen Lastzüge mit Kurzkuppelsystemen auf?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Kurvenlaufeigenschaften dieser Züge unterscheiden sich von denen herkömmlicher Gliederzüge",
+        "correct": true
+      },
+      {
+        "text": "Die Verbindungseinrichtung unterliegt einem höheren Verschleiß",
+        "correct": true
+      },
+      {
+        "text": "Die nutzbare Ladefläche ist größer als bei einem vergleichbaren Gliederzug mit herkömmlicher Verbindungseinrichtung",
+        "correct": true
+      }
+    ],
+    "explanation": "Hier musst du alle Besonderheiten beachten. Die Kurvenlaufeigenschaften dieser Züge unterscheiden sich von denen herkömmlicher Gliederzüge. Die Verbindungseinrichtung unterliegt einem höheren Verschleiß und die nutzbare Ladefläche ist größer als bei einem vergleichbaren Gliederzug mit herkömmlicher Verbindungseinrichtung.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-307",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen mehrachsigen Anhänger ankuppeln. Worauf müssen Sie achten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der Anhänger muss gegen Wegrollen gesichert werden",
+        "correct": true
+      },
+      {
+        "text": "Es dürfen sich keine Personen zwischen Kraftfahrzeug und Anhänger befinden",
+        "correct": true
+      },
+      {
+        "text": "Die Bremsanschlüsse müssen bereits kurz vor dem Ankuppeln verbunden werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn du einen mehrachsigen Anhänger ankuppeln möchtest, musst du den Anhänger gegen Wegrollen sichern und es dürfen sich keine Personen zwischen Kraftfahrzeug und Anhänger befinden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-308",
+    "category": "zusatzstoff_b",
+    "question": "Sie möchten einen Anhänger mitführen. Was müssen Sie hinsichtlich der elektrischen Verbindung zwischen Zugfahrzeug und Anhänger beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die elektrischen Verbindungseinrichtungen dürfen nicht beschädigt sein",
+        "correct": true
+      },
+      {
+        "text": "Die Bordspannung von Zugfahrzeug und Anhänger muss aufeinander abgestimmt sein",
+        "correct": true
+      },
+      {
+        "text": "Die Funktion der Beleuchtungseinrichtungen der Fahrzeugkombination muss vor Fahrtantritt überprüft werden",
+        "correct": true
+      }
+    ],
+    "explanation": "",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-403",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen hinter Ihrer landwirtschaftlichen Zugmaschine mit einer bauartbestimmten Höchstgeschwindigkeit von 32 km/h zwei zulassungsfreie Anhänger mit Auflaufbremse mitführen. Was müssen Sie dabei beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Jeder Anhänger muss mit einem Geschwindigkeitsschild \"25\" gekennzeichnet sein",
+        "correct": true
+      },
+      {
+        "text": "Jeder Anhänger muss ein amtliches Kennzeichen haben",
+        "correct": false
+      },
+      {
+        "text": "Die zulässige Höchstgeschwindigkeit für diesen Zug ist 32 km/h",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-404",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele zulassungsfreie Anhänger mit Auflaufbremse dürfen hinter einer Zugmaschine mit einer bauartbestimmten Höchstgeschwindigkeit von 32 km/h höchstens mitgeführt werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zwei Anhänger, wenn diese mit Geschwindigkeitsschildern \"25\" gekennzeichnet sind",
+        "correct": true
+      },
+      {
+        "text": "Ein Anhänger, wenn nicht schneller als 32 km/h gefahren wird",
+        "correct": false
+      },
+      {
+        "text": "Zwei Anhänger, wenn nicht schneller als 32 km/h gefahren wird",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-406",
+    "category": "zusatzstoff_b",
+    "question": "Ein einachsiger Anhänger hat eine tatsächliche Gesamtmasse von 600 kg. Wie groß muss die Stützlast mindestens sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "24 kg (= 4 %)",
+        "correct": true
+      },
+      {
+        "text": "60 kg (= 10 %)",
+        "correct": false
+      },
+      {
+        "text": "90 kg (= 15 %)",
+        "correct": false
+      }
+    ],
+    "explanation": "Stützlast ist diejenige Masse, die auf der Anhängerkupplung des ziehenden Fahrzeugs aufliegt. Um sie zu ermitteln, kann der/die Kfz-FahrerIn unter den Kupplungspunkt des waagerecht stehenden Anhängers ein Holzstück oder ein Rohr stellen und darunter eine Personenwaage platzieren. Angezeigt wird dann die Stützlast. Die vom Zugfahrzeug aufzunehmende Mindeststützlast darf bei Anhängern mit einem zulässigen Gesamtgewicht von nicht mehr als 3,5 Tonnen nicht weniger als 4 % des Gesamtgewichts des Anhängers betragen. Eine Mindeststützlast von 25 kg ist jedoch ausreichend. In diesem Beispiel beträgt die Mindeststützlast 24 kg. Wenn Sie den Anhänger beladen, müssen Sie als Kfz-FahrerIn darauf achten, die minimal und maximal zulässige Stützlast nicht zu unter- bzw. zu überschreiten. Durch das Verschieben der Ladung können Sie die Stützlast beeinflussen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.03-408",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren eine landwirtschaftliche Zugmaschine mit einer bauartbestimmten Höchstgeschwindigkeit von 40 km/h. Hinter dieser Zugmaschine möchten Sie einen zulassungsfreien Anhänger mitführen. Was müssen Sie dabei beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die zulässige Höchstgeschwindigkeit für diese Fahrzeugkombination beträgt 25 km/h",
+        "correct": true
+      },
+      {
+        "text": "Der Anhänger muss mit einem Geschwindigkeitsschild „25“ gekennzeichnet sein",
+        "correct": true
+      },
+      {
+        "text": "Der Anhänger muss ein eigenes amtliches Kennzeichen haben",
+        "correct": false
+      }
+    ],
+    "explanation": "Zur Erhöhung der Transportkapazitäten können zwei Anhänger hinter einer Zugmaschine gefahren werden. Die zulässige Höchstgeschwindigkeit darf 25 km/h nicht überschreiben und die Anhänger müssen mit einem Geschwindigkeitsschild „25“ gekennzeichnet sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-202",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden dürfen Sie einen Lkw mit einer zulässigen Gesamtmasse von 16 t innerhalb von 2 Wochen höchstens lenken?",
+    "image": null,
+    "answers": [
+      {
+        "text": "90 Stunden",
+        "correct": true
+      },
+      {
+        "text": "92 Stunden",
+        "correct": false
+      },
+      {
+        "text": "96 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Einen LKW mit einer zulässigen Gesamtmasse von 16 t darf man innerhalb von 2 Wochen nur 90 Stunden lenken. Die anderen beiden Antworten sind falsch.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-203",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Lkw mit einer zulässigen Gesamtmasse von 16 t. Wie lange muss die Lenkzeit nach 4 1/2 Stunden mindestens unterbrochen werden, bevor Sie weiterfahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "45 Minuten",
+        "correct": true
+      },
+      {
+        "text": "30 Minuten",
+        "correct": false
+      },
+      {
+        "text": "15 Minuten",
+        "correct": false
+      }
+    ],
+    "explanation": "Lkw mit einer Gesamtmasse von 16 t müssen nach 4 1/2 Stunden mindestens 45 Minuten Pause machen. Dies dient sowohl zu deinem, als auch zum Schutz anderer Verkehrsteilnehmer. Bitte achte auf ausgiebige Pausen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-205",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden beträgt die zulässige Tageslenkzeit, wenn Sie einen Lkw mit einer zulässigen Gesamtmasse von 16 t fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "9 Stunden, zweimal pro Woche auch 10 Stunden",
+        "correct": true
+      },
+      {
+        "text": "9 Stunden, dreimal pro Woche auch 10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Jeden Tag 10 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Mehr als 56 Stunden in der Woche darfst du nicht fahren. Deswegen ist 9 Stunden, zweimal pro Woche auch 10 Stunden hier richtig.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-208",
+    "category": "zusatzstoff_b",
+    "question": "Wie lang muss die tägliche Ruhezeit (ohne Verkürzung) mindestens sein, wenn Sie allein fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "11 Stunden",
+        "correct": true
+      },
+      {
+        "text": "10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "9 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn du alleine fährst, musst du dich 11 Stunden ohne Verkürzung ausruhen. Beginnst du zu früh mit der Weiterfahrt, bist du nicht richtig fit und kannst dich und andere gefährden. Bitte denke an die Vorschriftsmäßigen Pausen (Ruhezeiten).",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-211",
+    "category": "zusatzstoff_b",
+    "question": "Wie viel Stunden dürfen Sie einen Lkw mit einer zulässigen Gesamtmasse von 6 t innerhalb von zwei Wochen höchstens lenken?",
+    "image": null,
+    "answers": [
+      {
+        "text": "90 Stunden",
+        "correct": true
+      },
+      {
+        "text": "92 Stunden",
+        "correct": false
+      },
+      {
+        "text": "96 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw mit einer zulässigen Gesamtmasse von 6 t darfst du innerhalb von zwei Wochen höchsten 90 Stunden lenken.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-212",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Lkw mit einer zulässigen Gesamtmasse von 6 t. Wie lange müssen Sie nach 4 1/2 Stunden ununterbrochener Fahrt mindestens Pause machen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "45 Minuten",
+        "correct": true
+      },
+      {
+        "text": "30 Minuten",
+        "correct": false
+      },
+      {
+        "text": "15 Minuten",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw mit einer zulässigen Gesamtmasse von 6 t musst du nach 4 1/2 Stunden ununterbrochener Fahrt eine Pause von 45 Minuten machen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-216",
+    "category": "zusatzstoff_b",
+    "question": "Wie lange dürfen Sie im EU-Bereich ohne Pause einen Bus höchstens fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "4 1/2 Stunden",
+        "correct": true
+      },
+      {
+        "text": "5 Stunden",
+        "correct": false
+      },
+      {
+        "text": "5 1/2 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-217",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden beträgt die zulässige Tageslenkzeit?",
+    "image": null,
+    "answers": [
+      {
+        "text": "9 Stunden, zweimal pro Woche auch 10 Stunden",
+        "correct": true
+      },
+      {
+        "text": "Jeden Tag 9 Stunden, dreimal pro Woche auch 10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Jeden Tag 10 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-219",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren im EU-Bereich einen Bus im Gelegenheitsverkehr. Wie lange muss die Lenkzeit nach 4 1/2 Stunden mindestens unterbrochen werden, bevor Sie weiterfahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "45 Minuten",
+        "correct": true
+      },
+      {
+        "text": "30 Minuten",
+        "correct": false
+      },
+      {
+        "text": "15 Minuten",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-220",
+    "category": "zusatzstoff_b",
+    "question": "Wie lang muss beim Einsatz im Gelegenheitsverkehr die tägliche Ruhezeit (ohne Verkürzung) mindestens sein, wenn Sie allein fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "11 Stunden",
+        "correct": true
+      },
+      {
+        "text": "10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "9 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-223",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Lkw mit einer zulässigen Gesamtmasse von 6 t. Wie muss die Lenkzeit nach 4 1/2 Stunden mindestens unterbrochen werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Durch eine Pause von 45 Minuten",
+        "correct": true
+      },
+      {
+        "text": "Durch eine Pause von 30 Minuten, wenn Sie vorher schon eine Pause von 15 Minuten gemacht haben",
+        "correct": true
+      },
+      {
+        "text": "Durch eine Pause von 15 Minuten, wenn Sie vorher schon 3 Pausen von je 10 Minuten gemacht haben",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw mit einer zulässigen Gesamtmasse von 6 t musst du nach 4 1/2 Stunden ununterbrochener Fahrt eine Pause von 45 Minuten machen. Oder eine Pause von 30 Minuten, wenn du vorher schon eine Pause von 15 Minuten gemacht hast.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-224",
+    "category": "zusatzstoff_b",
+    "question": "Was gilt für den Fahrzeugführer eines Lkws mit einer zulässigen Gesamtmasse von 6 t im gewerblichen Güterverkehr als Fahrtunterbrechung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Pausen und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Ein Radwechsel, den er selbst ausführt",
+        "correct": false
+      },
+      {
+        "text": "Mithilfe beim Be- oder Entladen",
+        "correct": false
+      }
+    ],
+    "explanation": "Für dich als Fahrzeugführer deines Lkw mit einer zulässigen Gesamtmasse von 6 t im gewerblichen Güterverkehr, gelten Pausen und Ruhezeiten.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-227",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Lkw mit einer zulässigen Gesamtmasse von mehr als 3,5 t im gewerblichen Güterkraftverkehr. Welcher Zeitraum gilt für Sie als Fahrtunterbrechung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- der vorgeschriebenen Ruhepause",
+        "correct": true
+      },
+      {
+        "text": "- als Beifahrer",
+        "correct": true
+      },
+      {
+        "text": "- des Be- und Entladens",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei einer Fahrtunterbrechung handelt es sich um Zeit, die dem Fahrer zur Erholung dient. In dieser Zeit sitzt er nicht hinter dem Steuer des Fahrzeugs und übt keine Fahrertätigkeiten aus. Untersagt sind in dieser Zeit auch Arbeiten wie das Be- und Entladen des Fahrzeugs. \nZeiten, die der Fahrer auf dem Beifahrersitz verbringt, sind ebenfalls Fahrtunterbrechungen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-228",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren ein Fahrzeug im gewerblichen Güter- oder Personenverkehr. Bis wann müssen Sie eine verkürzte wöchentliche Ruhezeit spätestens ausgeglichen haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- dritten folgenden Woche",
+        "correct": true
+      },
+      {
+        "text": "- vierten folgenden Woche",
+        "correct": false
+      },
+      {
+        "text": "- zweiten folgenden Woche",
+        "correct": false
+      }
+    ],
+    "explanation": "Als Fahrer im gewerblichen Güter- oder Personenverkehr müssen Sie eine verkürzte wöchentliche Ruhezeit bis spätestens zum Ende der dritten auf die Verkürzung folgenden Woche durch eine gleichwertige Ruhezeit ausgleichen. Dieser Ausgleich dient dazu, die durch die Verkürzung entstandene Erholungsdefizite zu kompensieren und die Verkehrssicherheit zu gewährleisten.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-302",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden dürfen Sie einen Lastzug mit einer zulässigen Gesamtmasse von 24 t innerhalb von 2 Wochen höchstens lenken?",
+    "image": null,
+    "answers": [
+      {
+        "text": "90 Stunden",
+        "correct": true
+      },
+      {
+        "text": "92 Stunden",
+        "correct": false
+      },
+      {
+        "text": "96 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Innerhalb von 2 Wochen darfst du maximal 90 Stunden fahren, wenn du einen Lastzug mit einer zulässigen Gesamtmasse von 24 t lenkst.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-305",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden beträgt die zulässige Tageslenkzeit, wenn Sie einen Lastzug mit einer zulässigen Gesamtmasse von 24 t fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "9 Stunden, zweimal pro Woche auch 10 Stunden",
+        "correct": true
+      },
+      {
+        "text": "9 Stunden, dreimal pro Woche auch 10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Jeden Tag 10 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Die zulässige Tageslenkzeit (24 t zulässige Gesamtmasse) beträgt 9 Stunden, zweimal pro Woche auch 10 Stunden.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-307",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren einen Lastzug mit einer zulässigen Gesamtmasse von 24 t. Wie muss die Lenkzeit nach 4 1/2 Stunden mindestens unterbrochen werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Durch eine Pause von 45 Minuten",
+        "correct": true
+      },
+      {
+        "text": "Durch eine Pause von 30 Minuten, wenn Sie vorher schon eine Pause von 15 Minuten gemacht haben",
+        "correct": true
+      },
+      {
+        "text": "Durch eine Pause von 15 Minuten, wenn Sie vorher schon 3 Pausen von je 10 Minuten gemacht haben",
+        "correct": false
+      }
+    ],
+    "explanation": "Nach 4 1/2 Stunden musst du eine Pause von 45 Minuten machen oder eine Pause von 30 Minuten, wenn du vorher schon eine Pause von 15 Minuten gemacht hast. Bitte vermeide zu viele kurze Pausen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-310",
+    "category": "zusatzstoff_b",
+    "question": "Nach wie vielen Stunden Lenkzeit müssen Sie die Fahrt unterbrechen, wenn Sie einen Lkw mit einer zulässigen Gesamtmasse von 16 t fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nach 4,5 Stunden",
+        "correct": true
+      },
+      {
+        "text": "Nach 5,0 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Nach 5,5 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Faustregel: Immer die Hälfte der Tageslenkzeit. Da diese 9 Stunden beträgt, ist die Antwort 4,5 Stunden hier richtig.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-311",
+    "category": "zusatzstoff_b",
+    "question": "Für wen sind bei gewerblicher Güterbeförderung Lenk- und Ruhezeiten vorgeschrieben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- von Lkws oder Lastzügen mit einer zulässigen Gesamtmasse über 2,8 t grundsätzlich",
+        "correct": true
+      },
+      {
+        "text": "- von Kraftfahrzeugen mit einer zulässigen Gesamtmasse bis zu 2,8 t",
+        "correct": false
+      },
+      {
+        "text": "- von Kraftfahrzeugen - einschließlich Anhänger - mit einer zulässigen Zuggesamtmasse bis zu 2,8 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Für Fahrzeugführer die gewerbliche Güter befördern gelten grundsätzlich Lenk- und Ruhezeiten sowohl für LKW als auch Lastzüge mit einer zulässigen Gesamtmasse über 2,8t.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.04-312",
+    "category": "zusatzstoff_b",
+    "question": "Nach wie vielen Stunden Lenkzeit müssen Sie die Fahrt unterbrechen, wenn Sie einen Lkw mit einer zulässigen Gesamtmasse von 6 t fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nach 4,5 Stunden",
+        "correct": true
+      },
+      {
+        "text": "Nach 5,0 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Nach 5,5 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Für dich in deinem Lkw mit einer zulässigen Gesamtmasse von 6 t, musst du die Fahrt nach 4,5 Stunden für eine Pause unterbrechen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-313",
+    "category": "zusatzstoff_b",
+    "question": "Nach wie vielen Stunden Lenkzeit müssen Sie die Fahrt unterbrechen, wenn Sie ein Sattelkraftfahrzeug mit einer zulässigen Gesamtmasse von 20 t fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nach 4,5 Stunden",
+        "correct": true
+      },
+      {
+        "text": "Nach 5,0 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Nach 5,5 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit einer Gesamtmasse von 20 t deines Sattelkraftfahrzeuges musst du nach 4,5 Stunden eine Pause machen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-314",
+    "category": "zusatzstoff_b",
+    "question": "Wie viele Stunden beträgt die zulässige Tageslenkzeit, wenn Sie einen Lkw mit einer zulässigen Gesamtmasse von 6 t als gewerblichen Gütertransport fahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "9 Stunden, zweimal pro Woche auch 10 Stunden",
+        "correct": true
+      },
+      {
+        "text": "9 Stunden, dreimal pro Woche auch 10 Stunden",
+        "correct": false
+      },
+      {
+        "text": "Jeden Tag 10 Stunden",
+        "correct": false
+      }
+    ],
+    "explanation": "Die zulässige Tageslenkzeit mit deinem Lkw mit einer zulässigen Gesamtmasse von 6 t als gewerblichen Gütertransport, darfst du 9 Stunden, zweimal pro Woche auch 10 Stunden fahren.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-315",
+    "category": "zusatzstoff_b",
+    "question": "Was gilt für den Fahrzeugführer eines Lkws mit einer zulässigen Gesamtmasse von 16 t im gewerblichen Güterverkehr als Fahrtunterbrechung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Pausen und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Ein Radwechsel, den er selbst ausführt",
+        "correct": false
+      },
+      {
+        "text": "Mithilfe beim Be- oder Entladen",
+        "correct": false
+      }
+    ],
+    "explanation": "Pausen und Ruhezeiten gelten als Fahrtunterbrechung. Radwechsel oder Hilfe beim Be- und Entladen sind zwar Unterbrechungen, gelten aber nicht als Pausen oder Ruhezeiten.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-316",
+    "category": "zusatzstoff_b",
+    "question": "Was gilt für den Fahrzeugführer eines Lkws mit einer zulässigen Gesamtmasse von 24 t im gewerblichen Güterverkehr als Fahrtunterbrechung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Pausen und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Ein Radwechsel, den er selbst ausführt",
+        "correct": false
+      },
+      {
+        "text": "Mithilfe beim Be- oder Entladen",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit einer Gesamtmasse von 24 t im gewerblichen Güterverkehr musst du dich an Pausen und Ruhezeiten halten. In diesen kannst du dich erholen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.04-317",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren im gewerblichen Güterverkehr einen Lkw, dessen zulässige Gesamtmasse 3,5 t übersteigt. Wie lange müssen Sie nach einer Lenkzeit von 4 1/2 Stunden mindestens Pause machen, bevor Sie weiterfahren?",
+    "image": null,
+    "answers": [
+      {
+        "text": "45 Minuten, wenn ich vorher noch keine Pause gemacht habe",
+        "correct": true
+      },
+      {
+        "text": "30 Minuten, wenn ich vorher schon eine Pause von 15 Minuten gemacht habe",
+        "correct": true
+      },
+      {
+        "text": "15 Minuten, wenn ich vorher schon drei Pausen von je 10 Minuten gemacht habe",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Lenkzeitunterbrechung dient deiner Erholung. 45 Minuten, wenn du vorher oder 30 Minuten (bei vorheriger Unterbrechung von 15 Minuten) sind hier richtig.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.05-216",
+    "category": "zusatzstoff_b",
+    "question": "Welchen Zweck erfüllt die Fahrerkarte?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-216.png",
+    "answers": [
+      {
+        "text": "Nachweis für die Lenk- und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Mautnachweis",
+        "correct": false
+      },
+      {
+        "text": "Ersatz für den Kartenführerschein",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit der Fahrerkarte werden alle Aktivitäten der Fahrt gespeichert. Sie dient als Nachweis für Lenk- und Ruhezeiten.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.05-217",
+    "category": "zusatzstoff_b",
+    "question": "Zu welchen Daten hat die Polizei mit Kontrollkarte Zugang?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-217.png",
+    "answers": [
+      {
+        "text": "Zu allen gespeicherten Daten",
+        "correct": true
+      },
+      {
+        "text": "Zu allen Daten der Ladung",
+        "correct": false
+      },
+      {
+        "text": "Zu allen gespeicherten Fahrerdaten beim Kraftfahrt-Bundesamt",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Polizei hat mit der Kontrollkarte Zugang zu allen gespeicherten Daten. Innerhalb deiner Fahrerkarte kannst du deine Lenk- und Ruhezeiten einsehen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.05-219",
+    "category": "zusatzstoff_b",
+    "question": "Wann ist der Verlust der Fahrerkarte anzuzeigen?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-219.png",
+    "answers": [
+      {
+        "text": "Unverzüglich",
+        "correct": true
+      },
+      {
+        "text": "Spätestens nach 8 Tagen",
+        "correct": false
+      },
+      {
+        "text": "Spätestens nach 14 Tagen",
+        "correct": false
+      }
+    ],
+    "explanation": "Der Verlust der Fahrerkarte ist unverzüglich anzuzeigen. Nicht morgen oder nicht übermorgen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.05-220",
+    "category": "zusatzstoff_b",
+    "question": "Wann dürfen Kontrollbeamte eine Fahrerkarte einbehalten?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-220.png",
+    "answers": [
+      {
+        "text": "Wenn eine Fahrerkarte vorgelegt wurde, die einer anderen Person gehört",
+        "correct": true
+      },
+      {
+        "text": "Wenn deutlich zu schnell gefahren wurde",
+        "correct": false
+      },
+      {
+        "text": "Wenn die Lenkzeit unzulässig ausgedehnt wurde",
+        "correct": false
+      }
+    ],
+    "explanation": "Sollten Kontrollbeamte eine Fahrerkarte eines anderen Fahrers vorgelegt bekommen, werden Sie diese einbehalten. Die beiden anderen Antworten sind falsch.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.05-221",
+    "category": "zusatzstoff_b",
+    "question": "Was muss bei einem Antrag auf eine Fahrerkarte vorgelegt werden?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-221.png",
+    "answers": [
+      {
+        "text": "Kartenführerschein",
+        "correct": true
+      },
+      {
+        "text": "Lichtbild",
+        "correct": true
+      },
+      {
+        "text": "Bestätigung des Arbeitgebers",
+        "correct": false
+      }
+    ],
+    "explanation": "Sowohl der Kartenführerschein als auch ein Lichtbild müssen vorgelegt werden damit deine Erlaubnis und deine Identität einwandfrei festgestellt werden können. Die Bestätigung des Arbeitgebers ist nicht erforderlich.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.05-226",
+    "category": "zusatzstoff_b",
+    "question": "Was wird mit diesem Fahrtenschreiber (Kontrollgerät) aufgezeichnet?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-226.png",
+    "answers": [
+      {
+        "text": "Die Lenkzeit",
+        "correct": true
+      },
+      {
+        "text": "Die gefahrene Geschwindigkeit",
+        "correct": true
+      },
+      {
+        "text": "Der Kraftstoffverbrauch",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit dem Kontrollgerät (Fahrtenschreiber) wird die Lenkzeit und auch die gefahrene Geschwindigkeit aufgezeichnet. Dies hat straßenverkehrsrechtliche Gründe.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.05-227",
+    "category": "zusatzstoff_b",
+    "question": "Wie sind Ladezeiten bei diesem Fahrtenschreiber (Kontrollgerät) vor der Abfahrt nachzuweisen?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-227.png",
+    "answers": [
+      {
+        "text": "Durch Eingabe in den Fahrtenschreiber",
+        "correct": true
+      },
+      {
+        "text": "Durch Vermerk auf einem separaten Blatt",
+        "correct": false
+      },
+      {
+        "text": "Durch umgehende Mitteilung an den Arbeitgeber",
+        "correct": false
+      }
+    ],
+    "explanation": "Durch die Eingabe in den Fahrtenschreiber (Kontrollgerät) kannst du alle Tätigkeiten einwandfrei nachweisen. So kannst du auch die Ladezeiten nachweisen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.05-228",
+    "category": "zusatzstoff_b",
+    "question": "Wozu dient der Schacht 2 bei diesem Fahrtenschreiber (Kontrollgerät)?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.05-228.png",
+    "answers": [
+      {
+        "text": "Zum Stecken der „Fahrerkarte“ für den „zweiten Fahrer“",
+        "correct": true
+      },
+      {
+        "text": "Zum Auslesen der Kontrolldaten für die Polizei",
+        "correct": false
+      },
+      {
+        "text": "Zum Aufbewahren einer Ersatzkarte",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn ein zweiter Fahrer mitfährt, ist der 2. Schacht für den Fahrtenschreiber zu benutzen. Man spricht hier auch vom sogenannten Mehrfahrerbetrieb.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-101",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie beim Betrieb von Fahrzeugen hinsichtlich der Fahrzeughöhe beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- mich über die tatsächliche Höhe des Fahrzeugs informieren",
+        "correct": true
+      },
+      {
+        "text": "- mich über die tatsächliche Höhe der Ladung informieren, die über den Fahrzeugumriss hinausragt",
+        "correct": true
+      },
+      {
+        "text": "- die Verbote zur tatsächlichen Höhe beachten",
+        "correct": true
+      }
+    ],
+    "explanation": "Vor Fahrtantritt solltest du dich über die tatsächliche Höhe des Fahrzeugs informieren, dich über die tatsächliche Höhe der Ladung informieren, die über den Fahrzeugumriss hinausragt und die Verbote zur tatsächlichen Höhe beachten (Sichtwort Unterführungen/Brücken)",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-102",
+    "category": "zusatzstoff_b",
+    "question": "Was bezeichnet man als zulässige Nutzlast?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die maximal zulässige Zuladung",
+        "correct": true
+      },
+      {
+        "text": "Die Differenz aus zulässiger Gesamtmasse und Leermasse",
+        "correct": true
+      },
+      {
+        "text": "Die zulässige Gesamtmasse",
+        "correct": false
+      }
+    ],
+    "explanation": "Die zulässige Nutzlast - also das Gewicht, das du beladen darfst - ist leider nicht im Fahrzeugschein zu finden. Sie lässt sich aber durch zwei andere Angaben herausfinden: Das Leergewicht und die zulässige Gesamtmasse.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-104",
+    "category": "zusatzstoff_b",
+    "question": "Was gilt beim Betrieb von Fahrzeugen hinsichtlich der Fahrzeughöhe einschließlich der Höhe der Ladung?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- mich in der Zulassungsbescheinigung Teil I über die Fahrzeughöhe informieren",
+        "correct": true
+      },
+      {
+        "text": "- bei nach oben über den Fahrzeugumriss hinausragender Ladung die tatsächliche Höhe ermitteln",
+        "correct": true
+      },
+      {
+        "text": "- die gesetzlich zulässige Höhe von maximal 4,5 m einhalten",
+        "correct": false
+      }
+    ],
+    "explanation": "Du musst dich in der Zulassungsbeschränkung Teil 1, dem sogenannten Fahrzeugschein, über deine genaue Fahrzeughöhe informieren. So verhinderst du zum einen Gefahrensituationen auf Straßenabschnitten mit begrenzter Höhe und zum anderen Verstöße gegen die zulässige Gesamthöhe. \nFalls die Ladung über den Fahrzeugumriss hinausragt, musst du die tatsächliche Höhe deines Fahrzeugs mit jeweiliger Ladung ermitteln. So stellst du sicher, dass die zulässige Gesamthöhe nicht überschritten wird.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-201",
+    "category": "zusatzstoff_b",
+    "question": "Wie lang darf ein Zug, bestehend aus einem Kraftfahrzeug und einem Anhänger, einschließlich der Ladung höchstens sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "20,75 m",
+        "correct": true
+      },
+      {
+        "text": "18 m",
+        "correct": false
+      },
+      {
+        "text": "20 m",
+        "correct": false
+      }
+    ],
+    "explanation": "Ein Zug bestehend aus einem Kraftfahrzeug und einem Anhänger, darf einschließlich der Ladung höchstens 20,75 m sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-202",
+    "category": "zusatzstoff_b",
+    "question": "Wann ist die Prüfung des Geschwindigkeitsbegrenzers vorgeschrieben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nach jeder Änderung des wirksamen Reifenumfangs",
+        "correct": true
+      },
+      {
+        "text": "Nach jeder Änderung der Kraftstoff-Zuführungseinrichtung",
+        "correct": true
+      },
+      {
+        "text": "Nach jeder Änderung der Auspuffanlage",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Prüfung des Geschwindigkeitsbegrenzers ist nach jeder Änderung der Kraftstoff-Zuführungseinrichtung vorgeschrieben & auch nach jeder Änderung des wirksamen Reifenumfangs.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.06-203",
+    "category": "zusatzstoff_b",
+    "question": "Wer darf eine Bescheinigung über die Prüfung eines Geschwindigkeitsbegrenzers ausstellen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Der hierzu amtlich anerkannte Fahrzeughersteller",
+        "correct": true
+      },
+      {
+        "text": "Die von einer Behörde hierzu ermächtigte Werkstatt",
+        "correct": true
+      },
+      {
+        "text": "Alle Nutzfahrzeugwerkstätten",
+        "correct": false
+      }
+    ],
+    "explanation": "Eine Bescheinigung über die Prüfung eines Geschwindigkeitsbegrenzers darf die von einer Behörde hierzu ermächtigte Werkstatt ausstellen und der hierzu amtlich anerkannte Fahrzeughersteller.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.06-204",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen nur die Fahrerlaubnis der Klassen B und D und wollen hinter Ihrem Bus einen Anhänger mitführen. Welche zulässige Gesamtmasse des Anhängers darf nicht überschritten werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "750 kg",
+        "correct": true
+      },
+      {
+        "text": "850 kg",
+        "correct": false
+      },
+      {
+        "text": "1.000 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-205",
+    "category": "zusatzstoff_b",
+    "question": "Womit müssen Sie rechnen, wenn in einem vollbesetzten Reisebus alle Fahrgäste Gepäck mitführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Es besteht die Gefahr, dass die zulässige Gesamtmasse überschritten ist",
+        "correct": true
+      },
+      {
+        "text": "Es besteht die Gefahr, dass die zulässigen Achslasten überschritten sind",
+        "correct": true
+      },
+      {
+        "text": "Es ist immer gewährleistet, dass die zulässige Gesamtmasse nicht überschritten werden kann",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-207",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie mit Ihrem Bus beim Durchfahren von engen Durchfahrten beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Dass die Außenspiegel über die in den Fahrzeugpapieren angegebene Fahrzeugbreite herausragen",
+        "correct": true
+      },
+      {
+        "text": "Mögliche Aufbauschwankungen bei unebener Fahrbahn",
+        "correct": true
+      },
+      {
+        "text": "Dass die Außenspiegel bereits in der angegebenen Fahrzeugbreite berücksichtigt sind",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-208",
+    "category": "zusatzstoff_b",
+    "question": "Sie besitzen nur die Fahrerlaubnis der Klassen B und D1. Ihr Bus hat folgende Daten: - Leermasse 5.000 kg - zulässige Gesamtmasse 7.500 kg - zulässige Anhängelast 2.000 kg Welche zulässige Gesamtmasse darf ein mitgeführter Anhänger höchstens haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "750 kg",
+        "correct": true
+      },
+      {
+        "text": "1.500 kg",
+        "correct": false
+      },
+      {
+        "text": "2.000 kg",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-211",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie mit Ihrem Lkw beim Durchfahren von engen Durchfahrten beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Dass die Außenspiegel über die in den Fahrzeugpapieren angegebene Fahrzeugbreite herausragen",
+        "correct": true
+      },
+      {
+        "text": "Dass Fahrzeugaufbauten bei unebener Fahrbahn schwanken",
+        "correct": true
+      },
+      {
+        "text": "Dass die Außenspiegel in der angegebenen Fahrzeugbreite berücksichtigt sind",
+        "correct": false
+      }
+    ],
+    "explanation": "Du solltest bei engen Durchfahrten darauf achten, dass die Außenspiegel über die in den Fahrzeugpapieren angegebene Fahrzeugbreite herausragen (kann von den Angaben in den Papieren abweichen) und das Fahrzeugaufbauten bei unebener Fahrbahn schwanken.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-213",
+    "category": "zusatzstoff_b",
+    "question": "Wann dürfen Sie in dieser Situation weiter auf dem linken Fahrstreifen verbleiben?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.06-213.png",
+    "answers": [
+      {
+        "text": "- einschließlich Ladung tatsächlich maximal 2 m breit ist",
+        "correct": true
+      },
+      {
+        "text": "- gemäß Zulassungsbescheinigung Teil I (Fahrzeugschein) 2 m breit ist",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Verkehrszeichen gibt an, wie breit Ihr Fahrzeug einschließlich Außenspiegel und Ladung maximal sein darf. Achten Sie darauf, ob die Außenspiegel bei den Maßen in Ihren Fahrzeugpapieren mit eingerechnet wurden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-215",
+    "category": "zusatzstoff_b",
+    "question": "In welchen Fahrzeugdokumenten finden Sie Angaben über die Abmessungen Ihres Busses?",
+    "image": null,
+    "answers": [
+      {
+        "text": "In der Zulassungsbescheinigung Teil I (Fahrzeugschein)",
+        "correct": true
+      },
+      {
+        "text": "Im Prüfbuch",
+        "correct": false
+      },
+      {
+        "text": "In der Zulassungsbescheinigung Teil II (Fahrzeugbrief)",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.06-216",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie in dieser Situation beachten?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.06-216.png",
+    "answers": [
+      {
+        "text": "Nach 200 m verringert sich die Breite des linken Fahrstreifens",
+        "correct": true
+      },
+      {
+        "text": "Mein Fahrzeug ist mit Außenspiegeln breiter als in den Fahrzeugpapieren angegeben",
+        "correct": true
+      },
+      {
+        "text": "Auf einer Länge von 200 m verringert sich die Breite des linken Fahrstreifens",
+        "correct": false
+      }
+    ],
+    "explanation": "Das obere Verkehrszeichen zeigt an, dass sich die Fahrbahn auf die im Verkehrszeichen angegebene Breite verringert. Das Zusatzzeichen informiert darüber, dass die Fahrbahnverengung erst in ca. 200 Meter beginnt. Außenspiegel sind zu dem in den Fahrzeugpapieren angegebenen Maß in der Breite hinzuzurechnen. Neigungen bei unebener Fahrbahn können zudem mehr Breite erfordern. Berücksichtigen Sie diese Faktoren bei der weiteren Durchfahrt.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-301",
+    "category": "zusatzstoff_b",
+    "question": "Wie lang darf ein Zug, bestehend aus einem Lkw und einem Anhänger, ohne dass Ladung hinausragt, höchstens sein?",
+    "image": null,
+    "answers": [
+      {
+        "text": "18,75 m",
+        "correct": true
+      },
+      {
+        "text": "18,00 m",
+        "correct": false
+      },
+      {
+        "text": "20,00 m",
+        "correct": false
+      }
+    ],
+    "explanation": "Ein Zug bestehend aus einem Lkw und einem Anhänger, ohne dass die Ladung hinausragt, darf höchstens 18,75 m lang sein.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.06-302",
+    "category": "zusatzstoff_b",
+    "question": "Welche zulässige Gesamtmasse darf ein Sattelkraftfahrzeug (zweiachsige Zugmaschine, dreiachsiger Sattelanhänger, kein kombinierter Verkehr) höchstens haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "40 t",
+        "correct": true
+      },
+      {
+        "text": "38 t",
+        "correct": false
+      },
+      {
+        "text": "44 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Die zulässige Gesamtmasse bei einem Sattelkraftfahrzeug darf höchstens 40 t schwer sein.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-303",
+    "category": "zusatzstoff_b",
+    "question": "Welche zulässige Gesamtmasse darf ein Sattelkraftfahrzeug (dreiachsige Zugmaschine, dreiachsiger Sattelanhänger) im kombinierten Verkehr mit 40-Fuß-ISO-Containern höchstens haben?",
+    "image": null,
+    "answers": [
+      {
+        "text": "44 t",
+        "correct": true
+      },
+      {
+        "text": "40 t",
+        "correct": false
+      },
+      {
+        "text": "38 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Die zulässige Gesamtmasse bei einem Sattelkraftfahrzeug welcher 3 Achsen in der Zugmaschine und auch 3 Achsen im Anhänger hat, darf höchstens 44 t wiegen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-304",
+    "category": "zusatzstoff_b",
+    "question": "Welche Gesamtmasse darf ein Zug (zweiachsiger Lkw, dreiachsiger Anhänger, kein kombinierter Verkehr) nicht überschreiten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "40 t",
+        "correct": true
+      },
+      {
+        "text": "38 t",
+        "correct": false
+      },
+      {
+        "text": "44 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Gesamtmasse bei einem Zug (zweiachsiger Lkw, dreiachsiger Anhänger, kein kombinierter Verkehr) darf höchstens 40 t wiegen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-305",
+    "category": "zusatzstoff_b",
+    "question": "Wie können Sie rechnerisch überprüfen, ob durch die Zusammenstellung eines Sattelkraftfahrzeugs (Sattellast = Aufliegelast) die höchstzulässige Gesamtmasse des Zuges überschritten wird?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Zulässige Gesamtmasse der Zugmaschine plus zulässige Gesamtmasse des Sattelanhängers minus Aufliegelast",
+        "correct": true
+      },
+      {
+        "text": "Zulässige Gesamtmasse der Zugmaschine plus zulässige Gesamtmasse des Sattelanhängers",
+        "correct": false
+      },
+      {
+        "text": "Zulässige Gesamtmasse der Zugmaschine plus Nutzlast des Sattelanhängers",
+        "correct": false
+      }
+    ],
+    "explanation": "Du kannst rechnerisch die zulässige Gesamtmasse der Zugmaschine plus die zulässige Gesamtmasse des Sattelanhängers ermitteln und das Ergebnis minus die Aufliegelast rechnen. So kannst du prüfen, ob die höchstzulässige Gesamtmasse des Zuges überschritten wird.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-306",
+    "category": "zusatzstoff_b",
+    "question": "Sie stellen ein Sattelkraftfahrzeug mit 5 Achsen zusammen (kein kombinierter Verkehr). Folgende Fahrzeugdaten sind Ihnen bekannt:\nzulässige Gesamtmasse (Zugmaschine) = 25 t\nzulässige Gesamtmasse (Sattelanhänger) = 34 t\nSattel-/Aufliegelast (Zugmaschine) = 16 t\nSattel-/Aufliegelast (Sattelanhänger) = 16 t",
+    "image": null,
+    "answers": [
+      {
+        "text": "- zulässig, wenn Sie auf mindestens 3 t Nutzlast verzichten",
+        "correct": true
+      },
+      {
+        "text": "- zulässig, auch wenn der Sattelanhänger mit 34 t voll ausgelastet ist",
+        "correct": false
+      },
+      {
+        "text": "- in keinem Fall zulässig",
+        "correct": false
+      }
+    ],
+    "explanation": "Der Betrieb dieser Kombi ist zulässig, wenn du auf mindestens 3 t Nutzlast verzichtest, denn die Gesamtlast beträgt 43 t. (34 t + 25 t - 16 t = 43 t.)",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-308",
+    "category": "zusatzstoff_b",
+    "question": "Wie ermitteln Sie die zulässige Zuggesamtmasse einer Fahrzeugkombination bestehend aus einem Zugfahrzeug mit Starrdeichselanhänger?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- zulässige Gesamtmasse des Anhängers minus Stützlast des Anhängers, wenn diese größer ist als die zulässige Stützlast des Zugfahrzeugs",
+        "correct": true
+      },
+      {
+        "text": "- zulässige Gesamtmasse des Anhängers minus Stützlast des Anhängers, wenn diese kleiner ist als die zulässige Stützlast des Zugfahrzeugs",
+        "correct": false
+      },
+      {
+        "text": "- Nutzlast des Anhängers minus Stützlast des Anhängers, wenn diese größer ist als die zulässige Stützlast des Zugfahrzeugs",
+        "correct": false
+      }
+    ],
+    "explanation": "Du berechnest die zulässige Zuggesamtmasse anhand folgender Daten:\nZulässige Gesamtmasse des Zugfahrzeugs plus zulässige Gesamtmasse des Anhängers minus Stützlast des Anhängers, wenn diese größer ist als die zulässige Stützlast des Zugfahrzeugs.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.06-402",
+    "category": "zusatzstoff_b",
+    "question": "Wie groß darf das Maß X bei landwirtschaftlichen Zugmaschinen höchstens sein?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.06-402.png",
+    "answers": [
+      {
+        "text": "3,5 m",
+        "correct": true
+      },
+      {
+        "text": "2,5 m",
+        "correct": false
+      },
+      {
+        "text": "4,5 m",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-403",
+    "category": "zusatzstoff_b",
+    "question": "Wie groß darf das Maß X bei landwirtschaftlichen Zugmaschinen höchstens sein?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/2.6.06-403.png",
+    "answers": [
+      {
+        "text": "12 m",
+        "correct": true
+      },
+      {
+        "text": "8 m",
+        "correct": false
+      },
+      {
+        "text": "10 m",
+        "correct": false
+      }
+    ],
+    "explanation": "Demnächst...",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-407",
+    "category": "zusatzstoff_b",
+    "question": "Ab welcher zulässigen Gesamtmasse ist für Kraftfahrzeuge oder Fahrzeugkombinationen bei geschäftsmäßiger Beförderung von Gütern das Güterkraftverkehrsgesetz zu beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Über 3,5 t",
+        "correct": true
+      },
+      {
+        "text": "Ab 2,8 t",
+        "correct": false
+      },
+      {
+        "text": "Ab 3,0 t",
+        "correct": false
+      }
+    ],
+    "explanation": "Ab einer zulässigen Gesamtmasse von 3,5 t für Kraftfahrzeuge oder Fahrzeugkombinationen bei geschäftsmäßiger Beförderung von Gütern ist das Güterkraftverkehrsgesetz zu beachten.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.06-408",
+    "category": "zusatzstoff_b",
+    "question": "Die Geltungsdauer einer Ihrer Fahrerlaubnisklassen ist abgelaufen. Welche Folgen hat dies?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Fahrerlaubnis dieser Klasse ist erloschen",
+        "correct": true
+      },
+      {
+        "text": "Das Führen von Kraftfahrzeugen dieser Klasse ist untersagt",
+        "correct": true
+      },
+      {
+        "text": "Die Fahrerlaubnis dieser Klasse darf nur noch für Privatfahrten genutzt werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Folgen sind das Führen von Kraftfahrzeugen dieser Klasse ist untersagt und die Fahrerlaubnis dieser Klasse ist erloschen. Sie darf nicht für Privatfahrten genutzt werden.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-001",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie bei der Benutzung von Navigationssystemen und Straßenkarten beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Inhalte können schon kurz nach dem Kauf veraltet sein",
+        "correct": true
+      },
+      {
+        "text": "Auch aktuelle Inhalte können von der Realität abweichen",
+        "correct": true
+      },
+      {
+        "text": "Alle Navigationssysteme können sich automatisch aktualisieren",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei der Benutzung eines Navis, solltest du darauf achten, dass auch aktuelle Inhalte von der Realität abweichen können und die Inhalte können schon kurz nach dem Kauf veraltet sein. Eine Garantie auf Aktualität trotz automatischer Aktualisierung gibt es nicht.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-101",
+    "category": "zusatzstoff_b",
+    "question": "Was sollten Sie bei der Streckenplanung ins Ausland beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Bedingungen für die innerstädtische Straßennutzung gelten (zum Beispiel City-Maut)",
+        "correct": true
+      },
+      {
+        "text": "- Kennzeichnungspflichten für das Befahren von Umweltzonen bestehen",
+        "correct": true
+      },
+      {
+        "text": "- Geschwindigkeitsbeschränkungen gelten",
+        "correct": true
+      }
+    ],
+    "explanation": "Erkundigen Sie sich vor der Fahrt welche Bestimmungen im Ausland gelten.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-204",
+    "category": "zusatzstoff_b",
+    "question": "Worauf ist bei der Streckenplanung zu achten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf mögliche Verkehrsbehinderungen durch Ferienverkehr in verschiedenen Bundesländern",
+        "correct": true
+      },
+      {
+        "text": "Auf mögliche Verkehrsbehinderungen durch Baustellen",
+        "correct": true
+      },
+      {
+        "text": "Auf möglichst abwechslungsreiche Streckenführung",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei deiner Streckenplanung achte bitte auf mögliche Verkehrsbehinderungen durch Baustellen und auf mögliche Verkehrsbehinderungen durch Ferienverkehr in verschiedenen Bundesländern.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-206",
+    "category": "zusatzstoff_b",
+    "question": "Können die Angaben in den Straßenkarten von den tatsächlichen Gegebenheiten abweichen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Straßenkarten können schon kurz nach der Veröffentlichung überholt sein",
+        "correct": true
+      },
+      {
+        "text": "Straßenkarten haben eine Gültigkeit von 4 Jahren, danach müssen sie ausgetauscht werden",
+        "correct": false
+      },
+      {
+        "text": "Straßenkarten der Automobilklubs und Tankgesellschaften weichen nie von den tatsächlichen Gegebenheiten ab",
+        "correct": false
+      }
+    ],
+    "explanation": "Straßenkarten können schon kurz nach der Veröffentlichung überholt und veraltet sein. Achte bitte möglichst auf die Aktualität.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-207",
+    "category": "zusatzstoff_b",
+    "question": "Was sagt der Maßstab 1:300 000 auf einer Straßenkarte aus?",
+    "image": null,
+    "answers": [
+      {
+        "text": "1 Zentimeter auf der Karte entspricht 3 Kilometern",
+        "correct": true
+      },
+      {
+        "text": "1 Zentimeter auf der Karte entspricht 300 Kilometern",
+        "correct": false
+      },
+      {
+        "text": "1 Zentimeter auf der Karte entspricht 30 Kilometern",
+        "correct": false
+      }
+    ],
+    "explanation": "Dieser Maßstab sagt, dass 1 Zentimeter auf der Straßenkarte 3 Kilometern entspricht.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-209",
+    "category": "zusatzstoff_b",
+    "question": "Sie fahren auf der Autobahn und wollen auf direktem Weg nach Unterbach. An welcher Stelle verlassen Sie die Autobahn?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2018-10-15/2.6.07-209.png",
+    "answers": [
+      {
+        "text": "An der Autobahnausfahrt Düsseldorf/Erkrath",
+        "correct": true
+      },
+      {
+        "text": "Am Autobahnkreuz Düsseldorf-Süd",
+        "correct": false
+      },
+      {
+        "text": "Am Autobahnkreuz Hilden",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn du nach Unterbach möchtest, solltest du auf der Autobahnausfahrt Düsseldorf/Erkrath abfahren.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-210",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen mit Ihrem Fahrzeug von Hamburg nach Rom fahren. Welchen Kartenmaßstab sollten Sie wählen, um eine erste Gesamtstreckenplanung durchzuführen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "1:500.000",
+        "correct": true
+      },
+      {
+        "text": "1:50.000",
+        "correct": false
+      },
+      {
+        "text": "1:10.000",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei deiner Fahrt von Hamburg nach Rom kannst du mit dem Maßstab  1:500.000 eine erste Gesamtstreckenplanung durchzuführen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-212",
+    "category": "zusatzstoff_b",
+    "question": "Welche Informationen bietet die Legende zu einer Straßenkarte?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Erklärung der verwendeten Symbole und Zeichen in der Karte",
+        "correct": true
+      },
+      {
+        "text": "Ein Entfernungslineal zur schnellen Entfernungsbestimmung",
+        "correct": true
+      },
+      {
+        "text": "Einen historischen Überblick über die Entstehung der Karte",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Legende zu einer Straßenkarte bietet dir eine Erklärung der verwendeten Symbole und Zeichen in der Karte und ein Entfernungslineal zur schnellen Entfernungsbestimmung.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-213",
+    "category": "zusatzstoff_b",
+    "question": "Die Nummerierungen der Autobahnen haben folgende Bedeutungen:",
+    "image": null,
+    "answers": [
+      {
+        "text": "Nord-Süd-Autobahnen führen ungerade Zahlen",
+        "correct": true
+      },
+      {
+        "text": "Regionale Autobahnen führen dreistellige Zahlen",
+        "correct": true
+      },
+      {
+        "text": "Ost-West-Autobahnen führen ungerade Zahlen",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Nummerierungen auf Autobahnen bedeuten: Regionale Autobahnen führen dreistellige Zahlen und Nord-Süd-Autobahnen führen ungerade Zahlen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.07-214",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen mit Ihrem Lkw über 7,5 t zulässige Gesamtmasse auf der Autobahn von Hannover nach München fahren. Mit welcher Durchschnittsgeschwindigkeit können Sie rechnen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "70 km/h",
+        "correct": true
+      },
+      {
+        "text": "80 km/h",
+        "correct": false
+      },
+      {
+        "text": "40 km/h",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit deinem Lkw über 7,5 t zulässige Gesamtmasse auf der Autobahn von Hannover nach München solltest du mit einer Durchschnittsgeschwindigkeit von 70 km/h rechnen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.07-216",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen lebende Tiere über eine große Entfernung transportieren. Was ist bei der Streckenplanung zu berücksichtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ladungskontrolle und Ladungspflege",
+        "correct": true
+      },
+      {
+        "text": "Tank- und Raststopps",
+        "correct": true
+      },
+      {
+        "text": "Tierschutztransportverordnung",
+        "correct": true
+      }
+    ],
+    "explanation": "Wenn du lebende Tiere über eine große Entfernung transportieren möchtest, solltest du bei der Streckenplanung die Tierschutztransportverordnung, die Ladungskontrollen und Ladungspflege und die Tank- und Raststopps berücksichtigen.",
+    "difficulty": "hard",
+    "points": 4
+  },
+  {
+    "id": "2.6.07-217",
+    "category": "zusatzstoff_b",
+    "question": "Sie wollen einen Routenplan erstellen, um von Frankfurt (Oder) nach Kiel zu fahren. An unterschiedlichen Zwischenstationen müssen Sie Ladung austauschen. Welche Angaben sind zur Routenplanung hinsichtlich Weg und Zeit nötig?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Startort, Zielort, Reihenfolge der Zwischenstationen, geplante Ladezeiten und Fahrtunterbrechungen",
+        "correct": true
+      },
+      {
+        "text": "Standort, Zielort, Zwischenstationen, Höchstgeschwindigkeit",
+        "correct": false
+      },
+      {
+        "text": "Standort, Zielort, Fahrgeschwindigkeit",
+        "correct": false
+      }
+    ],
+    "explanation": "In deinem Routenplan von Frankfurt (Oder) nach Kiel, mit unterschiedlichen Zwischenstationen, wegen Ladungstausch, sollten folgende Infos vorhanden sein: Startort, Zielort, Reihenfolge der Zwischenstationen, geplante Ladezeiten und Fahrtunterbrechungen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.07-218",
+    "category": "zusatzstoff_b",
+    "question": "Sie planen Ihre Fahrt mit einer Straßenkarte mit dem Maßstab 1:200.000. 1 cm auf der Karte entspricht wie vielen Kilometern in der Realität?",
+    "image": null,
+    "answers": [
+      {
+        "text": "2 km",
+        "correct": true
+      },
+      {
+        "text": "10 km",
+        "correct": false
+      },
+      {
+        "text": "20 km",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei deiner Planung mit einer Straßenkarte mit einem Maßstab von 1:200.000 entspricht 1 cm auf der Karte 2 Kilometern.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-219",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie bei der Nutzung eines Navigationssystems im Fahrzeug beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die ausgegebenen Informationen sind Empfehlungen",
+        "correct": true
+      },
+      {
+        "text": "Das Navigationsgerät sollte die Sicht des Fahrers nicht beeinträchtigen",
+        "correct": true
+      },
+      {
+        "text": "Das Navigationsgerät sollte nicht unbefestigt im Auto herumliegen",
+        "correct": true
+      }
+    ],
+    "explanation": "Bei der Nutzung eines Navigationssystems, beachte bitte, dass die ausgegebenen Informationen sind Empfehlungen, das Navigationsgerät sollte deine Sicht nicht beeinträchtigen und das Navi sollte nicht unbefestigt im Auto herumliegen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-220",
+    "category": "zusatzstoff_b",
+    "question": "Welche Tätigkeiten können beim Fahren zu risikoreichen Ablenkungen führen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Eingabe einer Adresse in ein Navigationsgerät",
+        "correct": true
+      },
+      {
+        "text": "Das Schreiben einer Textnachricht",
+        "correct": true
+      },
+      {
+        "text": "Das Telefonieren auch mit Freisprecheinrichtung",
+        "correct": true
+      }
+    ],
+    "explanation": "Alle Anworten können zu risikoreichen Ablenkungen führen. Die Eingabe einer Adresse in ein Navigationsgerät / das Schreiben einer Textnachricht und das Telefonieren auch mit einer Freisprecheinrichtung.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.6.07-221",
+    "category": "zusatzstoff_b",
+    "question": "Warum sind bei der Streckenplanung die Lenk- und Ruhezeiten zu berücksichtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- sichergestellt wird, dass der Fahrer die vorgeschriebenen Pausen einhalten kann",
+        "correct": true
+      },
+      {
+        "text": "- Beeinträchtigungen der Fahrweise vermieden werden sollen",
+        "correct": true
+      },
+      {
+        "text": "- die Fahrtstrecke kürzer wird",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei der Streckenplanung die Lenk- und Ruhezeiten zu berücksichtigen ist deswegen wichtig, weil es sicherstellt, dass du die vorgeschriebenen Pausen einhalten kannst und die Beeinträchtigungen der Fahrweise vermieden werden soll.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-222",
+    "category": "zusatzstoff_b",
+    "question": "Was sollte bei der Streckenplanung berücksichtigt werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Lenk- und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Die Feiertage der einzelnen Bundesländer",
+        "correct": true
+      },
+      {
+        "text": "Bei grenzüberschreitendem Verkehr die Bestimmungen des anderen Staates",
+        "correct": true
+      }
+    ],
+    "explanation": "Du solltest die  Lenk- und Ruhezeiten bei deiner Streckenplanung berücksichtigen, die Feiertage der einzelnen Bundesländer und auch bei grenzüberschreitendem Verkehr die Bestimmungen des anderen Staates.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-223",
+    "category": "zusatzstoff_b",
+    "question": "Was ist bei der Benutzung eines elektronischen Navigationsgeräts zu beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ein Karten-Update sollte in regelmäßigen Abständen durchgeführt werden",
+        "correct": true
+      },
+      {
+        "text": "Das Ziel sollte eingegeben werden, wenn das Fahrzeug steht",
+        "correct": true
+      },
+      {
+        "text": "Die Anweisungen des Navigationsgeräts sollten stets befolgt werden",
+        "correct": false
+      }
+    ],
+    "explanation": "Prüfe bitte, ob ein Karten-Update in regelmäßigen Abständen durchgeführt wurde und das Ziel sollte eingegeben werden, wenn das Fahrzeug steht.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-224",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie bei der Streckenplanung berücksichtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Lenk- und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Die Feiertage der einzelnen Bundesländer",
+        "correct": true
+      },
+      {
+        "text": "Die Bestimmungen des anderen Staates bei grenzüberschreitendem Verkehr",
+        "correct": true
+      }
+    ],
+    "explanation": "Bei der Streckenplanung solltest du alle 3 Antworten beachten. Die Lenk- und Ruhezeiten, die Feiertage der einzelnen Bundesländer und die Bestimmungen des anderen Staates bei grenzüberschreitendem Verkehr.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-225",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie bei der Streckenplanung berücksichtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Lenk- und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Die Bestimmungen des anderen Staates bei grenzüberschreitendem Verkehr",
+        "correct": true
+      },
+      {
+        "text": "Die Fahrverbote aufgrund von Feiertagen der einzelnen Bundesländer",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei der Streckenplanung solltest du die Lenk- und Ruhezeiten berücksichtigen und die Bestimmungen des anderen Staates bei grenzüberschreitendem Verkehr.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-226",
+    "category": "zusatzstoff_b",
+    "question": "Was ist bei der Streckenplanung zu beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Regelungen der Ferienreiseverordnung",
+        "correct": true
+      },
+      {
+        "text": "Die Regelungen der Lenk- und Ruhezeiten",
+        "correct": true
+      },
+      {
+        "text": "Mögliche Verkehrsbehinderungen durch Baustellen",
+        "correct": true
+      }
+    ],
+    "explanation": "Du solltest bei einer Streckenplanung darauf achten, dass es mögliche Verkehrsbehinderungen durch Baustellen geben kann, die Regelungen der Ferienreiseverordnung und die Lenk- und Ruhezeiten. Alle Antworten sind richtig.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-227",
+    "category": "zusatzstoff_b",
+    "question": "Sie transportieren Stückgut. Was ist bei der Streckenplanung zu berücksichtigen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Reihenfolge der Be- und Entladestellen",
+        "correct": true
+      },
+      {
+        "text": "Der zeitliche Aufwand für das Be- und Entladen",
+        "correct": true
+      },
+      {
+        "text": "Die Anwendung der Lenk- und Ruhezeiten in Verbindung mit dem Arbeitszeitgesetz",
+        "correct": true
+      }
+    ],
+    "explanation": "Beim Transport von Stückgut, solltest du alle 3 Antworten berücksichtigen. Die Reihenfolge der Be- und Entladestellen & der zeitliche Aufwand für das Be- und Entladen (Zeit sparen) und die Anwendung der Lenk- und Ruhezeiten in Verbindung mit dem Arbeitszeitgesetz. (Ausruhen und Kraft tanken)",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-228",
+    "category": "zusatzstoff_b",
+    "question": "Was ist bei der Nutzung von Navigationssystemen zu beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf der vorgeschlagenen Streckenführung müssen die Fahrzeugabmessungen berücksichtigt werden",
+        "correct": true
+      },
+      {
+        "text": "Angebrachte mobile Navigationssysteme dürfen die Sicht nach vorn nicht behindern",
+        "correct": true
+      },
+      {
+        "text": "Die zum Fahrtbeginn berechnete Ankunftszeit berücksichtigt bereits vorgeschriebene Lenk- und Ruhezeiten",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.6.07-229",
+    "category": "zusatzstoff_b",
+    "question": "Was müssen Sie im Winter bei Fahrten ins europäische Ausland beachten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Mindestprofiltiefe der Bereifung unterscheiden",
+        "correct": true
+      },
+      {
+        "text": "- Ausrüstungspflicht mit Winterreifen unterscheiden",
+        "correct": true
+      },
+      {
+        "text": "- Mitführpflicht von Schneeketten unterscheiden",
+        "correct": true
+      }
+    ],
+    "explanation": "",
+    "difficulty": "easy",
+    "points": 2
+  }
+]

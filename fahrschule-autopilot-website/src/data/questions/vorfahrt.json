@@ -1,0 +1,1208 @@
+[
+  {
+    "id": "1.3.01-001",
+    "category": "vorfahrt",
+    "question": "An welchen Stellen ohne vorfahrtregelnde Verkehrszeichen gilt die Regel „rechts vor links“?",
+    "image": null,
+    "answers": [
+      {
+        "text": "An Straßenkreuzungen und -einmündungen",
+        "correct": true
+      },
+      {
+        "text": "An Grundstücksausfahrten",
+        "correct": false
+      },
+      {
+        "text": "Am Ende eines verkehrsberuhigten Bereiches",
+        "correct": false
+      }
+    ],
+    "explanation": "An Kreuzungen und Einmündungen ohne vorfahrtregelndes Verkehrszeichen gilt „rechts vor links“. Wenn ein Fahrzeug aus einem Grundstück oder einem verkehrsberuhigten Bereich hinausfährt, haben alle anderen Verkehrsteilnehmer Vorrang, auch Fußgänger und Kinder, die auf dem Gehweg fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-002",
+    "category": "vorfahrt",
+    "question": "An welchen Stellen ohne vorfahrtregelnde Verkehrszeichen gilt die Regel „rechts vor links“?",
+    "image": null,
+    "answers": [
+      {
+        "text": "An Straßenkreuzungen und -einmündungen",
+        "correct": true
+      },
+      {
+        "text": "An Einmündungen mit abgesenktem Bordstein",
+        "correct": false
+      },
+      {
+        "text": "Wo Feld- oder Waldwege in eine andere Straße münden",
+        "correct": false
+      }
+    ],
+    "explanation": "An Kreuzungen und Einmündungen ohne Vorfahrtsschilder haben die von rechts kommenden Fahrzeuge Vorfahrt. Gleiches gilt für Straßen, die gemäß ihrer Beschilderung gleichrangig sind. Eine Ausnahme bilden Fahrbahnen mit abgesenktem Bordstein, Grundstücksausfahrten sowie Feld- und Waldwege. Befinden Sie sich auf einer dieser Straßen, haben Sie den anderen Verkehrsteilnehmern Vorrang zu gewähren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-003",
+    "category": "vorfahrt",
+    "question": "Sie kommen an eine Kreuzung, an der Sie die Vorfahrtlage nicht gleich überblicken. Wie verhalten Sie sich?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Warten, beobachten und sich gegebenenfalls mit anderen verständigen",
+        "correct": true
+      },
+      {
+        "text": "Nach der Regel „rechts vor links“ fahren",
+        "correct": false
+      },
+      {
+        "text": "Als Geradeausfahrer immer durchfahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Es gibt Situationen, die bezüglich der Vorfahrtsregelung schwierig zu überblicken sind. Hier sollten Sie abwarten und die anderen Kfz-FahrerInnen beobachten. Falls sich die Lage nicht klärt, kann man durch deutliche Handzeichen miteinander kommunizieren. Einfach geradeaus weiterzufahren oder nach der Regel \"rechts vor links\" zu agieren, wäre zu riskant und unfallträchtig.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-007-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-007-M.png",
+    "answers": [
+      {
+        "text": "Ich muss den Radfahrer durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss den [Motorradfahrer] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem Radfahrer abbiegen",
+        "correct": false
+      }
+    ],
+    "explanation": "Es gilt, die Rechts-vor-links-Vorfahrtsregelung einzuhalten. Gewähren Sie dem von rechts kommenden Motorradfahrer Vorfahrt, bevor Sie in die Kreuzung einfahren. Als Nächstes haben Sie als Linksabbieger dem entgegenkommenden Radfahrer Vorrang zu geben. Der Radfahrer kommt für den Motorradfahrer von rechts und hat somit Vorfahrt vor ihm.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-013-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-013-M.png",
+    "answers": [
+      {
+        "text": "Ich darf als Erster die Kreuzung überqueren",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den roten Lkw] abbiegen lassen",
+        "correct": false
+      },
+      {
+        "text": "Ich muss den [Radfahrer] abbiegen lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Vorfahrtsregelung „rechts vor links“ gilt an Kreuzungen und Einmündungen ohne vorfahrtregelndes Verkehrszeichen. Da von rechts kein Fahrzeug kommt, dürfen Sie zuerst die Kreuzung überqueren. Danach fährt der Lkw und zuletzt der Radfahrer.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-016-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-016-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [den blauen Lkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den Traktor] abbiegen lassen",
+        "correct": true
+      },
+      {
+        "text": "[Der blaue Lkw] muss mich durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Verkehrszeichen „Vorfahrt gewähren“ regelt hier die Vorfahrt. Das heißt, Sie müssen warten und sowohl das von rechts als auch das von links kommende Fahrzeug vorfahren lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-017-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-017-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [das Motorrad] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich fahre vor [dem Bus]",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den Bus] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Hier gilt das Verkehrszeichen „Vorfahrt an der nächsten Kreuzung oder Einmündung“. Da Sie links abbiegen, müssen Sie das entgegenkommende Fahrzeug vorfahren lassen. Sie dürfen dann vor dem von rechts kommenden Fahrzeug abbiegen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-018-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-018-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [das Motorrad] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich fahre vor dem [Bus]",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den Bus] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Verkehrszeichen \"Vorfahrt gewähren\" setzt die Rechts-vor-links-Regelung aus. Somit hat das von links kommende Motorrad Vorfahrt. Sie müssen warten. Danach muss der Linksabbieger vom Gegenverkehr Sie zuerst die Kreuzung überqueren lassen, bevor er abbiegen darf.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-021-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-021-M.png",
+    "answers": [
+      {
+        "text": "- erst nach dem [Motorrad] abbiegen",
+        "correct": true
+      },
+      {
+        "text": "- vor dem [gelben Pkw] abbiegen",
+        "correct": true
+      },
+      {
+        "text": "- als Erster abbiegen",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Verkehrszeichen steht für eine „Vorfahrtsstraße“. Sie dürfen deshalb vor dem Fahrzeug abbiegen, das von links kommt. Zuerst müssen Sie jedoch das entgegenkommende Fahrzeug abbiegen lassen, denn Sie sind als Linksabbieger wartepflichtig.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-034-M",
+    "category": "vorfahrt",
+    "question": "Wie verhalten Sie sich hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-034-M.png",
+    "answers": [
+      {
+        "text": "Ich lasse [das gelbe Fahrzeug] durchfahren",
+        "correct": true
+      },
+      {
+        "text": "Ich biege vor dem [gelben Fahrzeug] ab",
+        "correct": false
+      },
+      {
+        "text": "Ich biege vor dem [roten] Pkw ab",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Vorfahrtsregel besagt, dass du das gelbe Fahrzeug durchfahren lassen musst.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-035-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-035-M.png",
+    "answers": [
+      {
+        "text": "Ich lasse den [grünen Pkw] durchfahren",
+        "correct": true
+      },
+      {
+        "text": "Ich biege vor dem [grünen Pkw] links ab",
+        "correct": false
+      },
+      {
+        "text": "Ich muss den [roten Pkw] vorbeilassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Da es an dieser Kreuzung keine Beschilderung gibt, die den Vorrang der FahrerInnen festlegt, gilt grundsätzlich die Vorfahrtsregelung \"rechts vor links\". Aus diesem Grund müssen Sie das Kfz rechts von Ihnen zuerst passieren lassen. Im Anschluss hat Ihnen der/die FahrerIn links von Ihnen Vorfahrt zu gewähren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-038-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-038-M.png",
+    "answers": [
+      {
+        "text": "Ich muss das Motorrad durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss den [blauen Pkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [blauen Pkw] fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Gemäß der Beschilderung befindet sich der/die MotorradfahrerIn auf der Vorfahrtsstraße und darf daher zuerst fahren. Sowohl der/die FahrerIn des blauen Pkw als auch Sie selbst befinden sich auf einer Fahrbahn mit der Kennzeichnung \"Vorfahrt gewähren\". Da sich hieraus kein Vorrang ergibt, gilt grundsätzlich die Vorfahrtsregelung \"rechts vor links\". Aus diesem Grund müssen Sie das andere Fahrzeug durchfahren lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-039-M",
+    "category": "vorfahrt",
+    "question": "Wer darf hier zuerst fahren?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2022-04-01/1.3.01-039-M.png",
+    "answers": [
+      {
+        "text": "Der Elektroroller",
+        "correct": true
+      },
+      {
+        "text": "[Der rote Lkw]",
+        "correct": false
+      },
+      {
+        "text": "Ich",
+        "correct": false
+      }
+    ],
+    "explanation": "Der Elektroroller folgt der Vorfahrtstraße und hat somit Vorfahrt.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-040-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2023-04-01/1.3.01-040-M.png",
+    "answers": [
+      {
+        "text": "Der [grüne] Pkw darf vor dem [roten] Pkw fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [roten] Pkw fahren",
+        "correct": false
+      },
+      {
+        "text": "Ich darf vor dem [grünen] Pkw fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Der grüne und rote PKW befinden sich auf einer abknickenden Vorfahrtsstraße. Du befindet dich auf der untergeordneten Straße. Der grüne PKW bleibt auf der abknickenden Vorfahrtsstraße, das bedeutet, der grüne PKW darf als Erstes fahren, danach der rote PKW und du darfst als Letztes fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-041-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2023-04-01/1.3.01-041-M.png",
+    "answers": [
+      {
+        "text": "Ich darf vor dem [roten Pkw] fahren",
+        "correct": true
+      },
+      {
+        "text": "[Der gelbe Pkw] darf vor dem [roten Pkw] fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [gelben Pkw] fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Du und der gelbe PKW befindet sich auf einer abknickenden Vorfahrtsstraße. Der rote PKW befindet sich auf einer untergeordneten Straße.  Dadurch das der gelbe PKW auf der abknickenden Vorfahrtsstraße bleibt, darf er als erstes fahren. Du darfst als zweites fahren und der rote PKW darf als letztes fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-042-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-042-M.png",
+    "answers": [
+      {
+        "text": "Ich muss die Straßenbahn durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss das [Motorrad] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Die Straßenbahn muss mich vorher abbiegen lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Schild an der Kreuzung zeigt Ihnen an, dass Sie Vorfahrt gewähren müssen. Da Sie links abbiegen wollen, müssen Sie hier die Straßenbahn wie auch das entgegenkommende Motorrad durchlassen und dürfen erst als Letzte/Letzter in die Kreuzung einfahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-043-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2023-04-01/1.3.01-043-M.png",
+    "answers": [
+      {
+        "text": "[Das Motorrad] darf vor dem [gelben Pkw] fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [gelben Pkw] fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [Motorrad] fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Motorrad befindet sich auf einer abknickenden Vorfahrtstraße und darf deswegen vor dem gelben Pkw und dir abbiegen.\nEntsprechend der \"rechts-vor-links\"-Regelung an Kreuzungen darfst du vor dem gelben PKW fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-044-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2023-10-01/1.3.01-044-M.png",
+    "answers": [
+      {
+        "text": "Ich darf als Erster fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den roten Pkw] abbiegen lassen",
+        "correct": false
+      },
+      {
+        "text": "Ich muss [den Radfahrer] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "An dieser Kreuzung gilt rechts vor links. Vor daher darfst du als erstes Fahren. \n„Rechts vor links” gilt an Kreuzungen, an denen die Vorfahrt nicht durch Schilder, Ampeln oder Verkehrspolizisten geregelt wird.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-045-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2024-04-01/1.3.01-045-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [den gelben Pkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss den [blauen Lkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [gelben Pkw] fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "An dieser Kreuzung gilt die Regel recht vor links, das bedeutet, dass du das gelbe Fahrzeug durchfahren lassen musst.\nDu musst auch den LKW durchfahren lassen, da du links abbiegen möchtest und der LKW geradeaus auf seiner Fahrbahn weiterfahren möchte.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-046-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-046-M.png",
+    "answers": [
+      {
+        "text": "Ich darf durchfahren",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den blauen Pkw] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie befinden sich auf der abknickenden Vorfahrtsstraße und folgen ihrem Verlauf. Deshalb dürfen Sie zuerst fahren und das andere Fahrzeug muss warten.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-047-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2024-04-01/1.3.01-047-M.png",
+    "answers": [
+      {
+        "text": "- [den blauen Pkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "- an der Haltlinie anhalten",
+        "correct": true
+      },
+      {
+        "text": "- [den roten Pkw] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Du fährst auf eine abbiegende Vorfahrtsstraße zu. Da du von einer Nebenstraße kommst, musst du den blauen Pkw, der die Vorfahrtsstraße verlässt, durchfahren lassen. Außerdem musst du bei einem Stoppschild  an der Haltlinie anhalten, bevor du die Kreuzung befahren darfst.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-048-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-048-M.png",
+    "answers": [
+      {
+        "text": "Ich lasse [den blauen Pkw] abbiegen",
+        "correct": true
+      },
+      {
+        "text": "Ich fahre als Erster",
+        "correct": false
+      },
+      {
+        "text": "Ich lasse das Motorrad vor mir abbiegen",
+        "correct": false
+      }
+    ],
+    "explanation": "An einer Kreuzung, die keine Verkehrszeichen mit Vorfahrtsregeln aufweist, müssen Sie das Prinzip „rechts vor links” beachten. Fährt ein Pkw von rechts an und möchte nach rechts abbiegen, darf er als Erster fahren, und Sie müssen warten. Möchte ein Ihnen entgegenkommendes Fahrzeug hingegen nach links abbiegen, haben Sie Vorfahrt, denn wer abbiegt, muss dem entgegenkommenden Verkehr stets Vorrang gewähren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-049-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-049-M.png",
+    "answers": [
+      {
+        "text": "Ich darf als Erster fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den roten Pkw] vorlassen",
+        "correct": false
+      },
+      {
+        "text": "Ich muss die Straßenbahn vorlassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Verkehrszeichen zeigt Ihnen an, dass Sie sich auf einer Vorfahrtsstraße befinden. Die Straßenbahn und der/die FahrerIn des roten Pkw müssen hingegen das Zeichen \"Vorfahrt gewähren\" befolgen und warten. Sie fahren als Erster.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-050-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-050-M.png",
+    "answers": [
+      {
+        "text": "Ich darf durchfahren",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [dem blauen Pkw] Vorfahrt gewähren",
+        "correct": false
+      },
+      {
+        "text": "Ich muss [dem grünen Pkw] Vorfahrt gewähren",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie auf einer Vorfahrtsstraße unterwegs sind, dürfen Sie grundsätzlich zuerst fahren. Ein Pkw, der Ihnen entgegenkommt und nach links abbiegen möchte, muss hingegen warten. Möchte von rechts ein/e Kfz-FahrerIn in Ihre Straße einbiegen, muss er/sie Ihnen ebenfalls die Vorfahrt gewähren, da Sie sich auf einer Vorfahrtsstraße befinden.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-051-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2025-04-01/1.3.01-051-M.png",
+    "answers": [
+      {
+        "text": "Ich lasse die Straßenbahn durchfahren",
+        "correct": true
+      },
+      {
+        "text": "Ich lasse [den Traktor] abbiegen",
+        "correct": false
+      },
+      {
+        "text": "Ich fahre als Erster",
+        "correct": false
+      }
+    ],
+    "explanation": "Auf einer Vorfahrtsstraße gilt folgende Rangordnung: Grundsätzlich haben Fahrzeuge auf einer Vorfahrtsstraße immer Vorrang. Beim Verlassen einer Vorfahrtsstraße ist jedoch den entgegenkommenden Fahrzeugen Vorrang zu gewähren. Fahrzeuge, die hingegen auf eine Vorfahrtsstraße fahren möchten, müssen den anderen Verkehrsteilnehmern auf der Vorfahrtsstraße Vorrang gewähren.\nDas bedeutet du musst der Straßenbahn Vorrang gewähren, da diese auf einer Vorfahrtsstraße fährt, ihre Richtung nicht ändert und du nach links abbiegen möchtest.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-052",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-052.png",
+    "answers": [
+      {
+        "text": "Ich muss die Radfahrerin durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich verzichte auf meine Vorfahrt, um die Kreuzung nicht zu verstopfen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor der Radfahrerin links abbiegen",
+        "correct": false
+      }
+    ],
+    "explanation": "Aufgrund der Regel \"rechts vor links\" hätten Sie gegenüber dem grünen Pkw Vorrang. Allerdings müssen Sie dem entgegenkommenden Radfahrer, dessen Fahrbahn Sie kreuzen würden, Vorfahrt gewähren. Um den Verkehrsfluss zu gewährleisten, empfiehlt es sich daher, auch den/die FahrerIn des grünen Pkw zuerst in die Kreuzung einfahren zu lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-053",
+    "category": "vorfahrt",
+    "question": "Sie möchten nach rechts in eine Vorfahrtstraße einbiegen. Worauf müssen Sie achten?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf von links und von rechts kommende Fahrzeuge",
+        "correct": true
+      },
+      {
+        "text": "Auf Radfahrer und Fußgänger, die rechts neben oder noch hinter Ihnen sind",
+        "correct": true
+      },
+      {
+        "text": "Nur auf die von links kommenden Fahrzeuge",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie rechts in eine Vorfahrtsstraße einbiegen, müssen Sie sämtlichen Verkehrsteilnehmern den Vorrang gewähren. Dies betrifft sowohl Fahrzeuge, die von rechts kommen, als auch solche, die von links vorbeifahren. Darüber hinaus sollten Sie unbedingt auf Radfahrer und Fußgänger aufpassen, die sich rechts von Ihnen befinden oder die hinter Ihnen unterwegs sind.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-055-M",
+    "category": "vorfahrt",
+    "question": "Wie verhalten Sie sich richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-055-M.png",
+    "answers": [
+      {
+        "text": "- nach dem [blauen Lkw]",
+        "correct": true
+      },
+      {
+        "text": "- nach dem [gelben Pkw]",
+        "correct": true
+      },
+      {
+        "text": "- vor dem [gelben Pkw]",
+        "correct": false
+      }
+    ],
+    "explanation": "Da die Vorfahrtsregelung an dieser Kreuzung nicht durch eine entsprechende Beschilderung festgelegt ist, gilt grundsätzlich \"rechts vor links\". Somit müssen Sie dem von rechts kommenden gelben Pkw Vorfahrt gewähren. Auch der blaue Lkw hat Ihnen gegenüber Vorrang, da Sie als Linksabbieger dessen Fahrbahn kreuzen würden.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-056-M",
+    "category": "vorfahrt",
+    "question": "Wie verhalten Sie sich richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-056-M.png",
+    "answers": [
+      {
+        "text": "- vor [den beiden Pkws]",
+        "correct": true
+      },
+      {
+        "text": "- nach [den beiden Pkws]",
+        "correct": false
+      },
+      {
+        "text": "- nach [dem blauen Pkw]",
+        "correct": false
+      }
+    ],
+    "explanation": "An dieser Kreuzung haben Sie Vorfahrt. Darauf weist das Verkehrszeichen hin. Deswegen müssen die Fahrzeuge von rechts und links warten und Sie als Erstes fahren lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-057-M",
+    "category": "vorfahrt",
+    "question": "Wie verhalten Sie sich richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-057-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [den roten Pkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor [dem blauen Lkw] fahren",
+        "correct": true
+      },
+      {
+        "text": "Ich darf erst nach [dem blauen Lkw] fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie von einer Vorfahrtsstraße aus nach links abbiegen möchten und neben Ihnen ein anderer Pkw fährt, der auf der Vorfahrtsstraße bleibt, müssen sie diesem/dieser Kfz-FahrerIn den Vorrang gewähren. Für ein Fahrzeug, das sich nicht auf der Vorfahrtsstraße befindet, besteht dagegen die Pflicht, zu warten.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-058-M",
+    "category": "vorfahrt",
+    "question": "Was gilt in dieser Situation?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-058-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [das Motorrad] zuerst fahren lassen",
+        "correct": true
+      },
+      {
+        "text": "[Das Motorrad] muss warten",
+        "correct": false
+      },
+      {
+        "text": "Ich muss links blinken",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie befinden sich auf einer abknickenden Vorfahrtsstraße, wollen dieser aber nicht nach rechts folgen, sondern geradeaus weiterfahren. Von rechts kommt ein Motorrad, das dem Verlauf der Vorfahrtsstraße folgt. Sie müssen warten und diesem Fahrzeug Vorrang gewähren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-059-M",
+    "category": "vorfahrt",
+    "question": "Wer darf zuerst fahren?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-059-M.png",
+    "answers": [
+      {
+        "text": "Ich",
+        "correct": true
+      },
+      {
+        "text": "[Der rote Pkw]",
+        "correct": false
+      },
+      {
+        "text": "[Der grüne Traktor]",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie folgen einer abknickenden Vorfahrtsstraße. Daher haben Sie Vorrang vor der Fahrerin/dem Fahrer des geradeaus fahrenden Pkw. Auch die Fahrerin/der Fahrer des Traktors muss warten, da sie/er die Vorfahrtsstraße verlässt und Sie gemäß rechts vor links Vorrang haben.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-060-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-10-01/1.3.01-060-M.png",
+    "answers": [
+      {
+        "text": "Ich muss blinken",
+        "correct": true
+      },
+      {
+        "text": "Der [gelbe] Pkw muss warten",
+        "correct": true
+      },
+      {
+        "text": "Ich muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn keine vorfahrtregelnden Verkehrszeichen aufgestellt wurden, handelt es sich um sogenannten kreisförmigen Verkehr. Hier gilt die Grundregel rechts vor links. Da du in den kreisförmigen Verkehr abbiegst musst du blinken.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-101-M",
+    "category": "vorfahrt",
+    "question": "Wer muss warten?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2018-10-15/1.3.01-101-M.png",
+    "answers": [
+      {
+        "text": "[Der Pkw, der] aus dem Feldweg kommt",
+        "correct": true
+      },
+      {
+        "text": "Ich muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn ein Fahrzeug aus einem Feld- oder Waldweg in eine Straße einbiegen möchte, muss der/die betreffende Kfz-FahrerIn warten. Die Regel \"rechts vor links\" gilt hier nicht.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-103-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-103-M.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "[Das Motorrad] muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wer von rechts kommt, hat an Kreuzungen und Einmündungen Vorfahrt. Denn wenn dort kein vorfahrtregelndes Verkehrszeichen steht, gilt „rechts vor links“. Größe und Art des Fahrzeugs sind dabei egal.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-112",
+    "category": "vorfahrt",
+    "question": "Sie wollen nach links abbiegen. Wer muss warten?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-112.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "Das blaue Fahrzeug muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei Kreuzungen und Einmündungen ohne vorfahrtregelndes Verkehrszeichen gilt die Regelung „rechts vor links“. Feld- und Waldwege sind jedoch untergeordnete Verkehrswege. Wenn Sie aus einem Feld- oder Waldweg auf eine Straße abbiegen möchten, müssen Sie warten.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-113",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-113.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "Der Radfahrer muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie in einen Kreisverkehr einbiegen möchten, werden Sie durch das Verkehrszeichen „Vorfahrt gewähren“ aufgefordert, zu warten. Die im Kreis fahrenden Verkehrsteilnehmer haben hier Vorfahrt.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-114-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-114-M.png",
+    "answers": [
+      {
+        "text": "Ich muss den Radfahrer abbiegen lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den blauen Pkw] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "[Der blaue Pkw] muss mich abbiegen lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Hier gilt die Vorfahrtsregel „rechts vor links“ und die Abbiegeregelung für Linksabbieger. Der von rechts kommende Pkw darf zuerst fahren. Da Sie links abbiegen wollen, hat der entgegenkommende Radfahrer ebenfalls Vorfahrt.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-115",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2018-10-15/1.3.01-115.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "Der Radfahrer muss warten",
+        "correct": false
+      },
+      {
+        "text": "Ich muss an der Sichtlinie anhalten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn ein Verkehrsteilnehmer von rechts kommt, müssen Sie die Vorfahrtsregel „rechts vor links“ beachten und warten. Dies gilt auch, wenn es sich um eine/n FahrradfahrerIn handelt.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-116",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-116.png",
+    "answers": [
+      {
+        "text": "Ich muss den Radfahrer durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem Radfahrer abbiegen",
+        "correct": false
+      },
+      {
+        "text": "Der blaue Lkw darf zuerst fahren",
+        "correct": false
+      }
+    ],
+    "explanation": "An dieser Stelle ist die Vorfahrt nicht durch Verkehrszeichen geregelt. Daher gilt an dieser Kreuzung rechts vor links. Hier hat der geradeaus fahrende Radfahrer/die Radfahrerin Vorrang vor Ihnen, da Sie abbiegen wollen. Der von links kommende Lkw darf zuletzt fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-117-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-117-M.png",
+    "answers": [
+      {
+        "text": "- [den Radfahrer] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "- den [Bus] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "- an der Haltlinie anhalten",
+        "correct": true
+      }
+    ],
+    "explanation": "Ein Fahrzeug, das von links kommt, ist bereits auf der Vorfahrtsstraße. Daher darf es zuerst fahren. Wenn Sie links abbiegen, müssen Sie auch entgegenkommende Fahrzeuge zuerst durchfahren lassen. Aufgrund des Verkehrsschilds müssen Sie an der Haltelinie stehen bleiben („Vorfahrt achten“) oder komplett anhalten und dürfen nicht einmal mehr langsam rollen („Stoppschild“).",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-118-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-118-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [die Radfahrerin] durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor dem [Motorrad] fahren",
+        "correct": true
+      },
+      {
+        "text": "[Die Radfahrerin] muss mich vorbeilassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Da die Vorfahrt hier nicht durch Verkehrszeichen geregelt ist, müssen Sie die Regel rechts vor links beachten. Das bedeutet: Sie müssen anhalten und dem von rechts kommenden Fahrzeug Vorfahrt gewähren. Das von links kommende Motorrad muss Sie vorlassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-119",
+    "category": "vorfahrt",
+    "question": "Sie möchten eine Vorfahrtstraße überqueren. Die Sicht nach beiden Seiten ist durch parkende Fahrzeuge stark eingeschränkt. Wie verhalten Sie sich?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Ich taste mich vorsichtig in die Kreuzung hinein",
+        "correct": true
+      },
+      {
+        "text": "Ich überquere die Kreuzung zügig",
+        "correct": false
+      },
+      {
+        "text": "Ich warne den kreuzenden Verkehr durch Hupen",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei eingeschränkter Sicht dürfen Sie nur vorsichtig weiterfahren. Tasten Sie sich langsam in die Kreuzung hinein, bis Sie die Vorfahrtstraße einsehen können. So handeln Sie verantwortlich.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-120-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-120-M.png",
+    "answers": [
+      {
+        "text": "Ich muss [das blaue Fahrzeug] vorbeilassen",
+        "correct": true
+      },
+      {
+        "text": "Ich darf vor [dem grünen Fahrzeug] abbiegen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [das grüne Fahrzeug] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Im Falle einer abknickenden Vorfahrtstraße gibt es eine geregelte Reihenfolge. Zuerst fahren immer die Fahrzeuge, die auf der abknickenden Vorfahrtstraße bleiben. Als zweites fahren diejenigen, die sich auf der abknickenden Vorfahrtstraße befinden und diese verlassen möchten und zuletzt fahren die Fahrzeuge, die sich nicht auf der abknickenden Vorfahrtstraße befinden und in diese einfahren wollen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-121-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-121-M.png",
+    "answers": [
+      {
+        "text": "Ich muss die Straßenbahn durchfahren lassen",
+        "correct": true
+      },
+      {
+        "text": "Ich muss den Traktor durchfahren lassen",
+        "correct": false
+      },
+      {
+        "text": "Ich darf nicht auf den Gleisen warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie befinden sich auf der Vorfahrtsstraße. Der Traktor muss daher warten und Sie zuerst links abbiegen lassen. Sie müssen allerdings zunächst die geradeaus auf der Vorfahrtsstraße weiterfahrende Straßenbahn durchlassen, da Geradeausverkehr stets vor Abbiegeverkehr Vorrang hat.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-122-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-122-M.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "[Der grüne Pkw] muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn Sie sich an einer Kreuzung befinden und bei Ihnen das Verkehrszeichen „Vorfahrt gewähren” steht, müssen Sie warten und den/die Kfz-FahrerIn auf der Vorfahrtsstraße durchfahren lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-123-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-123-M.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "[Der gelbe Pkw] muss warten",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie und ein anderer Verkehrsteilnehmer befinden sich auf einer abknickenden Vorfahrtsstraße. Das andere Fahrzeug folgt dem Verlauf der Vorfahrtsstraße, Sie möchten sie verlassen. Deshalb müssen Sie den anderen Verkehrsteilnehmer zuerst durchfahren lassen.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-124-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-124-M.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "Ich darf die Kreuzung vor [dem Motorrad] überqueren",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie wollen eine abknickende Vorfahrtsstraße überqueren. Hier müssen Sie allen Fahrzeugen auf der Vorfahrtsstraße Vorrang gewähren und warten, bis die Vorfahrtsstraße zum Überqueren für Sie frei ist.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-125-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-125-M.png",
+    "answers": [
+      {
+        "text": "Ich muss dem [roten Pkw] Vorfahrt gewähren",
+        "correct": true
+      },
+      {
+        "text": "Ich habe Vorfahrt vor dem [blauen Pkw]",
+        "correct": true
+      },
+      {
+        "text": "Ich muss dem [blauen Pkw] Vorfahrt gewähren",
+        "correct": false
+      }
+    ],
+    "explanation": "Ohne zusätzliche vorfahrtregelnde Verkehrszeichen oder Ampeln gilt die generelle Vorfahrt-Regel „rechts vor links”. Dem Pkw, der von rechts kommt, müssen Sie Vorfahrt gewähren. Sie haben als Nächste/r Vorfahrt vor dem von links kommenden Pkw.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-126-M",
+    "category": "vorfahrt",
+    "question": "Welches Verhalten ist richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-126-M.png",
+    "answers": [
+      {
+        "text": "Ich fahre zuerst",
+        "correct": true
+      },
+      {
+        "text": "Ich muss [den gelben Pkw] durchfahren lassen",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei dem Verkehrszeichen „Vorfahrt an der nächsten Kreuzung oder Einmündung” dürfen Sie an der nächsten Kreuzung zuerst fahren. Ein von links kommendes Fahrzeug muss warten.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-127-M",
+    "category": "vorfahrt",
+    "question": "In welcher Reihenfolge müssen die Fahrzeuge hier weiterfahren?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-127-M.png",
+    "answers": [
+      {
+        "text": "[Der Radfahrer], ich, [der gelbe Pkw]",
+        "correct": true
+      },
+      {
+        "text": "[Der Radfahrer], [der gelbe Pkw], ich",
+        "correct": false
+      },
+      {
+        "text": "Ich, [der Radfahrer], [der gelbe Pkw]",
+        "correct": false
+      }
+    ],
+    "explanation": "Sie befinden sich auf einer abknickenden Vorfahrtsstraße und wollen sie geradeaus verlassen. Der/die RadfahrerIn folgt dem Verlauf der Vorfahrtsstraße und hat daher vor Ihnen Vorrang. Der Pkw von links muss Ihnen gemäß der Regel \"rechts vor links\" Vorfahrt gewähren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-128-M",
+    "category": "vorfahrt",
+    "question": "Wer darf in dieser Situation zuerst fahren?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-128-M.png",
+    "answers": [
+      {
+        "text": "Ich selbst",
+        "correct": true
+      },
+      {
+        "text": "Der [rote] Pkw",
+        "correct": false
+      },
+      {
+        "text": "Der [blaue] Traktor",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Grundregel \"Rechts vor Links\" gilt nicht für Fahrzeuge, die aus einem Feld- oder Waldweg auf eine andere Straße fahren.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-129-M",
+    "category": "vorfahrt",
+    "question": "Wie verhalten Sie sich hier richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2021-04-01/1.3.01-129-M.png",
+    "answers": [
+      {
+        "text": "Ich warte, bis [der Radfahrer] abgebogen ist",
+        "correct": true
+      },
+      {
+        "text": "Ich fahre vor [dem Radfahrer]",
+        "correct": false
+      },
+      {
+        "text": "Ich warne [den Radfahrer] durch Hupen",
+        "correct": false
+      }
+    ],
+    "explanation": "An Kreuzungen und Einmündungen hat die Vorfahrt, wer von rechts kommt.",
+    "difficulty": "hard",
+    "points": 5
+  },
+  {
+    "id": "1.3.01-130-M",
+    "category": "vorfahrt",
+    "question": "Was ist in dieser Situation richtig?",
+    "image": "https://storage.googleapis.com/theory-svc-production-media/media/de/2022-04-01/1.3.01-130-M_anfang.png",
+    "answers": [
+      {
+        "text": "Ich muss warten",
+        "correct": true
+      },
+      {
+        "text": "[Der blaue Pkw] muss warten",
+        "correct": false
+      },
+      {
+        "text": "Ich muss mich mit dem Fahrer des [blauen Pkws] verständigen",
+        "correct": false
+      }
+    ],
+    "explanation": "Durch die Beschilderung erkennst du, dass es sich hier nicht um einen Kreisverkehr handelt. Deshalb gilt rechts vor links.",
+    "difficulty": "hard",
+    "points": 5
+  }
+]

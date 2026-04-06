@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahnarztpraxis Dr. med. dent. I. Medalo | Nürnberg</title>
+    <meta name="description" content="Ihre Zahnarztpraxis in Nürnberg - Dr. med. dent. I. Medalo. Individuelle Behandlung in entspannter Atmosphäre. Moderne Zahnmedizin auf höchstem Niveau.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0e7490;
+            --primary-light: #22d3ee;
+            --primary-dark: #155e75;
+            --primary-glow: rgba(34,211,238,0.15);
+            --accent: #d4af37;
+            --accent-light: #f0d878;
+            --dark: #0f172a;
+            --dark-medium: #1e293b;
+            --text: #334155;
+            --text-light: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.07);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+            --shadow-xl: 0 25px 60px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--light); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary), var(--primary-dark)); border-radius: 3px; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 120px 0; }
+
+        .section-header { text-align: center; margin-bottom: 72px; }
+        .section-header .overline {
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--primary); margin-bottom: 14px; display: block;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+            font-weight: 600; color: var(--dark); line-height: 1.2; margin-bottom: 18px;
+        }
+        .section-header .divider {
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            margin: 22px auto; border-radius: 2px;
+        }
+        .section-header p {
+            font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto; line-height: 1.8;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 18px 0; transition: var(--transition); background: transparent;
+        }
+        .navbar.scrolled {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); padding: 10px 0;
+            box-shadow: 0 1px 30px rgba(0,0,0,0.06);
+        }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+        .logo-icon {
+            width: 46px; height: 46px; border-radius: 12px; overflow: hidden;
+            background: white; display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .logo-icon img { width: 38px; height: auto; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-text .name {
+            font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600;
+            color: var(--white); transition: var(--transition); line-height: 1.2;
+        }
+        .logo-text .subtitle {
+            font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(255,255,255,0.6); transition: var(--transition);
+        }
+        .navbar.scrolled .logo-text .name { color: var(--dark); }
+        .navbar.scrolled .logo-text .subtitle { color: var(--text-light); }
+
+        .nav-links { display: flex; align-items: center; gap: 6px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; font-size: 0.88rem; font-weight: 500;
+            color: rgba(255,255,255,0.8); padding: 8px 16px; border-radius: 8px; transition: var(--transition);
+        }
+        .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .navbar.scrolled .nav-links a { color: var(--text); }
+        .navbar.scrolled .nav-links a:hover { color: var(--primary); background: rgba(14,116,144,0.06); }
+
+        .nav-cta {
+            background: var(--primary) !important; color: #fff !important;
+            padding: 10px 24px !important; border-radius: 50px !important; font-weight: 600 !important;
+            box-shadow: 0 4px 15px rgba(14,116,144,0.3);
+        }
+        .nav-cta:hover { background: var(--primary-dark) !important; transform: translateY(-1px); }
+        .navbar.scrolled .nav-cta { color: #fff !important; }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; z-index: 1001; }
+        .menu-toggle span { width: 24px; height: 2px; background: white; border-radius: 2px; transition: var(--transition); }
+        .navbar.scrolled .menu-toggle span { background: var(--dark); }
+
+        /* ===== HERO ===== */
+        .hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1920&q=80') center/cover no-repeat;
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(15,23,42,0.88) 0%, rgba(14,116,144,0.7) 50%, rgba(15,23,42,0.85) 100%);
+        }
+        /* Animated particles */
+        .hero-particles {
+            position: absolute; inset: 0; z-index: 1; overflow: hidden;
+        }
+        .particle {
+            position: absolute; width: 4px; height: 4px; background: rgba(34,211,238,0.3);
+            border-radius: 50%; animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        .hero .container {
+            position: relative; z-index: 2;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+            padding-top: 100px;
+        }
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+            font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 8px;
+        }
+        .hero-content h1 span {
+            display: block;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-content .tagline {
+            font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic;
+            color: rgba(255,255,255,0.75); margin-bottom: 24px;
+        }
+        .hero-content p {
+            font-size: 1.08rem; color: rgba(255,255,255,0.65); line-height: 1.9;
+            margin-bottom: 40px; max-width: 500px;
+        }
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 34px; border-radius: 50px; font-size: 0.95rem;
+            font-weight: 600; text-decoration: none; transition: var(--transition); cursor: pointer; border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+            box-shadow: 0 4px 25px rgba(14,116,144,0.4);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 35px rgba(14,116,144,0.5); }
+        .btn-outline {
+            background: rgba(255,255,255,0.08); color: #fff;
+            border: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+        }
+        .btn-outline:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
+        .btn-dark {
+            background: var(--dark); color: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .btn-dark:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+
+        .hero-visual { display: flex; justify-content: center; position: relative; }
+        .hero-image-wrapper {
+            position: relative; width: 400px; height: 480px;
+        }
+        .hero-image-wrapper img {
+            width: 100%; height: 100%; object-fit: cover;
+            border-radius: 24px; box-shadow: var(--shadow-xl);
+        }
+        .hero-image-wrapper::before {
+            content: ''; position: absolute; top: -12px; right: -12px;
+            width: 100%; height: 100%;
+            border: 2px solid rgba(34,211,238,0.3); border-radius: 24px; z-index: -1;
+        }
+        .hero-badge {
+            position: absolute; bottom: -20px; left: -20px;
+            background: white; padding: 18px 24px; border-radius: 16px;
+            box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .hero-badge .badge-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+        }
+        .hero-badge .badge-text strong { display: block; color: var(--dark); font-size: 0.95rem; }
+        .hero-badge .badge-text span { color: var(--text-light); font-size: 0.8rem; }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed; top: 100px; right: 24px; z-index: 999;
+            display: flex; flex-direction: column; gap: 6px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
+            padding: 8px; border-radius: 14px; box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+        .navbar.scrolled ~ .lang-switcher { top: 75px; }
+        .lang-btn {
+            width: 42px; height: 42px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 0.75rem; font-weight: 700; color: var(--text);
+            background: transparent; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lang-btn:hover { background: var(--light); }
+        .lang-btn.active { background: var(--primary); color: white; }
+
+        /* RTL support for Arabic */
+        html[dir="rtl"] { direction: rtl; }
+        html[dir="rtl"] .hero .container { direction: rtl; }
+        html[dir="rtl"] .welcome-grid { direction: rtl; }
+        html[dir="rtl"] .philosophy-grid { direction: rtl; }
+        html[dir="rtl"] .contact-grid { direction: rtl; }
+        html[dir="rtl"] .footer-grid { direction: rtl; }
+        html[dir="rtl"] .nav-links { direction: rtl; }
+        html[dir="rtl"] .hero-badge { left: auto; right: -20px; }
+        html[dir="rtl"] .welcome-images .experience-badge { right: auto; left: 60px; }
+        html[dir="rtl"] .welcome-content .highlight-text { border-left: none; border-right: 4px solid var(--primary); border-radius: 12px 0 0 12px; }
+        html[dir="rtl"] .philosophy-content blockquote { border-left: none; border-right: 3px solid var(--primary-light); padding-left: 0; padding-right: 24px; }
+
+        /* ===== TRUST BAR ===== */
+        .trust-bar { position: relative; z-index: 10; margin-top: -60px; }
+        .trust-bar .container {
+            background: white; border-radius: 24px; box-shadow: var(--shadow-xl);
+            display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden;
+        }
+        .trust-item {
+            text-align: center; padding: 40px 24px;
+            border-right: 1px solid var(--border); transition: var(--transition); position: relative;
+        }
+        .trust-item:last-child { border-right: none; }
+        .trust-item:hover { background: linear-gradient(135deg, var(--primary-glow), transparent); }
+        .trust-item .trust-number {
+            font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            line-height: 1;
+        }
+        .trust-item .trust-label {
+            font-size: 0.88rem; color: var(--text-light); margin-top: 6px; font-weight: 500;
+        }
+
+        /* ===== WELCOME / ABOUT ===== */
+        .welcome { background: var(--light); }
+        .welcome-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .welcome-images { position: relative; height: 560px; }
+        .welcome-images .img-main {
+            width: 65%; height: 420px; object-fit: cover; border-radius: 24px;
+            box-shadow: var(--shadow-lg); position: relative; z-index: 2;
+        }
+        .welcome-images .img-secondary {
+            width: 50%; height: 300px; object-fit: cover; border-radius: 20px;
+            box-shadow: var(--shadow-lg); position: absolute; bottom: 0; right: 0; z-index: 3;
+            border: 6px solid white;
+        }
+        .welcome-images .experience-badge {
+            position: absolute; top: 30px; right: 60px; z-index: 4;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; padding: 20px 24px; border-radius: 18px;
+            text-align: center; box-shadow: 0 10px 30px rgba(14,116,144,0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+        .experience-badge .badge-number {
+            font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1;
+        }
+        .experience-badge .badge-text { font-size: 0.78rem; opacity: 0.9; margin-top: 2px; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+        .welcome-images .pattern {
+            position: absolute; top: -15px; left: -15px; width: 100px; height: 100px;
+            background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(14,116,144,0.06) 5px, rgba(14,116,144,0.06) 10px);
+            border-radius: 16px; z-index: 1;
+        }
+        .welcome-content .overline {
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--primary); margin-bottom: 14px;
+        }
+        .welcome-content h2 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 2.8rem);
+            color: var(--dark); margin-bottom: 22px; line-height: 1.2;
+        }
+        .welcome-content p { color: var(--text-light); margin-bottom: 16px; font-size: 1.05rem; line-height: 1.9; }
+        .welcome-content .highlight-text {
+            background: linear-gradient(135deg, rgba(14,116,144,0.06), rgba(34,211,238,0.06));
+            border-left: 4px solid var(--primary); padding: 18px 24px; border-radius: 0 12px 12px 0;
+            margin: 24px 0; font-style: italic; color: var(--dark);
+            font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
+        }
+        .welcome-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
+        .welcome-feature {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 18px; background: white; border-radius: 14px;
+            box-shadow: var(--shadow-sm); transition: var(--transition);
+        }
+        .welcome-feature:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .welcome-feature .feature-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.1), rgba(34,211,238,0.1));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 1.2rem;
+        }
+        .welcome-feature span { font-size: 0.88rem; font-weight: 600; color: var(--dark); }
+
+        /* ===== WHY US ===== */
+        .why-us { background: white; position: relative; overflow: hidden; }
+        .why-us::before {
+            content: ''; position: absolute; top: -200px; right: -200px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--primary-glow), transparent 70%);
+            z-index: 0;
+        }
+        .why-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+            position: relative; z-index: 1;
+        }
+        .why-card {
+            background: white; border-radius: var(--radius); padding: 44px 32px;
+            border: 1px solid var(--border); transition: var(--transition);
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .why-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0); transition: var(--transition); transform-origin: left;
+        }
+        .why-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
+        .why-card:hover::before { transform: scaleX(1); }
+        .why-card .why-icon {
+            width: 80px; height: 80px; margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.08), rgba(34,211,238,0.08));
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; transition: var(--transition);
+        }
+        .why-card:hover .why-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 8px 25px rgba(14,116,144,0.3);
+        }
+        .why-card:hover .why-icon span { filter: brightness(0) invert(1); }
+        .why-card h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.25rem;
+            color: var(--dark); margin-bottom: 12px;
+        }
+        .why-card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.8; }
+
+        /* ===== SERVICES ===== */
+        .services { background: var(--light); }
+        .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .service-card {
+            background: white; border-radius: var(--radius); padding: 38px 28px;
+            text-align: center; transition: var(--transition);
+            border: 1px solid var(--border); position: relative; overflow: hidden;
+        }
+        .service-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            opacity: 0; transition: var(--transition);
+        }
+        .service-card:hover {
+            transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent;
+        }
+        .service-card:hover::after { opacity: 1; }
+        .service-card .service-icon {
+            width: 72px; height: 72px; margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.06), rgba(34,211,238,0.06));
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; transition: var(--transition);
+        }
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 6px 20px rgba(14,116,144,0.25);
+        }
+        .service-card:hover .service-icon span { filter: brightness(0) invert(1); }
+        .service-card h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.12rem;
+            color: var(--dark); margin-bottom: 10px;
+        }
+        .service-card p { font-size: 0.88rem; color: var(--text-light); line-height: 1.75; }
+
+        /* ===== SHOWCASE / IMAGE BAND ===== */
+        .showcase {
+            padding: 0; position: relative; overflow: hidden;
+        }
+        .showcase-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+        }
+        .showcase-item {
+            position: relative; height: 350px; overflow: hidden;
+        }
+        .showcase-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s ease, filter 0.5s ease;
+            filter: brightness(0.85);
+        }
+        .showcase-item:hover img { transform: scale(1.1); filter: brightness(1); }
+        .showcase-item .showcase-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(15,23,42,0.7), transparent 60%);
+            display: flex; align-items: flex-end; padding: 28px;
+            opacity: 0; transition: var(--transition);
+        }
+        .showcase-item:hover .showcase-overlay { opacity: 1; }
+        .showcase-overlay span {
+            color: white; font-weight: 600; font-size: 1rem;
+            transform: translateY(10px); transition: var(--transition);
+        }
+        .showcase-item:hover .showcase-overlay span { transform: translateY(0); }
+
+        /* ===== CTA BANNER ===== */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-dark) 100%);
+            padding: 80px 0; text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1920&q=80') center/cover;
+            opacity: 0.08;
+        }
+        .cta-banner .container { position: relative; z-index: 1; }
+        .cta-banner h2 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem);
+            color: white; margin-bottom: 16px;
+        }
+        .cta-banner p {
+            color: rgba(255,255,255,0.8); font-size: 1.15rem; max-width: 600px;
+            margin: 0 auto 36px; line-height: 1.8;
+        }
+        .cta-banner .btn-white {
+            background: white; color: var(--primary-dark); font-weight: 700;
+            padding: 16px 40px; border-radius: 50px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 10px;
+            transition: var(--transition); font-size: 1rem;
+        }
+        .cta-banner .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        /* ===== GALLERY ===== */
+        .gallery { background: white; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 320px; gap: 20px; }
+        .gallery-item {
+            border-radius: var(--radius); overflow: hidden; position: relative; cursor: pointer;
+        }
+                .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease;
+        }
+        .gallery-item::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(15,23,42,0.5), transparent 50%);
+            opacity: 0; transition: var(--transition);
+        }
+        .gallery-item:hover img { transform: scale(1.06); }
+        .gallery-item:hover::after { opacity: 1; }
+        .gallery-item .gallery-label {
+            position: absolute; bottom: 22px; left: 22px; color: white;
+            font-weight: 600; font-size: 1rem; z-index: 2;
+            opacity: 0; transform: translateY(10px); transition: var(--transition);
+        }
+        .gallery-item:hover .gallery-label { opacity: 1; transform: translateY(0); }
+
+        /* ===== PHILOSOPHY ===== */
+        .philosophy {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-medium) 100%);
+            position: relative; overflow: hidden;
+        }
+        .philosophy::before {
+            content: ''; position: absolute; top: -100px; left: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(14,116,144,0.15), transparent 70%);
+        }
+        .philosophy::after {
+            content: ''; position: absolute; bottom: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(34,211,238,0.1), transparent 70%);
+        }
+        .philosophy-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .philosophy-content .overline {
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--primary-light); margin-bottom: 14px;
+        }
+        .philosophy-content h2 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 2.8rem);
+            color: white; margin-bottom: 22px; line-height: 1.2;
+        }
+        .philosophy-content p { color: rgba(255,255,255,0.65); font-size: 1.05rem; margin-bottom: 18px; line-height: 1.9; }
+        .philosophy-content blockquote {
+            border-left: 3px solid var(--primary-light); padding-left: 24px; margin: 28px 0;
+            font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-style: italic;
+            color: rgba(255,255,255,0.85); line-height: 1.6;
+        }
+        .philosophy-values { display: flex; flex-direction: column; gap: 18px; }
+        .philosophy-value {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px; padding: 24px 28px; display: flex; align-items: flex-start;
+            gap: 18px; transition: var(--transition); backdrop-filter: blur(10px);
+        }
+        .philosophy-value:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); }
+        .philosophy-value .value-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0;
+        }
+        .philosophy-value .value-text strong { display: block; color: white; font-size: 1rem; margin-bottom: 4px; }
+        .philosophy-value .value-text span { color: rgba(255,255,255,0.55); font-size: 0.88rem; line-height: 1.6; }
+
+        /* ===== HOURS & CONTACT ===== */
+        .contact { background: var(--light); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+        .contact-card {
+            background: white; border-radius: 24px; padding: 48px; box-shadow: var(--shadow-md);
+        }
+        .contact-card h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            color: var(--dark); margin-bottom: 28px;
+        }
+        .contact-item {
+            display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
+        }
+        .contact-item .contact-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.1), rgba(34,211,238,0.1));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .contact-item .contact-text label {
+            font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--text-light); display: block; margin-bottom: 2px;
+        }
+        .contact-item .contact-text a,
+        .contact-item .contact-text span {
+            color: var(--dark); text-decoration: none; font-size: 1rem; font-weight: 600;
+        }
+        .contact-item .contact-text a:hover { color: var(--primary); }
+
+        .hours-card {
+            background: linear-gradient(135deg, var(--dark), var(--dark-medium));
+            border-radius: 24px; padding: 48px; box-shadow: var(--shadow-lg);
+        }
+        .hours-card h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            color: white; margin-bottom: 28px;
+        }
+        .hours-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .hours-row:last-child { border-bottom: none; }
+        .hours-row .day { color: rgba(255,255,255,0.85); font-weight: 500; font-size: 0.95rem; }
+        .hours-row .time { color: var(--primary-light); font-weight: 600; font-size: 0.95rem; }
+        .hours-row .time.closed { color: rgba(255,255,255,0.3); }
+        .time-sep { }
+        .time-sep::before { content: ' | '; }
+        .hours-note {
+            margin-top: 24px; padding: 18px 22px;
+            background: rgba(14,116,144,0.1); border-radius: 14px;
+            color: rgba(255,255,255,0.7); font-size: 0.88rem; line-height: 1.6;
+            border: 1px solid rgba(14,116,144,0.2);
+        }
+
+        /* ===== MAP ===== */
+        .map-section { padding: 0; }
+        .map-wrapper { position: relative; height: 450px; }
+        .map-wrapper iframe { width: 100%; height: 100%; border: none; filter: grayscale(20%) contrast(1.05); }
+        .map-overlay {
+            position: absolute; top: 50%; left: 8%; transform: translateY(-50%);
+            background: white; padding: 40px; border-radius: 24px;
+            box-shadow: var(--shadow-xl); max-width: 400px;
+        }
+        .map-overlay h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.5rem;
+            color: var(--dark); margin-bottom: 14px;
+        }
+        .map-overlay p { color: var(--text-light); font-size: 0.95rem; line-height: 1.8; margin-bottom: 22px; }
+
+        /* ===== FOOTER ===== */
+        .footer { background: var(--dark); padding: 80px 0 0; }
+        .footer-grid {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr;
+            gap: 48px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-brand > p { color: rgba(255,255,255,0.45); margin-top: 18px; font-size: 0.88rem; line-height: 1.8; max-width: 300px; }
+        .footer-col h4 { color: white; font-size: 0.95rem; font-weight: 700; margin-bottom: 22px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul li a {
+            color: rgba(255,255,255,0.45); text-decoration: none;
+            font-size: 0.88rem; transition: var(--transition);
+        }
+        .footer-col ul li a:hover { color: var(--primary-light); transform: translateX(3px); display: inline-block; }
+        .footer-col p { color: rgba(255,255,255,0.45); font-size: 0.88rem; line-height: 1.9; }
+        .footer-bottom {
+            padding: 24px 0; display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-bottom p { color: rgba(255,255,255,0.25); font-size: 0.78rem; }
+        .footer-bottom a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 0.78rem; }
+        .footer-bottom a:hover { color: var(--primary-light); }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border: none; cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(14,116,144,0.4);
+            opacity: 0; transform: translateY(20px);
+            transition: var(--transition);
+        }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(14,116,144,0.5); }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-up { opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .fade-up-delay-1 { transition-delay: 0.1s; }
+        .fade-up-delay-2 { transition-delay: 0.2s; }
+        .fade-up-delay-3 { transition-delay: 0.3s; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero .container { grid-template-columns: 1fr; text-align: center; padding-top: 120px; }
+            .hero-content h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); }
+            .hero-content p { margin: 0 auto 36px; }
+            .hero-buttons { justify-content: center; }
+            .hero-visual {
+                display: flex; justify-content: center; margin-top: 32px;
+            }
+            .hero-image-wrapper { width: 280px; height: 340px; }
+            .hero-badge { bottom: -12px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+            .welcome-grid, .philosophy-grid { grid-template-columns: 1fr; gap: 48px; }
+            .welcome-images { height: 420px; }
+            .why-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+            .gallery-item:first-child { grid-row: auto; }
+            .showcase-grid { grid-template-columns: repeat(3, 1fr); }
+            .contact-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .section-padding { padding: 60px 0; }
+            .container { padding: 0 20px; }
+            .nav-links {
+                display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100vh;
+                background: white; flex-direction: column; padding: 80px 32px 32px;
+                box-shadow: -4px 0 30px rgba(0,0,0,0.1); gap: 4px;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { color: var(--text) !important; padding: 12px 16px; width: 100%; }
+            .menu-toggle { display: flex; }
+            .hero { min-height: auto; padding-bottom: 20px; }
+            .hero .container { padding-top: 90px; }
+            .hero-content h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+            .hero-content .tagline { font-size: 1.1rem; }
+            .hero-content p { font-size: 0.95rem; line-height: 1.7; }
+            .hero-buttons { flex-direction: column; gap: 12px; align-items: stretch; }
+            .hero-buttons .btn { text-align: center; justify-content: center; }
+            .hero-visual { margin-top: 16px; }
+            .hero-image-wrapper { width: 200px; height: 260px; }
+            .hero-image-wrapper::before { top: -8px; right: -8px; }
+            .hero-badge { display: none; }
+            .section-header h2 { font-size: 1.8rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .showcase-grid { grid-template-columns: 1fr; }
+            .showcase-item { height: 250px; }
+            .trust-bar .container { grid-template-columns: repeat(2, 1fr); }
+            .trust-item:nth-child(2) { border-right: none; }
+            .trust-item { padding: 20px 12px; }
+            .trust-num { font-size: 1.6rem; }
+            .welcome-features { grid-template-columns: 1fr; }
+            .welcome-images { display: none; }
+            .why-card { padding: 28px 20px; }
+            .service-card { padding: 28px 20px; }
+            .cta-section h2 { font-size: 1.6rem; }
+            .cta-section p { font-size: 0.95rem; padding: 0 10px; }
+            .philosophy-grid { gap: 32px; }
+            .phil-values { grid-template-columns: 1fr; }
+            .hours-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+            .hours-row .day { min-width: 80px; flex-shrink: 0; font-size: 0.85rem; }
+            .hours-row .time { font-size: 0.85rem; text-align: right; }
+            .time-sep { display: block; }
+            .time-sep::before { content: ''; }
+            .hours-table td, .hours-table th { padding: 10px 8px; font-size: 0.9rem; }
+            .map-wrapper { height: auto; display: flex; flex-direction: column; }
+            .map-wrapper iframe { height: 250px; }
+            .map-overlay { position: relative; top: auto; left: auto; transform: none; margin: 0; padding: 28px; border-radius: 0; box-shadow: none; border-top: 1px solid #eee; }
+            .footer { padding-top: 60px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px 24px; }
+            .footer-brand { display: none; }
+            .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+        }
+        @media (max-width: 380px) {
+            .hero-image-wrapper { width: 180px; height: 240px; }
+            .hero-content h1 { font-size: 1.6rem; }
+            .trust-bar .container { grid-template-columns: 1fr; }
+            .trust-item { border-right: none !important; }
+        }
+        /* ===== VACATION OVERLAY ===== */
+        .vacation-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+            padding: 24px; opacity: 0; animation: vacFadeIn 0.5s ease forwards;
+        }
+        @keyframes vacFadeIn { to { opacity: 1; } }
+        .vacation-modal {
+            background: var(--white); border-radius: var(--radius);
+            max-width: 540px; width: 100%; padding: 48px 40px; text-align: center;
+            box-shadow: var(--shadow-xl); position: relative;
+            animation: vacSlideUp 0.5s ease forwards;
+        }
+        @keyframes vacSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .vacation-modal .vac-icon {
+            font-size: 3rem; margin-bottom: 16px; display: block;
+        }
+        .vacation-modal h2 {
+            font-family: 'Playfair Display', serif; font-size: 1.8rem;
+            color: var(--dark); margin-bottom: 12px; font-weight: 600;
+        }
+        .vacation-modal .vac-dates {
+            font-size: 1.15rem; font-weight: 600; color: var(--primary);
+            margin-bottom: 20px; display: block;
+        }
+        .vacation-modal p {
+            color: var(--text-light); font-size: 1rem; line-height: 1.8; margin-bottom: 8px;
+        }
+        .vacation-modal .vac-note {
+            background: var(--light); border-radius: var(--radius-sm);
+            padding: 16px 20px; margin-top: 20px; font-size: 0.92rem;
+            color: var(--text); line-height: 1.7; border-left: 3px solid var(--primary);
+            text-align: left;
+        }
+        .vacation-modal .vac-close {
+            margin-top: 28px; padding: 14px 36px; border: none; border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white); font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: var(--transition);
+        }
+        .vacation-modal .vac-close:hover {
+            transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,116,144,0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- VACATION NOTICE -->
+    <div class="vacation-overlay" id="vacationOverlay">
+        <div class="vacation-modal">
+            <span class="vac-icon">&#9992;&#65039;</span>
+            <h2>Wir sind im Urlaub</h2>
+            <span class="vac-dates">03.04.2026 &ndash; 12.04.2026</span>
+            <p>Liebe Patientinnen und Patienten,</p>
+            <p>unsere Praxis bleibt in der Zeit vom <strong>03. April</strong> bis einschlie&szlig;lich <strong>12. April 2026</strong> wegen Urlaub geschlossen.</p>
+            <div class="vac-note">
+                <strong>In dringenden Notf&auml;llen</strong> wenden Sie sich bitte an den zahn&auml;rztlichen Notdienst unter <strong>116 117</strong> oder an die n&auml;chstgelegene Zahnklinik.
+            </div>
+            <p style="margin-top: 16px;">Ab dem <strong>13. April 2026</strong> sind wir gerne wieder f&uuml;r Sie da.</p>
+            <button class="vac-close" onclick="document.getElementById('vacationOverlay').style.display='none'">Verstanden</button>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">
+                    <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/ssdsdds-71cccace-120w.png" alt="Medalo Logo">
+                </div>
+                <div class="logo-text">
+                    <span class="name">Dr. med. dent. I. Medalo</span>
+                    <span class="subtitle">Zahnmedizin</span>
+                </div>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Startseite</a></li>
+                <li><a href="#about">Praxis</a></li>
+                <li><a href="#why">Philosophie</a></li>
+                <li><a href="#services">Leistungen</a></li>
+                <li><a href="#gallery">Galerie</a></li>
+                <li><a href="#contact" class="nav-cta">Termin vereinbaren</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LANGUAGE SWITCHER -->
+    <!-- Language switcher removed - German only -->
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-particles" id="particles"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    Zahnarztpraxis
+                    <span>Dr.&nbsp;med.&nbsp;dent.&nbsp;I.&nbsp;Medalo</span>
+                </h1>
+                <p class="tagline">Individuelle Behandlung in entspannter Atmosphäre.</p>
+                <p>Willkommen in unserer modernen Praxis in Nürnberg. Wir verbinden höchste zahnmedizinische Kompetenz mit einfühlsamer Betreuung &mdash; damit Sie sich bei uns rundum wohl fühlen.</p>
+                <div class="hero-buttons">
+                    <a href="tel:0911332543" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                        Jetzt anrufen
+                    </a>
+                    <a href="#services" class="btn btn-outline">Unsere Leistungen</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-wrapper">
+                    <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/DxSC_3687-1920w.jpg" alt="Dr. med. dent. I. Medalo">
+                    <div class="hero-badge">
+                        <div class="badge-icon">&#x1F9B7;</div>
+                        <div class="badge-text">
+                            <strong>Moderne Zahnmedizin</strong>
+                            <span>Individuelle Beratung & Therapie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="trust-bar">
+        <div class="container fade-up">
+            <div class="trust-item">
+                <div class="trust-number" data-count="20">20+</div>
+                <div class="trust-label">Jahre Erfahrung</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">8+</div>
+                <div class="trust-label">Fachbereiche</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">100%</div>
+                <div class="trust-label">Patientenfokus</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">Top</div>
+                <div class="trust-label">Ausstattung</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WELCOME / ABOUT -->
+    <section class="welcome section-padding" id="about">
+        <div class="container">
+            <div class="welcome-grid">
+                <div class="welcome-images fade-up">
+                    <div class="pattern"></div>
+                    <img class="img-main" src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/39043fd5-3d92-4c03-974b-2615778fce07-e7a74ec1-1920w.JPG" alt="Behandlungsraum 1">
+                    <img class="img-secondary" src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/IMG_4026-800h.JPG" alt="Behandlungsraum 2">
+                    <div class="experience-badge">
+                        <div class="badge-number">20+</div>
+                        <div class="badge-text">Jahre Erfahrung</div>
+                    </div>
+                </div>
+                <div class="welcome-content fade-up">
+                    <div class="overline">Herzlich Willkommen</div>
+                    <h2>Ihre Zahnarztpraxis im Herzen von Nürnberg</h2>
+                    <p>In unserer modern eingerichteten Praxis in der Jagdstraße arbeiten wir auf höchstem zahnmedizinischem Niveau und nach dem neuesten Stand der Technik.</p>
+                    <p>Hier heißt Sie ein sympathisches und kompetentes Team willkommen, das sich jederzeit zuvorkommend und einfühlsam um Sie kümmert. Wir nehmen uns Zeit für jeden Patienten und gehen individuell auf Ihre Bedürfnisse und Wünsche ein.</p>
+                    <div class="highlight-text">
+                        &bdquo;Unser Ziel ist es, dass Sie sich bei uns wohl fühlen und mit einem strahlenden Lächeln unsere Praxis verlassen.&ldquo;
+                        <br><strong style="font-family:Inter,sans-serif; font-size:0.85rem; font-style:normal;">- Dr. med. dent. I. Medalo</strong>
+                    </div>
+                    <div class="welcome-features">
+                        <div class="welcome-feature">
+                            <div class="feature-icon">&#x2705;</div>
+                            <span>Modernste Technik</span>
+                        </div>
+                        <div class="welcome-feature">
+                            <div class="feature-icon">&#x1F49A;</div>
+                            <span>Sanfte Behandlung</span>
+                        </div>
+                        <div class="welcome-feature">
+                            <div class="feature-icon">&#x1F91D;</div>
+                            <span>Persönliche Betreuung</span>
+                        </div>
+                        <div class="welcome-feature">
+                            <div class="feature-icon">&#x1F4AB;</div>
+                            <span>Entspanntes Ambiente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY US -->
+    <section class="why-us section-padding" id="why">
+        <div class="container">
+            <div class="section-header fade-up">
+                <span class="overline">Warum zu uns?</span>
+                <h2>Was uns besonders macht</h2>
+                <div class="divider"></div>
+                <p>Wir vereinen modernste Zahnmedizin mit persönlicher Zuwendung &mdash; damit jeder Besuch bei uns ein positives Erlebnis wird.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card fade-up">
+                    <div class="why-icon"><span>&#x1F3AF;</span></div>
+                    <h3>Individuelle Behandlungspläne</h3>
+                    <p>Jeder Patient ist einzigartig. Wir erstellen für Sie einen maßgeschneiderten Behandlungsplan, der exakt auf Ihre Bedürfnisse, Wünsche und Ihre persönliche Situation abgestimmt ist.</p>
+                </div>
+                <div class="why-card fade-up fade-up-delay-1">
+                    <div class="why-icon"><span>&#x1F52C;</span></div>
+                    <h3>Neueste Technologien</h3>
+                    <p>Unsere Praxis ist mit modernster Technik ausgestattet. Von digitaler Röntgendiagnostik bis hin zu innovativen Behandlungsverfahren &mdash; wir setzen auf den neuesten Stand der Zahnmedizin.</p>
+                </div>
+                <div class="why-card fade-up fade-up-delay-2">
+                    <div class="why-icon"><span>&#x1F49C;</span></div>
+                    <h3>Angstfreie Atmosphäre</h3>
+                    <p>Wir verstehen, dass ein Zahnarztbesuch Unbehagen bereiten kann. Unser einfühlsames Team sorgt dafür, dass Sie sich in entspannter Atmosphäre bestens aufgehoben fühlen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOWCASE IMAGES -->
+    <section class="showcase">
+        <div class="showcase-grid">
+            <div class="showcase-item">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80" alt="Strahlendes Lächeln">
+                <div class="showcase-overlay"><span>Strahlendes Lächeln</span></div>
+            </div>
+            <div class="showcase-item">
+                <img src="https://images.pexels.com/photos/6627574/pexels-photo-6627574.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Zufriedene Patientin">
+                <div class="showcase-overlay"><span>Zufriedene Patientin</span></div>
+            </div>
+            <div class="showcase-item">
+                <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=800&q=80" alt="Individuelle Beratung">
+                <div class="showcase-overlay"><span>Individuelle Beratung</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services section-padding" id="services">
+        <div class="container">
+            <div class="section-header fade-up">
+                <span class="overline">Unser Behandlungsspektrum</span>
+                <h2>Unsere Leistungen</h2>
+                <div class="divider"></div>
+                <p>Von Prophylaxe bis Implantologie &mdash; umfassende zahnmedizinische Versorgung auf höchstem Niveau für Ihre Zahngesundheit.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1F9B7;</span></div>
+                    <h3>Implantologie</h3>
+                    <p>Ein schönes Lächeln ist Ihre Visitenkarte. Natürliches Zahn- und Mundgefühl durch hochwertige Implantate für ein selbstbewusstes Auftreten.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1FA7A;</span></div>
+                    <h3>Endodontie</h3>
+                    <p>Die eigenen Zähne sind die besten! Mit modernen Verfahren behandeln wir entzündete Zahnwurzeln schonend und erfolgreich.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1FA78;</span></div>
+                    <h3>Parodontologie</h3>
+                    <p>Gesundes Zahnfleisch bildet die Basis für stabile Gesundheit. Professionelle Behandlung und Vorbeugung der Parodontitis.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1F9F9;</span></div>
+                    <h3>Prophylaxe</h3>
+                    <p>Professionelle Zahnreinigungen für langfristig schöne und gesunde Zähne &mdash; ergänzend zur täglichen Mundhygiene.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x2728;</span></div>
+                    <h3>Ästhetik</h3>
+                    <p>Schöne Zähne stehen für Vitalität und Lebensfreude. Wir schenken Ihnen ein attraktives Lächeln &mdash; in jedem Alter.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1F476;</span></div>
+                    <h3>Kinderzahnheilkunde</h3>
+                    <p>Bereits im frühen Kindesalter legen wir gemeinsam den Grundstein für eine lebenslange Mundgesundheit Ihres Kindes.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1F528;</span></div>
+                    <h3>Restauration</h3>
+                    <p>Wenn Zahnsubstanz nicht gerettet werden kann, sorgen wir mit hochwertigen Materialien für perfekte Zahnrestauration.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><span>&#x1F31F;</span></div>
+                    <h3>Bleaching</h3>
+                    <p>Strahlend weißes Lächeln durch schonende und effektive Zahnaufhellung. Verfärbungen professionell entfernen lassen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="cta-banner">
+        <div class="container fade-up">
+            <h2>Ihr strahlendes Lächeln beginnt hier</h2>
+            <p>Vereinbaren Sie noch heute Ihren persönlichen Beratungstermin. Wir nehmen uns Zeit für Sie und Ihre Zahngesundheit.</p>
+            <a href="tel:0911332543" class="btn-white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                0911 / 332543 &mdash; Jetzt Termin vereinbaren
+            </a>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery section-padding" id="gallery">
+        <div class="container">
+            <div class="section-header fade-up">
+                <span class="overline">Einblicke</span>
+                <h2>Unsere Praxisräume</h2>
+                <div class="divider"></div>
+                <p>Moderne Ausstattung und ein einladendes Ambiente &mdash; überzeugen Sie sich selbst.</p>
+            </div>
+            <div class="gallery-grid fade-up">
+                <div class="gallery-item">
+                    <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/39043fd5-3d92-4c03-974b-2615778fce07-e7a74ec1-1920w.JPG" alt="Behandlungsraum">
+                    <span class="gallery-label">Behandlungsraum</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/IMG_4019-800h.JPG" alt="Empfangsbereich">
+                    <span class="gallery-label">Empfangsbereich</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/IMG_4026-800h.JPG" alt="Moderne Ausstattung">
+                    <span class="gallery-label">Moderne Ausstattung</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy section-padding">
+        <div class="container">
+            <div class="philosophy-grid">
+                <div class="philosophy-content fade-up">
+                    <div class="overline">Unsere Philosophie</div>
+                    <h2>Zahnmedizin mit Herz und Verstand</h2>
+                    <p>Wir glauben daran, dass jeder Mensch ein gesundes und strahlendes Lächeln verdient. Deshalb gehen wir weit über die reine Behandlung hinaus: Wir beraten, begleiten und betreuen Sie auf dem Weg zu Ihrer optimalen Zahngesundheit.</p>
+                    <p>Unser Anspruch ist es, modernste Zahnmedizin mit persönlicher Zuwendung zu verbinden. Jede Behandlung wird individuell auf Sie abgestimmt &mdash; mit Sorgfalt, Geduld und dem Blick fürs Detail.</p>
+                    <blockquote>
+                        &bdquo;Nicht nur Zähne behandeln, sondern Menschen begeistern.&ldquo;
+                    </blockquote>
+                </div>
+                <div class="philosophy-values fade-up">
+                    <div class="philosophy-value">
+                        <div class="value-icon">&#x1F49C;</div>
+                        <div class="value-text">
+                            <strong>Einfühlsam & Zuvorkommend</strong>
+                            <span>Wir kümmern uns mit Herz um jeden Patienten und nehmen uns die Zeit, die Sie brauchen.</span>
+                        </div>
+                    </div>
+                    <div class="philosophy-value">
+                        <div class="value-icon">&#x1F3AF;</div>
+                        <div class="value-text">
+                            <strong>Kompetent & Professionell</strong>
+                            <span>Höchste Qualitätsstandards und stetige Fortbildung garantieren optimale Behandlungsergebnisse.</span>
+                        </div>
+                    </div>
+                    <div class="philosophy-value">
+                        <div class="value-icon">&#x1F91D;</div>
+                        <div class="value-text">
+                            <strong>Vertrauensvoll & Transparent</strong>
+                            <span>Offene Kommunikation und ehrliche Beratung &mdash; bei uns werden Sie immer umfassend informiert.</span>
+                        </div>
+                    </div>
+                    <div class="philosophy-value">
+                        <div class="value-icon">&#x1F331;</div>
+                        <div class="value-text">
+                            <strong>Ganzheitlicher Ansatz</strong>
+                            <span>Wir betrachten Ihre Zahngesundheit im Zusammenhang mit Ihrem allgemeinen Wohlbefinden.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & HOURS -->
+    <section class="contact section-padding" id="contact">
+        <div class="container">
+            <div class="section-header fade-up">
+                <span class="overline">Wir freuen uns auf Sie</span>
+                <h2>Kontakt & Sprechzeiten</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="contact-grid fade-up">
+                <div class="contact-card">
+                    <h3>So erreichen Sie uns</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon">&#x1F4CD;</div>
+                        <div class="contact-text">
+                            <label>Adresse</label>
+                            <span>Jagdstraße 18, 90419 Nürnberg</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">&#x1F4DE;</div>
+                        <div class="contact-text">
+                            <label>Telefon</label>
+                            <a href="tel:0911332543">0911 / 332543</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">&#x2709;&#xFE0F;</div>
+                        <div class="contact-text">
+                            <label>E-Mail</label>
+                            <a href="mailto:info@zahnarztpraxis-medalo.de">info@zahnarztpraxis-medalo.de</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">&#x1F687;</div>
+                        <div class="contact-text">
+                            <label>Anfahrt</label>
+                            <span>Nähe U-Bahn Friedrich Ebert Platz</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hours-card">
+                    <h3>Öffnungszeiten</h3>
+                    <div class="hours-row">
+                        <span class="day">Montag</span>
+                        <span class="time">9:00 - 13:00<span class="time-sep"></span> 14:00 - 18:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="day">Dienstag</span>
+                        <span class="time">10:00 - 14:00<span class="time-sep"></span> 15:00 - 19:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="day">Mittwoch</span>
+                        <span class="time">8:00 - 13:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="day">Donnerstag</span>
+                        <span class="time">9:00 - 13:00<span class="time-sep"></span> 14:00 - 18:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="day">Freitag</span>
+                        <span class="time">8:00 - 13:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="day">Sa &mdash; So</span>
+                        <span class="time closed">Geschlossen</span>
+                    </div>
+                    <div class="hours-note">
+                        Termine nach Vereinbarung.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAP -->
+    <section class="map-section">
+        <div class="map-wrapper">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2596.5!2d11.0665!3d49.4605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479f57b6b7b14a8d%3A0x5e1ebb6f2e7e58a8!2sJagdstra%C3%9Fe%2018%2C%2090419%20N%C3%BCrnberg!5e0!3m2!1sde!2sde!4v1" allowfullscreen loading="lazy"></iframe>
+            <div class="map-overlay">
+                <h3>So finden Sie uns</h3>
+                <p>Unsere Praxis liegt zentral in Nürnberg, direkt in der Jagdstraße 18 &mdash; nur wenige Gehminuten von der U-Bahn-Haltestelle Friedrich Ebert Platz entfernt. Parkplätze finden Sie in unmittelbarer Nähe.</p>
+                <a href="https://maps.google.com/?q=Jagdstraße+18+90419+Nürnberg" target="_blank" class="btn btn-dark" style="font-size:0.88rem; padding:12px 28px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Route planen
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo" style="pointer-events:none;">
+                        <div class="logo-icon">
+                            <img src="https://le-cdn.website-editor.net/57d1b7f314fe43e8b0cbe4e7b2299753/dms3rep/multi/opt/ssdsdds-71cccace-120w.png" alt="Medalo Logo">
+                        </div>
+                        <div class="logo-text">
+                            <span class="name" style="color:white">Dr. med. dent. I. Medalo</span>
+                            <span class="subtitle">Zahnmedizin</span>
+                        </div>
+                    </div>
+                    <p>Ihre Zahnarztpraxis in Nürnberg. Individuelle Behandlung in entspannter Atmosphäre auf höchstem zahnmedizinischem Niveau. Wir freuen uns auf Ihren Besuch.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#home">Startseite</a></li>
+                        <li><a href="#about">Unsere Praxis</a></li>
+                        <li><a href="#why">Philosophie</a></li>
+                        <li><a href="#services">Leistungen</a></li>
+                        <li><a href="#gallery">Galerie</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Leistungen</h4>
+                    <ul>
+                        <li><a href="#services">Implantologie</a></li>
+                        <li><a href="#services">Endodontie</a></li>
+                        <li><a href="#services">Parodontologie</a></li>
+                        <li><a href="#services">Prophylaxe</a></li>
+                        <li><a href="#services">Ästhetik</a></li>
+                        <li><a href="#services">Bleaching</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>
+                        <strong style="color:rgba(255,255,255,0.7)">Dr. med. dent. I. Medalo</strong><br>
+                        Jagdstraße 18<br>
+                        90419 Nürnberg<br><br>
+                        Tel: 0911 / 332543<br>
+                        info@zahnarztpraxis-medalo.de
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Zahnarztpraxis Dr. med. dent. I. Medalo. Alle Rechte vorbehalten.</p>
+                <a href="#">Datenschutz &middot; Impressum</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <script>
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+            backToTop.classList.toggle('visible', window.scrollY > 500);
+        });
+
+        // Mobile menu
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('active'));
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Fade-up observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Hero particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
+            particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // ===== LANGUAGE SWITCHER =====
+        const translations = {
+            de: {
+                // Nav
+                nav_start: 'Startseite', nav_praxis: 'Praxis', nav_philo: 'Philosophie',
+                nav_leist: 'Leistungen', nav_galerie: 'Galerie', nav_cta: 'Termin vereinbaren',
+                // Hero
+                hero_h1_1: 'Zahnarztpraxis', hero_h1_2: 'Dr. med. dent. I. Medalo',
+                hero_tagline: 'Individuelle Behandlung in entspannter Atmosphäre.',
+                hero_text: 'Willkommen in unserer modernen Praxis in Nürnberg. Wir verbinden höchste zahnmedizinische Kompetenz mit einfühlsamer Betreuung \u2014 damit Sie sich bei uns rundum wohl fühlen.',
+                hero_btn1: 'Jetzt anrufen', hero_btn2: 'Unsere Leistungen',
+                hero_badge_title: 'Moderne Zahnmedizin', hero_badge_sub: 'Individuelle Beratung & Therapie',
+                // Trust
+                trust1_num: '20+', trust1_label: 'Jahre Erfahrung',
+                trust2_num: '8+', trust2_label: 'Fachbereiche',
+                trust3_num: '100%', trust3_label: 'Patientenfokus',
+                trust4_num: 'Top', trust4_label: 'Ausstattung',
+                // Welcome
+                welcome_over: 'Herzlich Willkommen',
+                welcome_h2: 'Ihre Zahnarztpraxis im Herzen von Nürnberg',
+                welcome_p1: 'In unserer modern eingerichteten Praxis in der Jagdstraße arbeiten wir auf höchstem zahnmedizinischem Niveau und nach dem neuesten Stand der Technik.',
+                welcome_p2: 'Hier heißt Sie ein sympathisches und kompetentes Team willkommen, das sich jederzeit zuvorkommend und einfühlsam um Sie kümmert. Wir nehmen uns Zeit für jeden Patienten und gehen individuell auf Ihre Bedürfnisse und Wünsche ein.',
+                welcome_quote: '\u201EUnser Ziel ist es, dass Sie sich bei uns wohl fühlen und mit einem strahlenden Lächeln unsere Praxis verlassen.\u201C',
+                welcome_f1: 'Modernste Technik', welcome_f2: 'Sanfte Behandlung',
+                welcome_f3: 'Persönliche Betreuung', welcome_f4: 'Entspanntes Ambiente',
+                // Why
+                why_over: 'Warum zu uns?', why_h2: 'Was uns besonders macht',
+                why_sub: 'Wir vereinen modernste Zahnmedizin mit persönlicher Zuwendung \u2014 damit jeder Besuch bei uns ein positives Erlebnis wird.',
+                why1_h: 'Individuelle Behandlungspläne',
+                why1_p: 'Jeder Patient ist einzigartig. Wir erstellen für Sie einen maßgeschneiderten Behandlungsplan, der exakt auf Ihre Bedürfnisse, Wünsche und Ihre persönliche Situation abgestimmt ist.',
+                why2_h: 'Neueste Technologien',
+                why2_p: 'Unsere Praxis ist mit modernster Technik ausgestattet. Von digitaler Röntgendiagnostik bis hin zu innovativen Behandlungsverfahren \u2014 wir setzen auf den neuesten Stand der Zahnmedizin.',
+                why3_h: 'Angstfreie Atmosphäre',
+                why3_p: 'Wir verstehen, dass ein Zahnarztbesuch Unbehagen bereiten kann. Unser einfühlsames Team sorgt dafür, dass Sie sich in entspannter Atmosphäre bestens aufgehoben fühlen.',
+                // Services
+                svc_over: 'Unser Behandlungsspektrum', svc_h2: 'Unsere Leistungen',
+                svc_sub: 'Von Prophylaxe bis Implantologie \u2014 umfassende zahnmedizinische Versorgung auf höchstem Niveau für Ihre Zahngesundheit.',
+                svc1_h: 'Implantologie', svc1_p: 'Ein schönes Lächeln ist Ihre Visitenkarte. Natürliches Zahn- und Mundgefühl durch hochwertige Implantate für ein selbstbewusstes Auftreten.',
+                svc2_h: 'Endodontie', svc2_p: 'Die eigenen Zähne sind die besten! Mit modernen Verfahren behandeln wir entzündete Zahnwurzeln schonend und erfolgreich.',
+                svc3_h: 'Parodontologie', svc3_p: 'Gesundes Zahnfleisch bildet die Basis für stabile Gesundheit. Professionelle Behandlung und Vorbeugung der Parodontitis.',
+                svc4_h: 'Prophylaxe', svc4_p: 'Professionelle Zahnreinigungen für langfristig schöne und gesunde Zähne \u2014 ergänzend zur täglichen Mundhygiene.',
+                svc5_h: 'Ästhetik', svc5_p: 'Schöne Zähne stehen für Vitalität und Lebensfreude. Wir schenken Ihnen ein attraktives Lächeln \u2014 in jedem Alter.',
+                svc6_h: 'Kinderzahnheilkunde', svc6_p: 'Bereits im frühen Kindesalter legen wir gemeinsam den Grundstein für eine lebenslange Mundgesundheit Ihres Kindes.',
+                svc7_h: 'Restauration', svc7_p: 'Wenn Zahnsubstanz nicht gerettet werden kann, sorgen wir mit hochwertigen Materialien für perfekte Zahnrestauration.',
+                svc8_h: 'Bleaching', svc8_p: 'Strahlend weißes Lächeln durch schonende und effektive Zahnaufhellung. Verfärbungen professionell entfernen lassen.',
+                // CTA
+                cta_h2: 'Ihr strahlendes Lächeln beginnt hier',
+                cta_p: 'Vereinbaren Sie noch heute Ihren persönlichen Beratungstermin. Wir nehmen uns Zeit für Sie und Ihre Zahngesundheit.',
+                cta_btn: '0911 / 332543 \u2014 Jetzt Termin vereinbaren',
+                // Gallery
+                gal_over: 'Einblicke', gal_h2: 'Unsere Praxisräume',
+                gal_sub: 'Moderne Ausstattung und ein einladendes Ambiente \u2014 überzeugen Sie sich selbst.',
+                gal1: 'Behandlungsraum', gal2: 'Empfangsbereich', gal3: 'Moderne Ausstattung',
+                // Philosophy
+                phil_over: 'Unsere Philosophie', phil_h2: 'Zahnmedizin mit Herz und Verstand',
+                phil_p1: 'Wir glauben daran, dass jeder Mensch ein gesundes und strahlendes Lächeln verdient. Deshalb gehen wir weit über die reine Behandlung hinaus: Wir beraten, begleiten und betreuen Sie auf dem Weg zu Ihrer optimalen Zahngesundheit.',
+                phil_p2: 'Unser Anspruch ist es, modernste Zahnmedizin mit persönlicher Zuwendung zu verbinden. Jede Behandlung wird individuell auf Sie abgestimmt \u2014 mit Sorgfalt, Geduld und dem Blick fürs Detail.',
+                phil_quote: '\u201ENicht nur Zähne behandeln, sondern Menschen begeistern.\u201C',
+                phil_v1_h: 'Einfühlsam & Zuvorkommend', phil_v1_p: 'Wir kümmern uns mit Herz um jeden Patienten und nehmen uns die Zeit, die Sie brauchen.',
+                phil_v2_h: 'Kompetent & Professionell', phil_v2_p: 'Höchste Qualitätsstandards und stetige Fortbildung garantieren optimale Behandlungsergebnisse.',
+                phil_v3_h: 'Vertrauensvoll & Transparent', phil_v3_p: 'Offene Kommunikation und ehrliche Beratung \u2014 bei uns werden Sie immer umfassend informiert.',
+                phil_v4_h: 'Ganzheitlicher Ansatz', phil_v4_p: 'Wir betrachten Ihre Zahngesundheit im Zusammenhang mit Ihrem allgemeinen Wohlbefinden.',
+                // Contact
+                con_over: 'Wir freuen uns auf Sie', con_h2: 'Kontakt & Sprechzeiten',
+                con_card_h: 'So erreichen Sie uns',
+                con_addr_l: 'Adresse', con_addr: 'Jagdstraße 18, 90419 Nürnberg',
+                con_tel_l: 'Telefon', con_fax_l: 'Fax', con_email_l: 'E-Mail',
+                con_anf_l: 'Anfahrt', con_anf: 'Nähe U-Bahn Friedrich Ebert Platz',
+                hours_h: 'Öffnungszeiten',
+                hours_mo: 'Montag', hours_di: 'Dienstag', hours_mi: 'Mittwoch',
+                hours_do: 'Donnerstag', hours_fr: 'Freitag', hours_wend: 'Sa \u2014 So',
+                hours_closed: 'Geschlossen',
+                hours_note: 'Termine nach Vereinbarung.',
+                // Map
+                map_h: 'So finden Sie uns',
+                map_p: 'Unsere Praxis liegt zentral in Nürnberg, direkt in der Jagdstraße 18 \u2014 nur wenige Gehminuten von der U-Bahn-Haltestelle Friedrich Ebert Platz entfernt. Parkplätze finden Sie in unmittelbarer Nähe.',
+                map_btn: 'Route planen',
+                // Footer
+                foot_nav: 'Navigation', foot_leist: 'Leistungen', foot_kontakt: 'Kontakt',
+                foot_copy: '\u00A9 2026 Zahnarztpraxis Dr. med. dent. I. Medalo. Alle Rechte vorbehalten.',
+                foot_legal: 'Datenschutz \u00B7 Impressum',
+            },
+            en: {
+                nav_start: 'Home', nav_praxis: 'Practice', nav_philo: 'Philosophy',
+                nav_leist: 'Services', nav_galerie: 'Gallery', nav_cta: 'Book Appointment',
+                hero_h1_1: 'Dental Practice', hero_h1_2: 'Dr. med. dent. I. Medalo',
+                hero_tagline: 'Individual treatment in a relaxed atmosphere.',
+                hero_text: 'Welcome to our modern practice in Nuremberg. We combine the highest dental expertise with compassionate care \u2014 so you feel completely at ease with us.',
+                hero_btn1: 'Call Now', hero_btn2: 'Our Services',
+                hero_badge_title: 'Modern Dentistry', hero_badge_sub: 'Individual Consultation & Therapy',
+                trust1_num: '20+', trust1_label: 'Years Experience',
+                trust2_num: '8+', trust2_label: 'Specialties',
+                trust3_num: '100%', trust3_label: 'Patient Focus',
+                trust4_num: 'Top', trust4_label: 'Equipment',
+                welcome_over: 'Welcome',
+                welcome_h2: 'Your Dental Practice in the Heart of Nuremberg',
+                welcome_p1: 'In our modern practice on Jagdstraße, we work at the highest level of dental medicine using the latest technology.',
+                welcome_p2: 'A friendly and competent team welcomes you here, always attentive and caring. We take time for every patient and address your individual needs and wishes.',
+                welcome_quote: '\u201COur goal is for you to feel comfortable with us and leave our practice with a radiant smile.\u201D',
+                welcome_f1: 'Latest Technology', welcome_f2: 'Gentle Treatment',
+                welcome_f3: 'Personal Care', welcome_f4: 'Relaxed Atmosphere',
+                why_over: 'Why Choose Us?', why_h2: 'What Makes Us Special',
+                why_sub: 'We combine modern dentistry with personal care \u2014 making every visit a positive experience.',
+                why1_h: 'Individual Treatment Plans',
+                why1_p: 'Every patient is unique. We create a customized treatment plan tailored exactly to your needs, wishes, and personal situation.',
+                why2_h: 'Latest Technologies',
+                why2_p: 'Our practice is equipped with state-of-the-art technology. From digital X-ray diagnostics to innovative treatment procedures \u2014 we rely on the latest in dental medicine.',
+                why3_h: 'Anxiety-Free Atmosphere',
+                why3_p: 'We understand that a dental visit can cause discomfort. Our empathetic team ensures you feel completely at ease in a relaxed atmosphere.',
+                svc_over: 'Our Treatment Spectrum', svc_h2: 'Our Services',
+                svc_sub: 'From prophylaxis to implantology \u2014 comprehensive dental care at the highest level for your dental health.',
+                svc1_h: 'Implantology', svc1_p: 'A beautiful smile is your calling card. Natural dental feeling through high-quality implants for confident appearance.',
+                svc2_h: 'Endodontics', svc2_p: 'Your own teeth are still the best! We treat inflamed tooth roots gently and successfully with modern procedures.',
+                svc3_h: 'Periodontology', svc3_p: 'Healthy gums form the basis for stable health. Professional treatment and prevention of periodontitis.',
+                svc4_h: 'Prophylaxis', svc4_p: 'Professional dental cleaning for long-term beautiful and healthy teeth \u2014 complementing daily oral hygiene.',
+                svc5_h: 'Aesthetics', svc5_p: 'Beautiful teeth represent vitality and joy of life. We give you an attractive smile \u2014 at any age.',
+                svc6_h: 'Pediatric Dentistry', svc6_p: 'Already in early childhood, we lay the foundation together for lifelong oral health of your child.',
+                svc7_h: 'Restoration', svc7_p: 'When tooth substance cannot be saved, we ensure perfect dental restoration with high-quality materials.',
+                svc8_h: 'Bleaching', svc8_p: 'Radiant white smile through gentle and effective teeth whitening. Have discolorations professionally removed.',
+                cta_h2: 'Your Radiant Smile Starts Here',
+                cta_p: 'Schedule your personal consultation today. We take time for you and your dental health.',
+                cta_btn: '0911 / 332543 \u2014 Book Appointment Now',
+                gal_over: 'Insights', gal_h2: 'Our Practice Rooms',
+                gal_sub: 'Modern equipment and an inviting atmosphere \u2014 see for yourself.',
+                gal1: 'Treatment Room', gal2: 'Reception Area', gal3: 'Modern Equipment',
+                phil_over: 'Our Philosophy', phil_h2: 'Dentistry with Heart and Mind',
+                phil_p1: 'We believe that every person deserves a healthy and radiant smile. That is why we go far beyond mere treatment: we advise, accompany, and support you on the way to your optimal dental health.',
+                phil_p2: 'Our aspiration is to combine modern dentistry with personal care. Every treatment is individually tailored to you \u2014 with diligence, patience, and attention to detail.',
+                phil_quote: '\u201CNot just treating teeth, but inspiring people.\u201D',
+                phil_v1_h: 'Empathetic & Attentive', phil_v1_p: 'We care for every patient with heart and take the time you need.',
+                phil_v2_h: 'Competent & Professional', phil_v2_p: 'Highest quality standards and continuous training guarantee optimal treatment results.',
+                phil_v3_h: 'Trustworthy & Transparent', phil_v3_p: 'Open communication and honest advice \u2014 you will always be comprehensively informed.',
+                phil_v4_h: 'Holistic Approach', phil_v4_p: 'We consider your dental health in connection with your overall well-being.',
+                con_over: 'We Look Forward to Seeing You', con_h2: 'Contact & Office Hours',
+                con_card_h: 'How to Reach Us',
+                con_addr_l: 'Address', con_addr: 'Jagdstraße 18, 90419 Nuremberg',
+                con_tel_l: 'Phone', con_fax_l: 'Fax', con_email_l: 'Email',
+                con_anf_l: 'Directions', con_anf: 'Near U-Bahn Friedrich Ebert Platz',
+                hours_h: 'Office Hours',
+                hours_mo: 'Monday', hours_di: 'Tuesday', hours_mi: 'Wednesday',
+                hours_do: 'Thursday', hours_fr: 'Friday', hours_wend: 'Sat \u2014 Sun',
+                hours_closed: 'Closed',
+                hours_note: 'Appointments by arrangement.',
+                map_h: 'How to Find Us',
+                map_p: 'Our practice is centrally located in Nuremberg, at Jagdstraße 18 \u2014 just a few minutes walk from the Friedrich Ebert Platz subway station. Parking is available nearby.',
+                map_btn: 'Plan Route',
+                foot_nav: 'Navigation', foot_leist: 'Services', foot_kontakt: 'Contact',
+                foot_copy: '\u00A9 2026 Dental Practice Dr. med. dent. I. Medalo. All rights reserved.',
+                foot_legal: 'Privacy \u00B7 Imprint',
+            },
+            ar: {
+                nav_start: 'الرئيسية', nav_praxis: 'العيادة', nav_philo: 'فلسفتنا',
+                nav_leist: 'الخدمات', nav_galerie: 'المعرض', nav_cta: 'احجز موعدًا',
+                hero_h1_1: 'عيادة طب الأسنان', hero_h1_2: 'د. مد. دنت. إ. ميدالو',
+                hero_tagline: 'علاج فردي في أجواء مريحة',
+                hero_text: 'مرحبًا بكم في عيادتنا الحديثة في نورنبرغ. نجمع بين أعلى مستويات طب الأسنان والرعاية الإنسانية المتخصصة، لكي تشعروا بالراحة والاطمئنان منذ اللحظة الأولى.',
+                hero_btn1: 'اتصلوا بنا الآن', hero_btn2: 'خدماتنا',
+                hero_badge_title: 'طب أسنان حديث', hero_badge_sub: 'استشارة وعلاج فرديان',
+                trust1_num: '+20', trust1_label: 'أكثر من 20 عامًا من الخبرة',
+                trust2_num: '+8', trust2_label: 'أكثر من 8 مجالات علاجية',
+                trust3_num: '100%', trust3_label: 'تركيز كامل على المريض',
+                trust4_num: 'الأحدث', trust4_label: 'أحدث التجهيزات',
+                welcome_over: 'أهلًا وسهلًا بكم',
+                welcome_h2: 'عيادة طب الأسنان الخاصة بكم في قلب نورنبرغ',
+                welcome_p1: 'في عيادتنا الحديثة في شارع ياغدشتراسه، نقدم لكم علاجًا سنيًا على أعلى مستوى وبالاعتماد على أحدث التقنيات.',
+                welcome_p2: 'يستقبلكم فريق ودود وكفء يرافقكم في جميع مراحل العلاج بعناية وتعاطف. نخصص الوقت الكافي لكل مريض ونولي اهتمامًا كبيرًا لاحتياجاتكم ورغباتكم الفردية.',
+                welcome_quote: '\u201Cهدفنا هو أن تشعروا بالراحة في عيادتنا وأن تغادروها بابتسامة مشرقة.\u201D',
+                welcome_f1: 'أحدث التقنيات', welcome_f2: 'علاج لطيف',
+                welcome_f3: 'رعاية شخصية', welcome_f4: 'أجواء مريحة',
+                why_over: 'لماذا نحن؟', why_h2: 'ما الذي يميزنا؟',
+                why_sub: 'نجمع بين طب الأسنان الحديث والاهتمام الشخصي، لكي تكون كل زيارة إلى العيادة تجربة إيجابية ومريحة.',
+                why1_h: 'خطط علاج فردية',
+                why1_p: 'كل مريض حالة فريدة. لذلك نضع لكم خطة علاج مصممة خصيصًا بما يتناسب مع احتياجاتكم ورغباتكم ووضعكم الصحي.',
+                why2_h: 'أحدث التقنيات',
+                why2_p: 'عيادتنا مجهزة بأحدث التقنيات الطبية. من التشخيص بالأشعة الرقمية إلى أساليب العلاج الحديثة، نعتمد على حلول متطورة تواكب أحدث ما توصل إليه طب الأسنان.',
+                why3_h: 'أجواء تبعث على الطمأنينة',
+                why3_p: 'ندرك أن زيارة طبيب الأسنان قد تكون مصدر قلق للبعض. لذلك يحرص فريقنا المتفهم على أن تشعروا بالأمان والراحة في كل مرحلة من مراحل العلاج.',
+                svc_over: 'مجالات العلاج لدينا', svc_h2: 'خدماتنا',
+                svc_sub: 'من الوقاية وحتى زراعة الأسنان، نقدم لكم رعاية سنية شاملة على أعلى مستوى من أجل صحة أسنانكم.',
+                svc1_h: 'زراعة الأسنان', svc1_p: 'الابتسامة الجميلة تعكس الثقة والراحة. نوفر لكم زراعات أسنان عالية الجودة تمنحكم إحساسًا طبيعيًا ومظهرًا متناسقًا.',
+                svc2_h: 'علاج جذور الأسنان', svc2_p: 'أسنانكم الطبيعية هي الخيار الأفضل دائمًا. نعالج التهابات جذور الأسنان بأحدث الطرق وبأكبر قدر ممكن من اللطف والدقة.',
+                svc3_h: 'علاج اللثة', svc3_p: 'اللثة الصحية أساس ثبات الأسنان وصحة الفم. نقدم علاجًا متخصصًا ووقاية فعالة من أمراض اللثة.',
+                svc4_h: 'الوقاية', svc4_p: 'يساعد تنظيف الأسنان الاحترافي على الحفاظ على أسنان جميلة وصحية على المدى الطويل، ويُعد مكملًا مهمًا للعناية اليومية بالفم.',
+                svc5_h: 'طب الأسنان التجميلي', svc5_p: 'الأسنان الجميلة تعكس الحيوية والثقة بالنفس. نساعدكم في الحصول على ابتسامة جذابة ومتناغمة في كل مرحلة عمرية.',
+                svc6_h: 'طب أسنان الأطفال', svc6_p: 'منذ السنوات الأولى من العمر، نرسي معًا الأساس لصحة فم وأسنان تدوم مدى الحياة لطفلكم.',
+                svc7_h: 'ترميم الأسنان', svc7_p: 'عندما يتعذر الحفاظ على بنية السن الأصلية بالكامل، نوفر ترميمات دقيقة باستخدام مواد عالية الجودة.',
+                svc8_h: 'تبييض الأسنان', svc8_p: 'ابتسامة ناصعة وأكثر إشراقًا من خلال تبييض لطيف وفعّال. نزيل التصبغات بطريقة احترافية وآمنة.',
+                cta_h2: 'ابتسامتكم الجميلة تبدأ من هنا',
+                cta_p: 'احجزوا موعد استشارتكم الشخصية اليوم. نخصص الوقت الكافي لكم ولصحة أسنانكم.',
+                cta_btn: '0911 / 332543 \u2014 احجزوا موعدًا الآن',
+                gal_over: 'نظرة إلى الداخل', gal_h2: 'مرافق العيادة',
+                gal_sub: 'تجهيزات حديثة وأجواء ترحيبية \u2014 اكتشفوا عيادتنا بأنفسكم.',
+                gal1: 'غرفة العلاج', gal2: 'منطقة الاستقبال', gal3: 'تجهيزات حديثة',
+                phil_over: 'فلسفتنا', phil_h2: 'طب الأسنان بعناية وخبرة',
+                phil_p1: 'نؤمن بأن لكل إنسان الحق في ابتسامة صحية ومشرقة. لذلك لا يقتصر دورنا على العلاج فقط، بل نحرص أيضًا على الاستشارة والمرافقة والدعم في طريقكم نحو صحة فموية مثالية.',
+                phil_p2: 'هدفنا هو الجمع بين طب الأسنان الحديث والاهتمام الشخصي. كل علاج نقدمه مصمم بعناية ليتناسب مع احتياجاتكم الفردية، وبالكثير من الدقة والصبر والاهتمام بالتفاصيل.',
+                phil_quote: '\u201Cلا نعالج الأسنان فحسب، بل نُلهم الناس أيضًا.\u201D',
+                phil_v1_h: 'بتعاطف واهتمام', phil_v1_p: 'نعتني بكل مريض باهتمام حقيقي ونمنحه الوقت الذي يحتاج إليه.',
+                phil_v2_h: 'كفاءة واحترافية', phil_v2_p: 'نلتزم بأعلى معايير الجودة والتدريب المستمر من أجل تحقيق أفضل نتائج علاجية ممكنة.',
+                phil_v3_h: 'موثوقية وشفافية', phil_v3_p: 'نؤمن بالتواصل الواضح والاستشارة الصادقة، لكي تكونوا على اطلاع كامل في كل الأوقات.',
+                phil_v4_h: 'نهج شامل', phil_v4_p: 'ننظر إلى صحة أسنانكم في إطار صحتكم العامة، لأن صحة الفم جزء أساسي من صحة الجسم.',
+                con_over: 'نتطلع إلى زيارتكم', con_h2: 'التواصل وساعات العمل',
+                con_card_h: 'كيفية الوصول إلينا',
+                con_addr_l: 'العنوان', con_addr: 'ياغدشتراسه 18، 90419 نورنبرغ',
+                con_tel_l: 'الهاتف', con_fax_l: 'الفاكس', con_email_l: 'البريد الإلكتروني',
+                con_anf_l: 'الوصول', con_anf: 'بالقرب من محطة مترو فريدريش-إيبرت-بلاتس',
+                hours_h: 'ساعات العمل',
+                hours_mo: 'الاثنين', hours_di: 'الثلاثاء', hours_mi: 'الأربعاء',
+                hours_do: 'الخميس', hours_fr: 'الجمعة', hours_wend: 'السبت - الأحد',
+                hours_closed: 'مغلق',
+                hours_note: 'المواعيد حسب الاتفاق.',
+                map_h: 'كيفية العثور علينا',
+                map_p: 'تقع عيادتنا في وسط نورنبرغ، في ياغدشتراسه 18، وعلى بُعد بضع دقائق سيرًا على الأقدام من محطة مترو فريدريش-إيبرت-بلاتس. كما تتوفر أماكن لوقوف السيارات في الجوار.',
+                map_btn: 'خطط الطريق',
+                foot_nav: 'التنقل', foot_leist: 'الخدمات', foot_kontakt: 'التواصل',
+                foot_copy: '\u00A9 2026 عيادة د. مد. دنت. إ. ميدالو لطب الأسنان. جميع الحقوق محفوظة.',
+                foot_legal: 'سياسة الخصوصية \u00B7 الإشعار القانوني',
+            }
+        };
+
+        function switchLang(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            // Set direction
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.lang-btn[onclick="switchLang('${lang}')"]`).classList.add('active');
+
+            // Map data-i18n keys to elements
+            const map = document.querySelectorAll('[data-i18n]');
+            map.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            // Update HTML content for elements with data-i18n-html
+            const mapHtml = document.querySelectorAll('[data-i18n-html]');
+            mapHtml.forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (t[key]) el.innerHTML = t[key];
+            });
+        }
+
+        // Add data-i18n attributes to all translatable elements
+        (function initI18n() {
+            const selectors = [
+                // Nav
+                ['.nav-links li:nth-child(1) a', 'nav_start'],
+                ['.nav-links li:nth-child(2) a', 'nav_praxis'],
+                ['.nav-links li:nth-child(3) a', 'nav_philo'],
+                ['.nav-links li:nth-child(4) a', 'nav_leist'],
+                ['.nav-links li:nth-child(5) a', 'nav_galerie'],
+                ['.nav-links li:nth-child(6) a', 'nav_cta'],
+            ];
+            selectors.forEach(([sel, key]) => {
+                const el = document.querySelector(sel);
+                if (el) el.setAttribute('data-i18n', key);
+            });
+
+            // Tag all elements with a specific data attribute for translation
+            const tagAll = (selector, keys) => {
+                const els = document.querySelectorAll(selector);
+                els.forEach((el, i) => {
+                    if (keys[i]) el.setAttribute('data-i18n', keys[i]);
+                });
+            };
+
+            // Hero
+            const heroH1Children = document.querySelector('.hero-content h1');
+            if (heroH1Children) {
+                heroH1Children.childNodes[0].textContent.trim() && (heroH1Children.firstChild.textContent = heroH1Children.firstChild.textContent); // keep structure
+                const h1Text = heroH1Children.childNodes[0];
+                const h1Span = heroH1Children.querySelector('span');
+                // We'll handle hero differently
+            }
+
+            // Auto-tag all sections using querySelectorAll with specific structure
+            // This is complex, so we use a simpler approach: re-render key text nodes
+            const setText = (selector, key, t) => {
+                const el = document.querySelector(selector);
+                if (el && t[key] !== undefined) el.textContent = t[key];
+            };
+            const setHTML = (selector, key, t) => {
+                const el = document.querySelector(selector);
+                if (el && t[key] !== undefined) el.innerHTML = t[key];
+            };
+
+            // Override switchLang with direct DOM manipulation
+            window.switchLang = function(lang) {
+                const t = translations[lang];
+                if (!t) return;
+
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+
+                // Nav
+                const navLinks = document.querySelectorAll('.nav-links > li > a');
+                if (navLinks[0]) navLinks[0].textContent = t.nav_start;
+                if (navLinks[1]) navLinks[1].textContent = t.nav_praxis;
+                if (navLinks[2]) navLinks[2].textContent = t.nav_philo;
+                if (navLinks[3]) navLinks[3].textContent = t.nav_leist;
+                if (navLinks[4]) navLinks[4].textContent = t.nav_galerie;
+                if (navLinks[5]) navLinks[5].textContent = t.nav_cta;
+
+                // Hero
+                const h1 = document.querySelector('.hero-content h1');
+                if (h1) { h1.childNodes[0].textContent = t.hero_h1_1 + '\n'; h1.querySelector('span').textContent = t.hero_h1_2; }
+                setText('.hero-content .tagline', 'hero_tagline', t);
+                const heroP = document.querySelectorAll('.hero-content > p');
+                if (heroP[1]) heroP[1].textContent = t.hero_text;
+                const heroBtns = document.querySelectorAll('.hero-buttons .btn');
+                if (heroBtns[0]) { heroBtns[0].lastChild.textContent = ' ' + t.hero_btn1; }
+                if (heroBtns[1]) heroBtns[1].textContent = t.hero_btn2;
+                setText('.hero-badge .badge-text strong', 'hero_badge_title', t);
+                setText('.hero-badge .badge-text span', 'hero_badge_sub', t);
+
+                // Trust
+                const trustNums = document.querySelectorAll('.trust-item .trust-number');
+                const trustLabels = document.querySelectorAll('.trust-item .trust-label');
+                [['trust1_num','trust1_label'],['trust2_num','trust2_label'],['trust3_num','trust3_label'],['trust4_num','trust4_label']].forEach(([nk,lk],i) => {
+                    if (trustNums[i]) trustNums[i].textContent = t[nk];
+                    if (trustLabels[i]) trustLabels[i].textContent = t[lk];
+                });
+
+                // Welcome
+                setText('#about .overline', 'welcome_over', t);
+                setText('#about .welcome-content h2', 'welcome_h2', t);
+                const welcomePs = document.querySelectorAll('#about .welcome-content > p');
+                if (welcomePs[0]) welcomePs[0].textContent = t.welcome_p1;
+                if (welcomePs[1]) welcomePs[1].textContent = t.welcome_p2;
+                const ht = document.querySelector('.highlight-text');
+                if (ht) ht.innerHTML = t.welcome_quote + '<br><strong style="font-family:Inter,sans-serif;font-size:0.85rem;font-style:normal;">- Dr. med. dent. I. Medalo</strong>';
+                const wf = document.querySelectorAll('.welcome-feature span');
+                if (wf[0]) wf[0].textContent = t.welcome_f1;
+                if (wf[1]) wf[1].textContent = t.welcome_f2;
+                if (wf[2]) wf[2].textContent = t.welcome_f3;
+                if (wf[3]) wf[3].textContent = t.welcome_f4;
+
+                // Why
+                setText('#why .section-header .overline', 'why_over', t);
+                setText('#why .section-header h2', 'why_h2', t);
+                setText('#why .section-header p', 'why_sub', t);
+                const whyCards = document.querySelectorAll('.why-card');
+                [['why1_h','why1_p'],['why2_h','why2_p'],['why3_h','why3_p']].forEach(([hk,pk],i) => {
+                    if (whyCards[i]) { whyCards[i].querySelector('h3').textContent = t[hk]; whyCards[i].querySelector('p').textContent = t[pk]; }
+                });
+
+                // Services
+                setText('#services .section-header .overline', 'svc_over', t);
+                setText('#services .section-header h2', 'svc_h2', t);
+                setText('#services .section-header p', 'svc_sub', t);
+                const svcCards = document.querySelectorAll('.service-card');
+                [['svc1_h','svc1_p'],['svc2_h','svc2_p'],['svc3_h','svc3_p'],['svc4_h','svc4_p'],['svc5_h','svc5_p'],['svc6_h','svc6_p'],['svc7_h','svc7_p'],['svc8_h','svc8_p']].forEach(([hk,pk],i) => {
+                    if (svcCards[i]) { svcCards[i].querySelector('h3').textContent = t[hk]; svcCards[i].querySelector('p').textContent = t[pk]; }
+                });
+
+                // CTA
+                setText('.cta-banner h2', 'cta_h2', t);
+                setText('.cta-banner p', 'cta_p', t);
+                const ctaBtn = document.querySelector('.cta-banner .btn-white');
+                if (ctaBtn) ctaBtn.lastChild.textContent = ' ' + t.cta_btn;
+
+                // Gallery
+                setText('#gallery .section-header .overline', 'gal_over', t);
+                setText('#gallery .section-header h2', 'gal_h2', t);
+                setText('#gallery .section-header p', 'gal_sub', t);
+                const galLabels = document.querySelectorAll('.gallery-item .gallery-label');
+                if (galLabels[0]) galLabels[0].textContent = t.gal1;
+                if (galLabels[1]) galLabels[1].textContent = t.gal2;
+                if (galLabels[2]) galLabels[2].textContent = t.gal3;
+
+                // Philosophy
+                setText('.philosophy .philosophy-content .overline', 'phil_over', t);
+                setText('.philosophy .philosophy-content h2', 'phil_h2', t);
+                const philPs = document.querySelectorAll('.philosophy-content > p');
+                if (philPs[0]) philPs[0].textContent = t.phil_p1;
+                if (philPs[1]) philPs[1].textContent = t.phil_p2;
+                const bq = document.querySelector('.philosophy-content blockquote');
+                if (bq) bq.textContent = t.phil_quote;
+                const philVals = document.querySelectorAll('.philosophy-value');
+                [['phil_v1_h','phil_v1_p'],['phil_v2_h','phil_v2_p'],['phil_v3_h','phil_v3_p'],['phil_v4_h','phil_v4_p']].forEach(([hk,pk],i) => {
+                    if (philVals[i]) { philVals[i].querySelector('strong').textContent = t[hk]; philVals[i].querySelector('span').textContent = t[pk]; }
+                });
+
+                // Contact
+                setText('#contact .section-header .overline', 'con_over', t);
+                setText('#contact .section-header h2', 'con_h2', t);
+                setText('.contact-card h3', 'con_card_h', t);
+                const conLabels = document.querySelectorAll('.contact-item .contact-text label');
+                const conVals = document.querySelectorAll('.contact-item .contact-text span, .contact-item .contact-text a');
+                if (conLabels[0]) conLabels[0].textContent = t.con_addr_l;
+                if (conLabels[1]) conLabels[1].textContent = t.con_tel_l;
+                if (conLabels[2]) conLabels[2].textContent = t.con_fax_l;
+                if (conLabels[3]) conLabels[3].textContent = t.con_email_l;
+                if (conLabels[4]) conLabels[4].textContent = t.con_anf_l;
+                // Contact values - only translate non-phone/email
+                const conSpans = document.querySelectorAll('.contact-item .contact-text');
+                if (conSpans[0]) conSpans[0].querySelector('span').textContent = t.con_addr;
+                if (conSpans[4]) conSpans[4].querySelector('span').textContent = t.con_anf;
+
+                // Hours
+                setText('.hours-card h3', 'hours_h', t);
+                const hRows = document.querySelectorAll('.hours-row');
+                const dayKeys = ['hours_mo','hours_di','hours_mi','hours_do','hours_fr','hours_wend'];
+                hRows.forEach((r, i) => {
+                    if (dayKeys[i]) r.querySelector('.day').textContent = t[dayKeys[i]];
+                    if (i === 5) r.querySelector('.time').textContent = t.hours_closed;
+                });
+                const hNote = document.querySelector('.hours-note');
+                if (hNote) hNote.textContent = t.hours_note;
+
+                // Map
+                setText('.map-overlay h3', 'map_h', t);
+                setText('.map-overlay p', 'map_p', t);
+                const mapBtn = document.querySelector('.map-overlay .btn');
+                if (mapBtn) mapBtn.lastChild.textContent = ' ' + t.map_btn;
+
+                // Footer
+                const footH4s = document.querySelectorAll('.footer-col h4');
+                if (footH4s[0]) footH4s[0].textContent = t.foot_nav;
+                if (footH4s[1]) footH4s[1].textContent = t.foot_leist;
+                if (footH4s[2]) footH4s[2].textContent = t.foot_kontakt;
+                setText('.footer-bottom p', 'foot_copy', t);
+                setText('.footer-bottom a', 'foot_legal', t);
+            };
+        })();
+    </script>
+
+</body>
+</html>

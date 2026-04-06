@@ -1,0 +1,51 @@
+{
+  "name": "fahrschule-autopilot-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "setup": "bash scripts/setup.sh",
+    "test:crm": "bash scripts/test-crm.sh",
+    "test:crm:prod": "bash scripts/test-crm.sh https://fahrschulautopilot.de",
+    "test:telefon": "bash scripts/test-telefon-assistent.sh",
+    "test:telefon:prod": "bash scripts/test-telefon-assistent.sh https://fahrschulautopilot.de",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@sentry/nextjs": "^10.46.0",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.1",
+    "@types/canvas-confetti": "^1.9.0",
+    "canvas-confetti": "^1.9.4",
+    "framer-motion": "^12.38.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.1",
+    "next-themes": "^0.4.6",
+    "pg": "^8.20.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.72.0",
+    "recharts": "^3.8.1",
+    "resend": "^6.9.4",
+    "server-only": "^0.0.1",
+    "stripe": "^21.0.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.1.2"
+  }
+}

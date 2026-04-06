@@ -1,0 +1,142 @@
+{
+  "_description": "Retell.ai Agent Konfiguration — Importiere diese Werte im Retell Dashboard",
+  "_version": "2.0",
+  "_lastUpdated": "2026-03-29",
+
+  "agent": {
+    "name": "Fahrschul-Assistent",
+    "language": "de-DE",
+    "promptSource": "./agent-prompt.md",
+
+    "voice": {
+      "provider": "elevenlabs",
+      "recommendation": "Suche 'German Female' Stimmen und teste 3-4 — wähle die natürlichste",
+      "fallback": {
+        "provider": "google",
+        "voiceId": "de-DE-Wavenet-C",
+        "note": "Weiblich, natürlich klingend"
+      },
+      "settings": {
+        "speed": 1.0,
+        "pitch": 0
+      }
+    },
+
+    "callSettings": {
+      "maxDurationSeconds": 300,
+      "silenceTimeoutSeconds": 15,
+      "endCallMessage": "Falls Sie keine weiteren Fragen haben, wünsche ich Ihnen einen schönen Tag. Auf Wiederhören!",
+      "responsiveness": 0.6,
+      "interruptionSensitivity": 0.6,
+      "backchannelingEnabled": true,
+      "backchannelingWords": ["mhm", "ja", "verstehe", "genau"]
+    },
+
+    "webhook": {
+      "url": "https://fahrschulautopilot.de/api/retell",
+      "events": ["call_started", "call_ended", "call_analyzed"],
+      "retryAttempts": 3,
+      "headers": {
+        "X-Source": "retell-agent"
+      }
+    },
+
+    "callAnalysis": {
+      "summaryEnabled": true,
+      "sentimentEnabled": true,
+      "customFields": {
+        "intent": {
+          "description": "Hauptgrund des Anrufs",
+          "type": "enum",
+          "values": ["anmeldung", "termin", "preisanfrage", "information", "beschwerde", "umschreibung", "auffrischung", "sonstiges"]
+        },
+        "name": {
+          "description": "Vollständiger Name des Anrufers (falls genannt)",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Telefonnummer des Anrufers (falls anders als Anrufnummer)",
+          "type": "string"
+        },
+        "email": {
+          "description": "E-Mail-Adresse des Anrufers (falls genannt)",
+          "type": "string"
+        },
+        "license_class": {
+          "description": "Gewünschte Führerscheinklasse",
+          "type": "enum",
+          "values": ["B", "A", "A1", "A2", "AM", "BE", "B96", "BF17", "unbekannt"]
+        },
+        "preferred_time": {
+          "description": "Bevorzugte Tage/Zeiten für Termin (falls genannt)",
+          "type": "string"
+        },
+        "urgency": {
+          "description": "Dringlichkeit des Anliegens",
+          "type": "enum",
+          "values": ["hoch", "mittel", "niedrig"]
+        },
+        "has_sehtest": {
+          "description": "Hat der Anrufer bereits einen Sehtest?",
+          "type": "enum",
+          "values": ["ja", "nein", "unbekannt"]
+        },
+        "has_erste_hilfe": {
+          "description": "Hat der Anrufer bereits einen Erste-Hilfe-Kurs?",
+          "type": "enum",
+          "values": ["ja", "nein", "unbekannt"]
+        },
+        "recording_consent": {
+          "description": "Hat der Anrufer der Aufnahme zugestimmt?",
+          "type": "enum",
+          "values": ["ja", "nein", "unbekannt"]
+        }
+      }
+    },
+
+    "transfer": {
+      "enabled": true,
+      "phoneNumber": "[TELEFONNUMMER_FAHRLEHRER]",
+      "triggers": [
+        "Anrufer fragt explizit nach einem Menschen",
+        "Beschwerde oder Reklamation",
+        "Bestehende Verträge/Zahlungen",
+        "Notfall (z.B. Unfall während Fahrstunde)",
+        "Agent hat nach 2 Versuchen keine passende Antwort"
+      ],
+      "transferMessage": "Ich verbinde einen Anrufer — {kurze Zusammenfassung des Anliegens}"
+    }
+  },
+
+  "phoneNumber": {
+    "country": "DE",
+    "areaCodeRecommendation": "Ortsnetz der Fahrschul-Stadt (z.B. +49 911 für Nürnberg)",
+    "monthlyCost": "$2",
+    "note": "Deutsche Nummer für Vertrauen — keine 0800 oder Mobilnummer"
+  },
+
+  "placeholders": {
+    "_note": "Alle [PLATZHALTER] im agent-prompt.md müssen vor Go-Live ersetzt werden",
+    "required": [
+      { "key": "[FAHRSCHULNAME]", "example": "Fahrschule Weber", "description": "Name der Fahrschule" },
+      { "key": "[ASSISTENTEN_NAME]", "example": "Marie", "description": "Name des AI-Assistenten" },
+      { "key": "[WEBSITE]", "example": "fahrschule-weber.de", "description": "Website der Fahrschule" },
+      { "key": "[CALENDLY_URL]", "example": "calendly.com/fahrschule-weber/beratung", "description": "Calendly-Buchungslink" },
+      { "key": "[GESAMTPREIS_B]", "example": "2.800-3.500", "description": "Gesamtkosten Klasse B" },
+      { "key": "[GRUNDGEBUEHR_B]", "example": "400", "description": "Grundgebühr Klasse B" },
+      { "key": "[PREIS_FAHRSTUNDE]", "example": "70", "description": "Preis pro Fahrstunde (45 Min)" },
+      { "key": "[PREIS_SONDERFAHRT]", "example": "80", "description": "Preis pro Sonderfahrt" },
+      { "key": "[BUERO_ZEITEN]", "example": "Mo-Fr 8-18 Uhr", "description": "Büro-Öffnungszeiten" },
+      { "key": "[THEORIE_TAGE_ZEITEN]", "example": "Di + Do 18:30-20:00 Uhr", "description": "Theorie-Unterrichtstage" },
+      { "key": "[ADRESSE]", "example": "Königstraße 15, 70173 Stuttgart", "description": "Adresse der Fahrschule" },
+      { "key": "[FAHRLEHRER_NAME]", "example": "Herr Schneider", "description": "Name des Hauptfahrlehrers" },
+      { "key": "[TELEFONNUMMER_FAHRLEHRER]", "example": "+49 711 456 7890", "description": "Transfer-Nummer" }
+    ]
+  },
+
+  "metadata": {
+    "_note": "Diese Felder werden bei jedem Anruf als Metadata mitgesendet",
+    "tenant_id": "[TENANT_ID]",
+    "source": "retell-phone-agent"
+  }
+}

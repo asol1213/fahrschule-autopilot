@@ -1,0 +1,379 @@
+{
+  "name": "Fahrschule Autopilot - Termin-Erinnerungen",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "trigger-1",
+      "name": "Alle 15 Min prüfen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-source",
+              "leftValue": "={{ $env.DATA_SOURCE }}",
+              "rightValue": "google_calendar",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "router-1",
+      "name": "Datenquelle Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "list"
+        },
+        "timeMin": "={{ $now.toISO() }}",
+        "timeMax": "={{ $now.plus({hours: 25}).toISO() }}"
+      },
+      "id": "gcal-1",
+      "name": "Google Calendar - Termine holen",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [660, 160],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "GOOGLE_CALENDAR_CREDENTIALS",
+          "name": "Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Termine",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": []
+        }
+      },
+      "id": "gsheets-1",
+      "name": "Google Sheets - Termine holen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [660, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.FAHRSCHUL_API_URL }}/api/termine",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "api-1",
+      "name": "Fahrschulsoftware API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 440]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Termine normalisieren (egal welche Quelle)\nconst items = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of items) {\n  const data = item.json;\n  \n  // Termin-Daten extrahieren (flexibel für verschiedene Quellen)\n  let terminDatum, schuelerName, schuelerTelefon, fahrlehrerName, terminArt;\n  \n  // Google Calendar Format\n  if (data.start && data.start.dateTime) {\n    terminDatum = new Date(data.start.dateTime);\n    // Aus der Beschreibung oder dem Titel extrahieren\n    const summary = data.summary || '';\n    schuelerName = summary.split(' - ')[0] || 'Fahrschüler';\n    schuelerTelefon = (data.description || '').match(/\\+?\\d[\\d\\s]{8,}/)?.[0] || '';\n    fahrlehrerName = summary.split(' - ')[1] || '';\n    terminArt = summary.split(' - ')[2] || 'Fahrstunde';\n  }\n  // Google Sheets Format\n  else if (data.Datum || data.datum) {\n    const datumStr = data.Datum || data.datum;\n    const zeitStr = data.Uhrzeit || data.uhrzeit || data.Zeit || data.zeit || '09:00';\n    terminDatum = new Date(`${datumStr}T${zeitStr}`);\n    schuelerName = data.Schüler || data.schueler || data.Name || data.name || 'Fahrschüler';\n    schuelerTelefon = data.Telefon || data.telefon || data.Handy || data.handy || data.WhatsApp || '';\n    fahrlehrerName = data.Fahrlehrer || data.fahrlehrer || data.Lehrer || '';\n    terminArt = data.Art || data.art || data.Typ || data.typ || 'Fahrstunde';\n  }\n  // API Format\n  else if (data.appointment_date || data.termin_datum) {\n    terminDatum = new Date(data.appointment_date || data.termin_datum);\n    schuelerName = data.student_name || data.schueler_name || 'Fahrschüler';\n    schuelerTelefon = data.student_phone || data.schueler_telefon || '';\n    fahrlehrerName = data.instructor_name || data.fahrlehrer_name || '';\n    terminArt = data.lesson_type || data.termin_art || 'Fahrstunde';\n  }\n  else {\n    continue; // Unbekanntes Format, überspringen\n  }\n  \n  if (!terminDatum || !schuelerTelefon) continue;\n  \n  // Telefonnummer bereinigen\n  schuelerTelefon = schuelerTelefon.replace(/[\\s\\-\\/]/g, '');\n  if (!schuelerTelefon.startsWith('+')) {\n    schuelerTelefon = '+49' + schuelerTelefon.replace(/^0/, '');\n  }\n  \n  // Stunden bis zum Termin berechnen\n  const stundenBisTermin = (terminDatum.getTime() - now.getTime()) / (1000 * 60 * 60);\n  \n  // Erinnerungstyp bestimmen\n  let erinnerungsTyp = null;\n  if (stundenBisTermin >= 23.5 && stundenBisTermin <= 24.5) {\n    erinnerungsTyp = '24h';\n  } else if (stundenBisTermin >= 1.5 && stundenBisTermin <= 2.5) {\n    erinnerungsTyp = '2h';\n  }\n  \n  if (!erinnerungsTyp) continue; // Kein Erinnerungsfenster\n  \n  // Datum und Uhrzeit formatieren\n  const optionen = { weekday: 'long', day: 'numeric', month: 'long' };\n  const terminDatumFormatiert = terminDatum.toLocaleDateString('de-DE', optionen);\n  const terminZeitFormatiert = terminDatum.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });\n  \n  results.push({\n    json: {\n      schuelerName,\n      schuelerTelefon,\n      fahrlehrerName,\n      terminArt,\n      terminDatum: terminDatum.toISOString(),\n      terminDatumFormatiert,\n      terminZeitFormatiert,\n      erinnerungsTyp,\n      stundenBisTermin: Math.round(stundenBisTermin * 10) / 10\n    }\n  });\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "normalize-1",
+      "name": "Termine normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEqual"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-1",
+      "name": "Nur gültige Termine",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1100, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-24h",
+              "leftValue": "={{ $json.erinnerungsTyp }}",
+              "rightValue": "24h",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-type",
+      "name": "24h oder 2h?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1320, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_NUMBER }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nKurze Erinnerung: Morgen steht Ihre {{ $json.terminArt }} an.\n\n📅 {{ $json.terminDatumFormatiert }}\n🕐 {{ $json.terminZeitFormatiert }} Uhr\n👤 {{ $json.fahrlehrerName }}\n\nBitte denken Sie an:\n✅ Personalausweis/Führerschein\n✅ Festes Schuhwerk\n✅ Brille (falls nötig)\n\nFalls Sie den Termin nicht wahrnehmen können, sagen Sie bitte mindestens 24 Stunden vorher ab.\n\n❌ Termin absagen? Antworten Sie mit ABSAGE\n✅ Termin bestätigen? Antworten Sie mit OK\n\nIhre Fahrschule wünscht Ihnen einen guten Tag! 🚗"
+      },
+      "id": "whatsapp-24h",
+      "name": "WhatsApp 24h Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1540, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_NUMBER }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! ⏰\n\nIhre {{ $json.terminArt }} beginnt in 2 Stunden!\n\n🕐 {{ $json.terminZeitFormatiert }} Uhr\n👤 {{ $json.fahrlehrerName }}\n\nBitte seien Sie 5 Minuten vorher da. Wir freuen uns auf Sie! 🚗💨"
+      },
+      "id": "whatsapp-2h",
+      "name": "WhatsApp 2h Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1540, 400],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Erinnerung loggen\nconst item = $input.first();\nconst logEntry = {\n  timestamp: new Date().toISOString(),\n  schueler: item.json.schuelerName,\n  telefon: item.json.schuelerTelefon,\n  termin: item.json.terminDatumFormatiert,\n  zeit: item.json.terminZeitFormatiert,\n  typ: item.json.erinnerungsTyp,\n  status: 'gesendet'\n};\n\nreturn [{ json: logEntry }];"
+      },
+      "id": "log-1",
+      "name": "Erinnerung loggen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1760, 300]
+    }
+  ],
+  "connections": {
+    "Alle 15 Min prüfen": {
+      "main": [
+        [
+          {
+            "node": "Datenquelle Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datenquelle Router": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar - Termine holen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets - Termine holen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fahrschulsoftware API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar - Termine holen": {
+      "main": [
+        [
+          {
+            "node": "Termine normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Termine holen": {
+      "main": [
+        [
+          {
+            "node": "Termine normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fahrschulsoftware API": {
+      "main": [
+        [
+          {
+            "node": "Termine normalisieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Termine normalisieren": {
+      "main": [
+        [
+          {
+            "node": "Nur gültige Termine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur gültige Termine": {
+      "main": [
+        [
+          {
+            "node": "24h oder 2h?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "24h oder 2h?": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp 24h Erinnerung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WhatsApp 2h Erinnerung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp 24h Erinnerung": {
+      "main": [
+        [
+          {
+            "node": "Erinnerung loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp 2h Erinnerung": {
+      "main": [
+        [
+          {
+            "node": "Erinnerung loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "Termin-Erinnerungen",
+      "id": "2"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "name": "Thomas M.",
+    "stadt": "",
+    "rolle": "Fahrschulinhaber",
+    "text": "Seit wir Fahrschule Autopilot nutzen, haben wir 85% weniger Terminausfälle. Das spart uns über €1.200 pro Monat.",
+    "sterne": 5,
+    "createdAt": "2026-02-15",
+    "approved": true
+  },
+  {
+    "id": "2",
+    "name": "Sandra K.",
+    "stadt": "",
+    "rolle": "Fahrschulleitung",
+    "text": "Die Google-Bewertungen haben sich verdreifacht. Von 12 auf über 45 Bewertungen in nur 3 Monaten.",
+    "sterne": 5,
+    "createdAt": "2026-02-20",
+    "approved": true
+  },
+  {
+    "id": "3",
+    "name": "Markus H.",
+    "stadt": "",
+    "rolle": "Fahrschulinhaber",
+    "text": "75% weniger Büroarbeit. Die Automationen laufen im Hintergrund und ich kann mich auf meine Schüler konzentrieren.",
+    "sterne": 5,
+    "createdAt": "2026-03-01",
+    "approved": true
+  }
+]

@@ -1,0 +1,6 @@
+Schueler_ID,Name,Telefon,Email,Klasse,Geburtsdatum,Adresse,Anmelde_Datum,Status,Dokumente_Status,Fehlende_Dokumente,Onboarding_Status,Fahrlehrer,Theorie_Status,Letzte_Theorie_Aktivitaet,Anzahl_Stunden,Letzte_Fahrstunde,Pruefung_Datum,Pruefung_Typ,Pruefung_Ergebnis,Pruefung_Bestanden,Feedback_Status,WA_Opt_Out,WA_Opt_Out_Datum
+SCH-TEST001,Max Mustermann,+491721234567,max@test.de,B,1998-05-15,Musterstr. 1 90402 Nuernberg,2026-03-20T10:00:00.000Z,aktiv,ausstehend,"Sehtest,Erste-Hilfe",gestartet,,,,0,,,,,,,
+SCH-TEST002,Lisa Weber,+491731234567,lisa@test.de,B,2000-11-22,Hauptstr. 5 90403 Nuernberg,2026-03-15T10:00:00.000Z,aktiv,komplett,,abgeschlossen,Schmidt,aktiv,2026-03-28,8,2026-03-27,,,,,
+SCH-TEST003,Tom Klein,+491741234567,tom@test.de,A,1999-03-08,Gartenweg 12 90478 Nuernberg,2026-03-01T10:00:00.000Z,aktiv,ausstehend,"Passfoto,Ausweis-Kopie",gestartet,Klein,,2026-03-10,3,2026-03-25,,,,,
+SCH-TEST004,Anna Schmidt,+491751234567,anna@test.de,B,2001-07-30,Ringstr. 8 90409 Nuernberg,2026-02-01T10:00:00.000Z,bestanden,komplett,,abgeschlossen,Schmidt,bestanden,,20,2026-03-20,Praktische Pruefung,bestanden,2026-03-20,,
+SCH-TEST005,Jonas Mueller,+491761234567,,B,1997-12-14,,2025-08-01T10:00:00.000Z,abgemeldet,ausstehend,,,,,,,,,,,,,

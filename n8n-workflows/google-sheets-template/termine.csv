@@ -1,0 +1,5 @@
+Datum,Uhrzeit,Schueler,Telefon,Fahrlehrer,Art,Status
+2026-03-31,10:00,Lisa Weber,+491731234567,Schmidt,Fahrstunde,geplant
+2026-03-31,14:00,Tom Klein,+491741234567,Klein,Fahrstunde,geplant
+2026-04-01,09:00,Max Mustermann,+491721234567,Schmidt,Fahrstunde,geplant
+2026-04-02,11:00,Lisa Weber,+491731234567,Schmidt,Pruefungsvorbereitung,geplant

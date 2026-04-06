@@ -1,0 +1,456 @@
+{
+  "name": "Fahrschule Autopilot - Schueler-Onboarding Flow",
+  "nodes": [
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "neue-anmeldung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-anmeldung",
+      "name": "Neue Anmeldung empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "neue-anmeldung"
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// Anmeldedaten normalisieren + validieren\nconst body = $input.first().json.body || $input.first().json;\n\nlet name = body.name || body.Name || body.schuelerName || '';\nconst vorname = body.vorname || body.Vorname || '';\nconst nachname = body.nachname || body.Nachname || '';\nif (!name && vorname && nachname) name = `${vorname} ${nachname}`;\n\nlet telefon = (body.telefon || body.phone || body.Telefon || body.Handy || '').toString();\nconst email = (body.email || body.Email || '').trim();\nconst klasse = body.klasse || body.Klasse || body.fuehrerscheinKlasse || 'B';\nconst geburtsdatum = body.geburtsdatum || body.Geburtsdatum || '';\nconst adresse = body.adresse || body.Adresse || '';\nconst anmerkungen = body.anmerkungen || body.Anmerkungen || body.nachricht || '';\nconst wunschTermin = body.wunschTermin || body.wunsch_termin || '';\n\n// Telefonnummer bereinigen\ntelefon = telefon.replace(/[\\s\\-\\/\\(\\)]/g, '');\nif (telefon && !telefon.startsWith('+')) {\n  telefon = '+49' + telefon.replace(/^0/, '');\n}\n\n// Schueler-ID generieren (URL-safe, kollisionsarm)\nconst schuelerId = 'SCH-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,5).toUpperCase();\n\nreturn [{\n  json: {\n    schuelerId,\n    schuelerName: name,\n    vorname,\n    nachname,\n    telefon,\n    email,\n    klasse,\n    geburtsdatum,\n    adresse,\n    anmerkungen,\n    wunschTermin,\n    anmeldeDatum: new Date().toISOString(),\n    hatEmail: email.length > 0 && email.includes('@'),\n    hatTelefon: telefon.length > 5,\n    status: 'angemeldet'\n  }\n}];"
+      },
+      "id": "normalize-anmeldung",
+      "name": "Anmeldung normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Schueler",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler_ID": "={{ $json.schuelerId }}",
+            "Name": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.telefon }}",
+            "Email": "={{ $json.email }}",
+            "Klasse": "={{ $json.klasse }}",
+            "Geburtsdatum": "={{ $json.geburtsdatum }}",
+            "Adresse": "={{ $json.adresse }}",
+            "Anmelde_Datum": "={{ $json.anmeldeDatum }}",
+            "Status": "angemeldet",
+            "Dokumente_Status": "ausstehend",
+            "Onboarding_Status": "gestartet",
+            "Fahrlehrer": ""
+          }
+        }
+      },
+      "id": "save-schueler",
+      "name": "Schueler in CRM anlegen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [660, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Herzlich willkommen bei {{ $env.FAHRSCHUL_NAME }}, {{ $json.schuelerName }}! 🎉🚗\n\nWir freuen uns, Sie auf dem Weg zum Fuehrerschein Klasse {{ $json.klasse }} zu begleiten!\n\n📋 Ihre Anmelde-Nr: {{ $json.schuelerId }}\n\nUm loszulegen, benoetigen wir noch diese Unterlagen von Ihnen:\n\n✅ Sehtest (nicht aelter als 2 Jahre)\n✅ Erste-Hilfe-Bescheinigung\n✅ Biometrisches Passfoto\n✅ Personalausweis / Reisepass (Kopie)\n\n📎 Schicken Sie uns die Dokumente einfach als Foto per WhatsApp oder bringen Sie sie persoenlich vorbei.\n\nBei Fragen antworten Sie einfach auf diese Nachricht!\n\nIhre {{ $env.FAHRSCHUL_NAME }} 🚗"
+      },
+      "id": "send-willkommen-wa",
+      "name": "Willkommen per WhatsApp",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [900, 160],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "check-email",
+              "leftValue": "={{ $json.hatEmail }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-has-email",
+      "name": "Hat der Schueler eine E-Mail?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [900, 360]
+    },
+
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.EMAIL_FROM }}",
+        "toEmail": "={{ $json.email }}",
+        "subject": "=Willkommen bei {{ $env.FAHRSCHUL_NAME }} \u2014 Ihre Anmeldung war erfolgreich!",
+        "emailType": "html",
+        "message": "=<!DOCTYPE html>\n<html lang=\"de\">\n<head><meta charset=\"UTF-8\"><style>\n  body { font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; }\n  .header { background: #1a1a2e; color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }\n  .header h1 { margin: 0; font-size: 24px; }\n  .content { background: #f9f9f9; padding: 30px; }\n  .checklist { background: white; border-radius: 8px; padding: 20px; margin: 20px 0; }\n  .checklist li { padding: 8px 0; border-bottom: 1px solid #eee; }\n  .checklist li:last-child { border-bottom: none; }\n  .cta-btn { display: inline-block; background: #e94560; color: white; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; margin: 20px 0; }\n  .footer { background: #1a1a2e; color: #aaa; padding: 20px; text-align: center; font-size: 12px; border-radius: 0 0 8px 8px; }\n  .info-box { background: #e8f4fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 0 6px 6px 0; margin: 15px 0; }\n</style></head>\n<body>\n<div class=\"header\">\n  <h1>{{ $env.FAHRSCHUL_NAME }}</h1>\n  <p style=\"margin:8px 0 0\">Willkommen, {{ $json.schuelerName }}! 🎉</p>\n</div>\n<div class=\"content\">\n  <p>Herzlich willkommen! Ihre Anmeldung fuer den <strong>Fuehrerschein Klasse {{ $json.klasse }}</strong> war erfolgreich.</p>\n  <div class=\"info-box\">\n    <strong>Ihre Anmelde-Nr:</strong> {{ $json.schuelerId }}<br>\n    <strong>Anmeldedatum:</strong> {{ new Date($json.anmeldeDatum).toLocaleDateString('de-DE') }}\n  </div>\n\n  <h3>Naechste Schritte:</h3>\n  <div class=\"checklist\">\n    <ul style=\"list-style:none; padding:0; margin:0;\">\n      <li>✅ Sehtest (max. 2 Jahre alt) \u2014 beim Optiker erhaltlich</li>\n      <li>✅ Erste-Hilfe-Kurs Bescheinigung \u2014 z.B. beim DRK oder ADAC</li>\n      <li>✅ Biometrisches Passfoto \u2014 beim Fotograf oder Optiker</li>\n      <li>✅ Personalausweis oder Reisepass (Kopie)</li>\n    </ul>\n  </div>\n  <p>Sie koennen uns die Unterlagen per <strong>WhatsApp als Foto</strong> schicken oder persoenlich bei uns vorbeibringen.</p>\n\n  <h3>Kostenloser Theorie-Trainer:</h3>\n  <p>Bereiten Sie sich schon jetzt auf die Theoriepruefung vor! Ueber 2.300 offizielle Pruefungsfragen mit KI-Erklaerungen:</p>\n  <a href=\"{{ $env.WEBSITE_URL }}/theorie\" class=\"cta-btn\">Jetzt lernen &rarr;</a>\n\n  <h3>Ihre Ansprechpartner:</h3>\n  <p>\n    📞 {{ $env.FAHRSCHUL_TELEFON || 'Im Buero erfragen' }}<br>\n    🌐 <a href=\"{{ $env.WEBSITE_URL }}\">{{ $env.WEBSITE_URL }}</a><br>\n    🕐 {{ $env.OEFFNUNGSZEITEN || 'Mo\u2013Fr 9\u201318 Uhr, Sa 9\u201313 Uhr' }}\n  </p>\n</div>\n<div class=\"footer\">\n  &copy; {{ $env.FAHRSCHUL_NAME }} &nbsp;|&nbsp; {{ $env.FAHRSCHUL_ADRESSE || '' }}\n</div>\n</body></html>"
+      },
+      "id": "send-welcome-email",
+      "name": "Willkommens-E-Mail senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1120, 360],
+      "credentials": {
+        "smtp": {
+          "id": "SMTP_CREDENTIALS",
+          "name": "SMTP"
+        }
+      },
+      "continueOnFail": true
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Noch ein Tipp zum Start, {{ $json.schuelerName }}! 📚\n\nMit unserem kostenlosen Theorie-Trainer koennen Sie sich schon jetzt auf die Pruefung vorbereiten:\n\n👉 {{ $env.WEBSITE_URL }}/theorie\n\n2.300+ Pruefungsfragen mit KI-Erklaerungen. Wer taeglich 20 Fragen uebt, besteht beim ersten Versuch. 🎯\n\nViel Erfolg! 💪"
+      },
+      "id": "send-theorie-link",
+      "name": "Theorie-Trainer Link senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [900, 560],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=🆕 Neue Anmeldung!\n\n👤 {{ $json.schuelerName }}\n📱 {{ $json.telefon }}\n📧 {{ $json.email || 'keine E-Mail' }}\n🚗 Klasse {{ $json.klasse }}\n📋 ID: {{ $json.schuelerId }}\n{{ $json.wunschTermin ? '📅 Wunschtermin: ' + $json.wunschTermin : '' }}\n{{ $json.anmerkungen ? '💬 ' + $json.anmerkungen : '' }}\n\n✅ Willkommen per WA gesendet\n{{ $json.hatEmail ? '✅ Willkommens-E-Mail gesendet' : '⚠️ Keine E-Mail angegeben' }}"
+      },
+      "id": "notify-inhaber-anmeldung",
+      "name": "Inhaber ueber Anmeldung informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [900, 760],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Onboarding_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler_ID": "={{ $json.schuelerId }}",
+            "Schueler": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.telefon }}",
+            "Email": "={{ $json.email }}",
+            "Schritt": "onboarding_start",
+            "Gesendet_am": "={{ $now.toISO() }}",
+            "WA_Willkommen": "ja",
+            "Email_Willkommen": "={{ $json.hatEmail ? 'ja' : 'nein (keine Email)' }}",
+            "Status": "gesendet"
+          }
+        }
+      },
+      "id": "log-onboarding-start",
+      "name": "Onboarding-Start loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1120, 760],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"schuelerId\": \"{{ $json.schuelerId }}\", \"message\": \"Onboarding gestartet\"}"
+      },
+      "id": "webhook-response-onboard",
+      "name": "API Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1360, 300]
+    },
+
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "id": "trigger-followup",
+      "name": "Follow-Up Pruefung (alle 12h)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 1000]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Schueler",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-schueler-followup",
+      "name": "Alle Schueler laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 920],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Onboarding_Log",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-onboarding-log",
+      "name": "Onboarding-Log laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 1100],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// ONBOARDING FOLLOW-UP LOGIC\n// Tag 3: Dokumente-Erinnerung\n// Tag 7: Dokumente-Erinnerung (dringender) + Theorie-Termin\n// Tag 14: Letzte Warnung Dokumente\n// Tag 7 (mit Fahrlehrer): Theorie-Termin vorschlagen\n// ============================================================\nconst schueler = $('Alle Schueler laden').all();\nconst logItems = $('Onboarding-Log laden').all();\n\n// Cooldown-Map: telefon_schritt -> letztes Sendedatum\nconst gesendet = new Set();\nfor (const item of logItems) {\n  const key = `${item.json.Telefon}_${item.json.Schritt}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of schueler) {\n  const data = item.json;\n\n  const status = (data.Status || '').toLowerCase();\n  if (status === 'abgemeldet' || status === 'storniert' || status === 'bestanden') continue;\n\n  const name = data.Name || data.Schueler || '';\n  let telefon = (data.Telefon || '').toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) telefon = '+49' + telefon.replace(/^0/, '');\n\n  const anmeldeDatum = data.Anmelde_Datum || '';\n  const dokuStatus = (data.Dokumente_Status || '').toLowerCase();\n  const fahrlehrer = data.Fahrlehrer || '';\n  const theorieStatus = (data.Theorie_Status || '').toLowerCase();\n  const klasse = data.Klasse || 'B';\n\n  if (!telefon || !name || !anmeldeDatum) continue;\n\n  let anmeldung;\n  try { anmeldung = new Date(anmeldeDatum); } catch(e) { continue; }\n  if (isNaN(anmeldung.getTime())) continue;\n\n  const tageSeit = Math.floor((now.getTime() - anmeldung.getTime()) / (1000 * 60 * 60 * 24));\n  const dokuKomplett = dokuStatus === 'komplett' || dokuStatus === 'vollstaendig';\n\n  // ---- TAG 3: ERSTE DOKUMENTE-ERINNERUNG ----\n  if (!dokuKomplett && tageSeit >= 3 && tageSeit < 7) {\n    const key = `${telefon}_followup_tag3`;\n    if (!gesendet.has(key)) {\n      results.push({ json: {\n        schuelerName: name, schuelerTelefon: telefon,\n        followupSchritt: 'followup_tag3', tageSeit,\n        nachricht: `Hallo ${name}! 👋\\n\\nKurze Erinnerung: Fuer Ihre Fahrschul-Anmeldung fehlen uns noch folgende Unterlagen:\\n\\n✅ Sehtest\\n✅ Erste-Hilfe-Bescheinigung\\n✅ Biometrisches Passfoto\\n✅ Personalausweis-Kopie\\n\\nSchicken Sie uns die Dokumente einfach als Foto per WhatsApp oder bringen Sie sie vorbei. Je frueher, desto schneller koennen Sie starten! 🚀\\n\\nIhre Fahrschule`\n      }});\n    }\n  }\n\n  // ---- TAG 7: ZWEITE ERINNERUNG + THEORIE-TERMIN VORSCHLAG ----\n  if (tageSeit >= 7 && tageSeit < 14) {\n\n    // Dokumente-Erinnerung (nur wenn noch nicht komplett)\n    if (!dokuKomplett) {\n      const key = `${telefon}_followup_tag7`;\n      if (!gesendet.has(key)) {\n        results.push({ json: {\n          schuelerName: name, schuelerTelefon: telefon,\n          followupSchritt: 'followup_tag7', tageSeit,\n          nachricht: `Hallo ${name},\\n\\nwir vermissen noch Ihre Unterlagen fuer die Anmeldung. Ohne diese koennen wir Ihren Fuehrerscheinantrag beim TUeV leider nicht stellen.\\n\\n📋 Noch benoetigt:\\n• Sehtest (beim Optiker, meist ohne Termin)\\n• Erste-Hilfe-Kurs\\n• Passfoto\\n• Ausweis-Kopie\\n\\nBrauchen Sie Hilfe bei der Beschaffung? Wir helfen gerne weiter!\\n\\nIhre Fahrschule`\n        }});\n      }\n    }\n\n    // Theorie-Termin vorschlagen (unabhaengig von Doku-Status)\n    if (theorieStatus !== 'aktiv' && theorieStatus !== 'bestanden') {\n      const key = `${telefon}_theorie_termin_vorschlag`;\n      if (!gesendet.has(key)) {\n        const theorieZeiten = $env.THEORIE_ZEITEN || 'Di + Do, 18:30 Uhr';\n        results.push({ json: {\n          schuelerName: name, schuelerTelefon: telefon,\n          followupSchritt: 'theorie_termin_vorschlag', tageSeit,\n          nachricht: `Hallo ${name}! 📚\\n\\nSie sind jetzt eine Woche angemeldet --- Zeit fuer den naechsten Schritt!\\n\\nUnsere Theorie-Stunden finden statt:\\n🗓 ${theorieZeiten}\\n\\nMoechten Sie ab naechster Woche starten? Antworten Sie einfach mit:\\n✅ JA\\n\\nOder nutzen Sie unseren kostenlosen Online-Trainer, um sich vorzubereiten:\\n📱 ${$env.WEBSITE_URL || ''}/theorie\\n\\nIhre Fahrschule 🚗`\n        }});\n      }\n    }\n  }\n\n  // ---- TAG 14: LETZTE DOKU-WARNUNG ----\n  if (!dokuKomplett && tageSeit >= 14 && tageSeit < 28) {\n    const key = `${telefon}_followup_tag14`;\n    if (!gesendet.has(key)) {\n      results.push({ json: {\n        schuelerName: name, schuelerTelefon: telefon,\n        followupSchritt: 'followup_tag14', tageSeit,\n        nachricht: `Hallo ${name},\\n\\nIhre Anmeldung liegt nun seit 2 Wochen vor, aber die erforderlichen Unterlagen fehlen noch.\\n\\n⚠️ Ohne Sehtest, Erste-Hilfe und Passfoto koennen wir leider nicht fuer Sie den Fuehrerscheinantrag stellen.\\n\\nMoechten Sie Ihre Anmeldung aufrechterhalten? Dann reichen Sie die Unterlagen bitte in den naechsten Tagen ein.\\n\\nBei Fragen: Rufen Sie uns an oder antworten Sie direkt hier.\\n\\nIhre Fahrschule`\n      }});\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-followup",
+      "name": "Follow-Up Nachrichten ermitteln",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 1000]
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "notTrue" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-followup",
+      "name": "Nur gueltige Follow-Ups",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [920, 1000]
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "={{ $json.nachricht }}"
+      },
+      "id": "send-followup",
+      "name": "Follow-Up senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1140, 1000],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Onboarding_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.schuelerTelefon }}",
+            "Schritt": "={{ $json.followupSchritt }}",
+            "Gesendet_am": "={{ $now.toISO() }}",
+            "Tage_seit_Anmeldung": "={{ $json.tageSeit }}",
+            "Status": "gesendet"
+          }
+        }
+      },
+      "id": "log-followup",
+      "name": "Follow-Up loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1380, 1000],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    }
+
+  ],
+  "connections": {
+    "Neue Anmeldung empfangen": {
+      "main": [[{ "node": "Anmeldung normalisieren", "type": "main", "index": 0 }]]
+    },
+    "Anmeldung normalisieren": {
+      "main": [[{ "node": "Schueler in CRM anlegen", "type": "main", "index": 0 }]]
+    },
+    "Schueler in CRM anlegen": {
+      "main": [
+        [
+          { "node": "Willkommen per WhatsApp", "type": "main", "index": 0 },
+          { "node": "Hat der Schueler eine E-Mail?", "type": "main", "index": 0 },
+          { "node": "Theorie-Trainer Link senden", "type": "main", "index": 0 },
+          { "node": "Inhaber ueber Anmeldung informieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Willkommen per WhatsApp": {
+      "main": [[{ "node": "Onboarding-Start loggen", "type": "main", "index": 0 }]]
+    },
+    "Hat der Schueler eine E-Mail?": {
+      "main": [[{ "node": "Willkommens-E-Mail senden", "type": "main", "index": 0 }]]
+    },
+    "Willkommens-E-Mail senden": {
+      "main": [[{ "node": "Onboarding-Start loggen", "type": "main", "index": 0 }]]
+    },
+    "Onboarding-Start loggen": {
+      "main": [[{ "node": "API Response", "type": "main", "index": 0 }]]
+    },
+    "Follow-Up Pruefung (alle 12h)": {
+      "main": [
+        [
+          { "node": "Alle Schueler laden", "type": "main", "index": 0 },
+          { "node": "Onboarding-Log laden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Alle Schueler laden": {
+      "main": [[{ "node": "Follow-Up Nachrichten ermitteln", "type": "main", "index": 0 }]]
+    },
+    "Onboarding-Log laden": {
+      "main": [[{ "node": "Follow-Up Nachrichten ermitteln", "type": "main", "index": 0 }]]
+    },
+    "Follow-Up Nachrichten ermitteln": {
+      "main": [[{ "node": "Nur gueltige Follow-Ups", "type": "main", "index": 0 }]]
+    },
+    "Nur gueltige Follow-Ups": {
+      "main": [[{ "node": "Follow-Up senden", "type": "main", "index": 0 }]]
+    },
+    "Follow-Up senden": {
+      "main": [[{ "node": "Follow-Up loggen", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Onboarding", "id": "8" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

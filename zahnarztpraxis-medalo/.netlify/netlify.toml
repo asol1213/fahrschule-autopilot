@@ -1,0 +1,26 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/Users/andrewarbo/Desktop/Autopilot_F/zahnarztpraxis-medalo"
+publishOrigin = "default"
+base = "/Users/andrewarbo/Desktop/Autopilot_F/zahnarztpraxis-medalo"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

@@ -1,0 +1,692 @@
+{
+  "name": "Fahrschule Autopilot - Feedback & Google-Bewertungen (Production)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "feedback-trigger",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Trigger - Schueler hat bestanden",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "feedback-trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Stuendlich pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schueler?tenant_id=eq.{{ $env.TENANT_ID }}&feedback_status=not.in.(gefragt,erhalten,google)&select=id,vorname,nachname,telefon,wa_opt_out,feedback_status,pruefung_bestanden_am,letzte_fahrstunde,anzahl_stunden",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "load-schueler",
+      "name": "Schueler laden (Production)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Schueler filtern die Feedback bekommen sollen\nconst items = $input.all();\nconst now = new Date();\nconst results = [];\n\nfor (const item of items) {\n  const data = item.json;\n  if (data.wa_opt_out) continue;\n\n  const name = `${data.vorname} ${data.nachname}`;\n  const telefon = data.telefon || '';\n  const pruefungDatum = data.pruefung_bestanden_am || '';\n  const letzteFahrstunde = data.letzte_fahrstunde || '';\n  const anzahlStunden = parseInt(data.anzahl_stunden || '0');\n\n  if (!telefon || !name) continue;\n\n  let sollFeedbackBekommen = false;\n  let trigger = '';\n\n  // Pruefung bestanden?\n  if (pruefungDatum) {\n    const pruefung = new Date(pruefungDatum);\n    const stundenSeit = (now.getTime() - pruefung.getTime()) / (1000 * 60 * 60);\n    if (stundenSeit >= 2 && stundenSeit <= 48) {\n      sollFeedbackBekommen = true;\n      trigger = 'pruefung_bestanden';\n    }\n  }\n\n  // Letzte Fahrstunde (alle 10 Stunden Meilenstein)\n  if (!sollFeedbackBekommen && letzteFahrstunde && anzahlStunden > 0 && anzahlStunden % 10 === 0) {\n    const letzteStunde = new Date(letzteFahrstunde);\n    const stundenSeit = (now.getTime() - letzteStunde.getTime()) / (1000 * 60 * 60);\n    if (stundenSeit >= 2 && stundenSeit <= 48) {\n      sollFeedbackBekommen = true;\n      trigger = 'meilenstein_' + anzahlStunden;\n    }\n  }\n\n  if (sollFeedbackBekommen) {\n    results.push({\n      json: {\n        schuelerName: name,\n        schuelerTelefon: telefon,\n        schuelerId: data.id,\n        trigger\n      }\n    });\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "filter-schueler",
+      "name": "Feedback-Kandidaten filtern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-valid",
+      "name": "Nur gueltige Kandidaten",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 🎉\n\nWir hoffen, Sie sind zufrieden mit Ihrer Fahrschule!\n\nKurze Frage: Wie bewerten Sie uns auf einer Skala von 1-5?\n\n⭐ Antworten Sie einfach mit einer Zahl:\n5 = Hervorragend\n4 = Gut\n3 = Okay\n2 = Nicht so gut\n1 = Schlecht\n\nIhr Feedback hilft uns, noch besser zu werden! 🙏"
+      },
+      "id": "send-feedback-request",
+      "name": "Feedback anfragen per WhatsApp",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        400
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"schueler_id\": \"{{ $json.schuelerId }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon }}\",\n  \"typ\": \"feedback_gefragt\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": { \"trigger\": \"{{ $json.trigger }}\" }\n}",
+        "options": {}
+      },
+      "id": "log-feedback-request",
+      "name": "Feedback-Anfrage loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schueler?id=eq.{{ $json.schuelerId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"feedback_status\": \"gefragt\"\n}",
+        "options": {}
+      },
+      "id": "update-schueler-gefragt",
+      "name": "Schueler feedback_status updaten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "feedback-response",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-feedback",
+      "name": "Eingehende Feedback-Antwort",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        800
+      ],
+      "webhookId": "feedback-response"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Feedback-Antwort auswerten\nconst body = $input.first().json.body || $input.first().json;\nconst messageBody = (body.Body || body.body || '').trim();\nconst from = (body.From || body.from || '').replace('whatsapp:', '').trim();\n\n// Bewertung extrahieren (1-5)\nconst bewertung = parseInt(messageBody);\n\nif (bewertung >= 1 && bewertung <= 5) {\n  return [{\n    json: {\n      telefon: from,\n      bewertung,\n      istPositiv: bewertung >= 4,\n      istSehrGut: bewertung === 5,\n      originalMessage: messageBody\n    }\n  }];\n}\n\n// Keine gueltige Bewertung\nreturn [{\n  json: {\n    telefon: from,\n    bewertung: null,\n    istPositiv: false,\n    istSehrGut: false,\n    originalMessage: messageBody\n  }\n}];"
+      },
+      "id": "parse-feedback",
+      "name": "Bewertung auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-positiv",
+              "leftValue": "={{ $json.istSehrGut }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-rating",
+      "name": "5 Sterne oder weniger",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        660,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Wow, vielen Dank fuer die 5 Sterne! ⭐⭐⭐⭐⭐\n\nDas freut uns riesig! 🎉\n\nWuerden Sie uns einen riesigen Gefallen tun und diese Bewertung auch auf Google hinterlassen? Das hilft anderen Fahrschuelern, uns zu finden.\n\nDauert nur 30 Sekunden:\n👉 {{ $env.GOOGLE_REVIEW_LINK }}\n\nVielen herzlichen Dank! 🙏"
+      },
+      "id": "send-google-link",
+      "name": "Google-Review Link senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        900,
+        700
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Vielen Dank fuer Ihr ehrliches Feedback! 🙏\n\nWir nehmen das sehr ernst und werden uns verbessern.\n\nMoechten Sie uns kurz sagen, was wir besser machen koennen? Wir lesen jede Nachricht.\n\nIhre Fahrschule"
+      },
+      "id": "send-internal-feedback",
+      "name": "Internes Feedback anfragen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        900,
+        920
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=⚠️ Feedback erhalten!\n\n📱 {{ $json.telefon }}\n⭐ Bewertung: {{ $json.bewertung }}/5\n\n{{ $json.bewertung >= 4 ? '✅ Positiv! Google-Review Link wurde gesendet.' : '❌ Negativ. Internes Feedback wurde angefragt. Bitte persoenlich nachfassen!' }}"
+      },
+      "id": "notify-inhaber",
+      "name": "Inhaber ueber Feedback informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        800
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"feedback_erhalten\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"{{ $json.istSehrGut ? 'google_link_gesendet' : 'intern_feedback' }}\",\n  \"details\": { \"bewertung\": {{ $json.bewertung }}, \"google_review\": \"{{ $json.istSehrGut ? 'angefragt' : 'nein' }}\" }\n}",
+        "options": {}
+      },
+      "id": "log-feedback-result",
+      "name": "Feedback-Ergebnis loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/schueler?telefon=eq.{{ $json.telefon }}&tenant_id=eq.{{ $env.TENANT_ID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"feedback_status\": \"{{ $json.istSehrGut ? 'google' : 'erhalten' }}\"\n}",
+        "options": {}
+      },
+      "id": "update-schueler-feedback",
+      "name": "Schueler feedback_status updaten (Ergebnis)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-1",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-2",
+      "name": "Webhook Response 2",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.schuelerTelefon || $json.telefon || 'unbekannt' }}\",\n  \"typ\": \"sendefehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"workflow\": \"Fahrschule Autopilot - Feedback & Google-Bewertungen (Production)\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-sendefehler",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Trigger - Schueler hat bestanden": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stuendlich pruefen": {
+      "main": [
+        [
+          {
+            "node": "Schueler laden (Production)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schueler laden (Production)": {
+      "main": [
+        [
+          {
+            "node": "Feedback-Kandidaten filtern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feedback-Kandidaten filtern": {
+      "main": [
+        [
+          {
+            "node": "Nur gueltige Kandidaten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nur gueltige Kandidaten": {
+      "main": [
+        [
+          {
+            "node": "Feedback anfragen per WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feedback anfragen per WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Feedback-Anfrage loggen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Schueler feedback_status updaten",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eingehende Feedback-Antwort": {
+      "main": [
+        [
+          {
+            "node": "Bewertung auswerten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bewertung auswerten": {
+      "main": [
+        [
+          {
+            "node": "5 Sterne oder weniger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 Sterne oder weniger": {
+      "main": [
+        [
+          {
+            "node": "Google-Review Link senden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Internes Feedback anfragen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google-Review Link senden": {
+      "main": [
+        [
+          {
+            "node": "Inhaber ueber Feedback informieren",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Internes Feedback anfragen": {
+      "main": [
+        [
+          {
+            "node": "Inhaber ueber Feedback informieren",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inhaber ueber Feedback informieren": {
+      "main": [
+        [
+          {
+            "node": "Feedback-Ergebnis loggen",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Schueler feedback_status updaten (Ergebnis)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sendefehler loggen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    {
+      "name": "Fahrschule Autopilot",
+      "id": "1"
+    },
+    {
+      "name": "Feedback",
+      "id": "4"
+    },
+    {
+      "name": "Google-Bewertungen",
+      "id": "5"
+    },
+    {
+      "name": "Supabase",
+      "id": "20"
+    }
+  ]
+}

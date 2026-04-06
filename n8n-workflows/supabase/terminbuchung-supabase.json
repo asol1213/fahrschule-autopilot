@@ -1,0 +1,718 @@
+{
+  "name": "Fahrschule Autopilot - Terminbuchung & Lehrer-Notification (Supabase)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "terminbuchung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-buchung",
+      "name": "Neue Buchung (Website/Chatbot)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "terminbuchung"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-buchung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-whatsapp",
+      "name": "Buchung per WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 600],
+      "webhookId": "whatsapp-buchung"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Buchungsdaten normalisieren (Website oder WhatsApp)\nconst body = $input.first().json.body || $input.first().json;\n\nlet schuelerName = body.name || body.schuelerName || body.Name || '';\nlet vorname = body.vorname || body.Vorname || '';\nlet nachname = body.nachname || body.Nachname || '';\nlet telefon = body.telefon || body.phone || body.Telefon || '';\nlet email = body.email || body.Email || '';\nlet wunschDatum = body.datum || body.date || body.Datum || '';\nlet wunschZeit = body.zeit || body.time || body.Zeit || body.Uhrzeit || '';\nlet terminArt = body.art || body.type || body.Art || 'Fahrstunde';\nlet fahrlehrerWunsch = body.fahrlehrer || body.instructor || body.Fahrlehrer || '';\nlet nachricht = body.nachricht || body.message || body.Nachricht || '';\nlet fuehrerscheinKlasse = body.klasse || body.Klasse || body.license_class || 'B';\n\n// Name aus vorname+nachname zusammensetzen falls noetig\nif (!schuelerName && vorname && nachname) {\n  schuelerName = `${vorname} ${nachname}`;\n}\nif (schuelerName && !vorname) {\n  const parts = schuelerName.split(' ');\n  vorname = parts[0] || '';\n  nachname = parts.slice(1).join(' ') || '';\n}\n\n// Telefonnummer bereinigen\ntelefon = telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\nif (telefon && !telefon.startsWith('+')) {\n  telefon = '+49' + telefon.replace(/^0/, '');\n}\n\n// Buchungs-ID generieren\nconst buchungsId = 'BK-' + Date.now().toString(36).toUpperCase();\n\nreturn [{\n  json: {\n    buchungsId,\n    schuelerName,\n    vorname,\n    nachname,\n    telefon,\n    email,\n    wunschDatum,\n    wunschZeit,\n    terminArt,\n    fahrlehrerWunsch,\n    fuehrerscheinKlasse,\n    nachricht,\n    eingang: new Date().toISOString(),\n    status: 'neu'\n  }\n}];"
+      },
+      "id": "normalize-buchung",
+      "name": "Buchung normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-name",
+              "leftValue": "={{ $json.schuelerName }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "check-telefon",
+              "leftValue": "={{ $json.telefon }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "validate-buchung",
+      "name": "Pflichtfelder pruefen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/buchungsanfragen",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"buchungs_id\": \"{{ $json.buchungsId }}\",\n  \"vorname\": \"{{ $json.vorname }}\",\n  \"nachname\": \"{{ $json.nachname }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"email\": \"{{ $json.email }}\",\n  \"wunsch_datum\": \"{{ $json.wunschDatum }}\",\n  \"wunsch_zeit\": \"{{ $json.wunschZeit }}\",\n  \"termin_art\": \"{{ $json.terminArt }}\",\n  \"fahrlehrer_wunsch\": \"{{ $json.fahrlehrerWunsch }}\",\n  \"fuehrerschein_klasse\": \"{{ $json.fuehrerscheinKlasse }}\",\n  \"nachricht\": \"{{ $json.nachricht }}\",\n  \"status\": \"neu\"\n}",
+        "options": {}
+      },
+      "id": "save-buchung",
+      "name": "Buchung in Supabase speichern",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/fahrlehrer?tenant_id=eq.{{ $env.TENANT_ID }}&aktiv=eq.true&select=id,vorname,nachname,telefon",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "options": { "response": { "response": { "fullResponse": false } } }
+      },
+      "id": "load-fahrlehrer",
+      "name": "Fahrlehrer laden (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, 580]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Zustaendigen Fahrlehrer bestimmen + DSGVO wa_opt_out pruefen\nconst buchung = $('Buchung in Supabase speichern').first().json;\nconst fahrlehrerListe = $('Fahrlehrer laden (Supabase)').all();\n\nif (!buchung) throw new Error('Keine Buchungsdaten empfangen');\n\nconst wunschLehrer = (buchung.fahrlehrer_wunsch || '').toLowerCase();\n\n// DSGVO: Schueler wa_opt_out aus Supabase laden\nlet schuelerOptOut = false;\ntry {\n  const supabaseUrl = $env.SUPABASE_URL;\n  const serviceKey = $env.SUPABASE_SERVICE_KEY;\n  const tenantId = $env.TENANT_ID;\n  const tel = buchung.telefon;\n  if (tel && supabaseUrl && serviceKey) {\n    const resp = await fetch(\n      `${supabaseUrl}/rest/v1/schueler?telefon=eq.${encodeURIComponent(tel)}&tenant_id=eq.${tenantId}&select=wa_opt_out`,\n      { headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` } }\n    );\n    const data = await resp.json();\n    if (Array.isArray(data) && data.length > 0 && data[0].wa_opt_out === true) {\n      schuelerOptOut = true;\n    }\n  }\n} catch(e) { /* Fehler beim Opt-Out Check - sicherheitshalber senden */ }\n\n// Erst aus DB suchen\nlet lehrerTelefon = '';\nlet lehrerName = 'Zustaendiger Fahrlehrer';\n\nif (wunschLehrer && fahrlehrerListe.length > 0) {\n  for (const item of fahrlehrerListe) {\n    const fl = item.json;\n    const flName = `${fl.vorname} ${fl.nachname}`.toLowerCase();\n    if (flName.includes(wunschLehrer) || wunschLehrer.includes(fl.nachname.toLowerCase())) {\n      lehrerTelefon = fl.telefon;\n      lehrerName = `${fl.vorname} ${fl.nachname}`;\n      break;\n    }\n  }\n}\n\n// Fallback: FAHRLEHRER_CONFIG env oder default\nif (!lehrerTelefon) {\n  try {\n    const config = JSON.parse($env.FAHRLEHRER_CONFIG || '{}');\n    if (wunschLehrer) {\n      for (const [name, tel] of Object.entries(config)) {\n        if (name === 'default') continue;\n        if (name.toLowerCase() === wunschLehrer || wunschLehrer.includes(name.toLowerCase())) {\n          lehrerTelefon = tel;\n          lehrerName = name;\n          break;\n        }\n      }\n    }\n    if (!lehrerTelefon) lehrerTelefon = config.default || '';\n  } catch(e) {}\n}\n\nif (!lehrerTelefon) {\n  lehrerTelefon = $env.FAHRLEHRER_TELEFON || $env.FAHRSCHULINHABER_TELEFON || '';\n}\n\n// Pass through original buchung fields for downstream nodes\nreturn [{\n  json: {\n    buchungsId: buchung.buchungs_id || buchung.buchungsId,\n    schuelerName: `${buchung.vorname} ${buchung.nachname}`,\n    telefon: buchung.telefon,\n    email: buchung.email,\n    wunschDatum: buchung.wunsch_datum,\n    wunschZeit: buchung.wunsch_zeit,\n    terminArt: buchung.termin_art,\n    fahrlehrerWunsch: buchung.fahrlehrer_wunsch,\n    fuehrerscheinKlasse: buchung.fuehrerschein_klasse,\n    nachricht: buchung.nachricht,\n    lehrerTelefon,\n    lehrerName,\n    schuelerOptOut\n  }\n}];"
+      },
+      "id": "find-lehrer",
+      "name": "Zustaendigen Fahrlehrer finden",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1180, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-dsgvo",
+              "leftValue": "={{ $json.schuelerOptOut }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "check-dsgvo",
+      "name": "DSGVO wa_opt_out pruefen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1300, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"terminbuchung_dsgvo_skip\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"uebersprungen\",\n  \"details\": {\n    \"grund\": \"wa_opt_out aktiv\",\n    \"buchungs_id\": \"{{ $json.buchungsId }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-dsgvo-skip",
+      "name": "DSGVO-Skip loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"terminbuchung_fehler\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"fehler\",\n  \"details\": {\n    \"buchungs_id\": \"{{ $json.buchungsId }}\",\n    \"fehler\": \"WhatsApp-Nachricht konnte nicht gesendet werden\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-send-error",
+      "name": "Sendefehler loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1700, 200]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.lehrerTelefon }}",
+        "body": "=📋 Neue Terminanfrage!\n\n🆔 {{ $json.buchungsId }}\n👤 {{ $json.schuelerName }}\n📱 {{ $json.telefon }}\n🚗 {{ $json.terminArt }} (Klasse {{ $json.fuehrerscheinKlasse }})\n📅 Wunsch: {{ $json.wunschDatum }} um {{ $json.wunschZeit }} Uhr\n{{ $json.fahrlehrerWunsch ? '👨‍🏫 Wunsch-Fahrlehrer: ' + $json.fahrlehrerWunsch : '' }}\n{{ $json.nachricht ? '💬 Nachricht: ' + $json.nachricht : '' }}\n\nBitte antworten Sie:\n✅ BESTAETIGEN {{ $json.buchungsId }}\n📅 ALTERNATIV {{ $json.buchungsId }} [neues Datum] [neue Zeit]\n❌ ABLEHNEN {{ $json.buchungsId }}"
+      },
+      "id": "notify-lehrer",
+      "name": "Fahrlehrer per WhatsApp benachrichtigen",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1520, 300],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nVielen Dank fuer Ihre Terminanfrage! ✅\n\n📋 Buchungs-Nr: {{ $json.buchungsId }}\n🚗 {{ $json.terminArt }}\n📅 Wunsch: {{ $json.wunschDatum }} um {{ $json.wunschZeit }} Uhr\n\nIhr Fahrlehrer wird sich in Kuerze bei Ihnen melden, um den Termin zu bestaetigen.\n\nBei Fragen antworten Sie einfach auf diese Nachricht.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "confirm-schueler",
+      "name": "Bestaetigung an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1520, 500],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"terminbuchung_eingang\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": {\n    \"buchungs_id\": \"{{ $json.buchungsId }}\",\n    \"termin_art\": \"{{ $json.terminArt }}\",\n    \"wunsch_datum\": \"{{ $json.wunschDatum }}\",\n    \"wunsch_zeit\": \"{{ $json.wunschZeit }}\",\n    \"fahrlehrer\": \"{{ $json.lehrerName }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-buchung",
+      "name": "Buchung loggen (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1660, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"buchungsId\": \"{{ $json.buchungsId }}\", \"message\": \"Terminanfrage erhalten\"}"
+      },
+      "id": "webhook-response",
+      "name": "API Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1660, 580]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lehrer-antwort",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-lehrer",
+      "name": "Fahrlehrer antwortet",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 900],
+      "webhookId": "lehrer-antwort"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Fahrlehrer-Antwort auswerten\nconst body = $input.first().json.body || $input.first().json;\nconst messageBody = (body.Body || body.body || '').trim().toUpperCase();\nconst from = (body.From || body.from || '').replace('whatsapp:', '').trim();\n\n// BESTAETIGEN BK-XXXXX\nif (messageBody.startsWith('BESTAETIGEN') || messageBody.startsWith('BESTÄTIGEN')) {\n  const buchungsId = messageBody.split(' ')[1] || '';\n  return [{\n    json: {\n      action: 'bestaetigt',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: '',\n      alternativZeit: ''\n    }\n  }];\n}\n\n// ALTERNATIV BK-XXXXX 29.03.2026 14:00\nif (messageBody.startsWith('ALTERNATIV')) {\n  const parts = messageBody.split(' ');\n  const buchungsId = parts[1] || '';\n  const altDatum = parts[2] || '';\n  const altZeit = parts[3] || '';\n  return [{\n    json: {\n      action: 'alternativ',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: altDatum,\n      alternativZeit: altZeit\n    }\n  }];\n}\n\n// ABLEHNEN BK-XXXXX\nif (messageBody.startsWith('ABLEHNEN')) {\n  const buchungsId = messageBody.split(' ')[1] || '';\n  return [{\n    json: {\n      action: 'abgelehnt',\n      buchungsId,\n      lehrerTelefon: from,\n      alternativDatum: '',\n      alternativZeit: ''\n    }\n  }];\n}\n\nreturn [{ json: { action: 'unbekannt', lehrerTelefon: from, message: messageBody } }];"
+      },
+      "id": "parse-lehrer-antwort",
+      "name": "Lehrer-Antwort auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 900]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-bestaetigt",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "bestaetigt",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-lehrer-action",
+      "name": "Bestaetigt oder Alternativ oder Abgelehnt",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [700, 900]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/buchungsanfragen?buchungs_id=eq.{{ $json.buchungsId }}&tenant_id=eq.{{ $env.TENANT_ID }}&select=*",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "options": { "response": { "response": { "fullResponse": false } } }
+      },
+      "id": "lookup-buchung",
+      "name": "Buchung nachschlagen (Supabase)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Buchungs-Daten fuer Nachricht aufbereiten + Aktion weiterleiten\nconst buchungArr = $('Buchung nachschlagen (Supabase)').all();\nconst lehrerAntwort = $('Lehrer-Antwort auswerten').first().json;\n\nif (!buchungArr || buchungArr.length === 0) {\n  return [{ json: { error: 'Buchung nicht gefunden', action: lehrerAntwort.action } }];\n}\n\nconst b = buchungArr[0].json;\n\nreturn [{\n  json: {\n    buchungsId: b.buchungs_id,\n    schuelerName: `${b.vorname} ${b.nachname}`,\n    telefon: b.telefon,\n    terminArt: b.termin_art,\n    wunschDatum: b.wunsch_datum,\n    wunschZeit: b.wunsch_zeit,\n    fuehrerscheinKlasse: b.fuehrerschein_klasse,\n    action: lehrerAntwort.action,\n    alternativDatum: lehrerAntwort.alternativDatum,\n    alternativZeit: lehrerAntwort.alternativZeit,\n    lehrerTelefon: lehrerAntwort.lehrerTelefon\n  }\n}];"
+      },
+      "id": "prepare-response",
+      "name": "Antwort-Daten aufbereiten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 800]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": []
+        },
+        "fallbackOutput": "extra",
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "bestaetigt",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "alternativ",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 1
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "abgelehnt",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ]
+              },
+              "outputIndex": 2
+            }
+          ]
+        }
+      },
+      "id": "switch-action-type",
+      "name": "Welche Aktion?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1360, 800]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Gute Nachricht, {{ $json.schuelerName }}! ✅🎉\n\nIhr Termin wurde bestaetigt!\n\n📋 {{ $json.buchungsId }}\n🚗 {{ $json.terminArt }}\n📅 {{ $json.wunschDatum }}\n🕐 {{ $json.wunschZeit }} Uhr\n\nWir freuen uns auf Sie! 🚗"
+      },
+      "id": "confirm-to-schueler",
+      "name": "Schueler - Termin bestaetigt",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1580, 680],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 📅\n\nIhr Wunschtermin ist leider nicht verfuegbar.\n\nIhr Fahrlehrer schlaegt vor:\n📅 {{ $json.alternativDatum }}\n🕐 {{ $json.alternativZeit }} Uhr\n\nPasst Ihnen das?\n✅ Antworten Sie mit JA\n❌ Antworten Sie mit NEIN\n\nIhre Fahrschule 🚗"
+      },
+      "id": "alternativ-to-schueler",
+      "name": "Schueler - Alternativtermin",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1580, 860],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "=Hallo {{ $json.schuelerName }},\n\nleider konnte Ihr Wunschtermin nicht bestaetigt werden. Wir melden uns in Kuerze mit alternativen Vorschlaegen.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "abgelehnt-to-schueler",
+      "name": "Schueler - Termin abgelehnt",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1580, 1040],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/buchungsanfragen?buchungs_id=eq.{{ $json.buchungsId }}&tenant_id=eq.{{ $env.TENANT_ID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"{{ $json.action }}\",\n  \"bearbeitet_am\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "update-buchung-status",
+      "name": "Buchungs-Status updaten",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Prefer", "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"tenant_id\": \"{{ $env.TENANT_ID }}\",\n  \"telefon\": \"{{ $json.telefon }}\",\n  \"typ\": \"terminbuchung_{{ $json.action }}\",\n  \"kanal\": \"whatsapp\",\n  \"status\": \"gesendet\",\n  \"details\": {\n    \"buchungs_id\": \"{{ $json.buchungsId }}\",\n    \"action\": \"{{ $json.action }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "log-lehrer-antwort",
+      "name": "Lehrer-Antwort loggen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 960]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-lehrer",
+      "name": "Webhook Response Lehrer",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2020, 900]
+    }
+  ],
+  "connections": {
+    "Neue Buchung (Website/Chatbot)": {
+      "main": [
+        [
+          { "node": "Buchung normalisieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung per WhatsApp": {
+      "main": [
+        [
+          { "node": "Buchung normalisieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung normalisieren": {
+      "main": [
+        [
+          { "node": "Pflichtfelder pruefen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Pflichtfelder pruefen": {
+      "main": [
+        [
+          { "node": "Buchung in Supabase speichern", "type": "main", "index": 0 },
+          { "node": "Fahrlehrer laden (Supabase)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung in Supabase speichern": {
+      "main": [
+        [
+          { "node": "Zustaendigen Fahrlehrer finden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer laden (Supabase)": {
+      "main": [
+        [
+          { "node": "Zustaendigen Fahrlehrer finden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Zustaendigen Fahrlehrer finden": {
+      "main": [
+        [
+          { "node": "DSGVO wa_opt_out pruefen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "DSGVO wa_opt_out pruefen": {
+      "main": [
+        [
+          { "node": "Fahrlehrer per WhatsApp benachrichtigen", "type": "main", "index": 0 },
+          { "node": "Bestaetigung an Schueler", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "DSGVO-Skip loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "DSGVO-Skip loggen": {
+      "main": [
+        [
+          { "node": "Buchung loggen (Supabase)", "type": "main", "index": 0 },
+          { "node": "API Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer per WhatsApp benachrichtigen": {
+      "main": [
+        [
+          { "node": "Buchung loggen (Supabase)", "type": "main", "index": 0 },
+          { "node": "API Response", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Sendefehler loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bestaetigung an Schueler": {
+      "main": [
+        [
+          { "node": "API Response", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Sendefehler loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer antwortet": {
+      "main": [
+        [
+          { "node": "Lehrer-Antwort auswerten", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Lehrer-Antwort auswerten": {
+      "main": [
+        [
+          { "node": "Bestaetigt oder Alternativ oder Abgelehnt", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bestaetigt oder Alternativ oder Abgelehnt": {
+      "main": [
+        [
+          { "node": "Buchung nachschlagen (Supabase)", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Buchung nachschlagen (Supabase)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Buchung nachschlagen (Supabase)": {
+      "main": [
+        [
+          { "node": "Antwort-Daten aufbereiten", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Antwort-Daten aufbereiten": {
+      "main": [
+        [
+          { "node": "Welche Aktion?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Welche Aktion?": {
+      "main": [
+        [
+          { "node": "Schueler - Termin bestaetigt", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Schueler - Alternativtermin", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Schueler - Termin abgelehnt", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler - Termin bestaetigt": {
+      "main": [
+        [
+          { "node": "Buchungs-Status updaten", "type": "main", "index": 0 },
+          { "node": "Lehrer-Antwort loggen", "type": "main", "index": 0 },
+          { "node": "Webhook Response Lehrer", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler - Alternativtermin": {
+      "main": [
+        [
+          { "node": "Buchungs-Status updaten", "type": "main", "index": 0 },
+          { "node": "Lehrer-Antwort loggen", "type": "main", "index": 0 },
+          { "node": "Webhook Response Lehrer", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler - Termin abgelehnt": {
+      "main": [
+        [
+          { "node": "Buchungs-Status updaten", "type": "main", "index": 0 },
+          { "node": "Lehrer-Antwort loggen", "type": "main", "index": 0 },
+          { "node": "Webhook Response Lehrer", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Terminbuchung", "id": "6" },
+    { "name": "Supabase", "id": "20" }
+  ]
+}

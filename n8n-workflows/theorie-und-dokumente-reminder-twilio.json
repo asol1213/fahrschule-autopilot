@@ -1,0 +1,221 @@
+{
+  "name": "Fahrschule Autopilot - Theorie-Trainer & Dokumente Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-daily",
+      "name": "Taeglich um 18 Uhr pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Schueler",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-schueler-reminder",
+      "name": "Schueler laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Reminder_Log",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-reminder-log",
+      "name": "Reminder-Log laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 420],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Theorie-Trainer Reminder + Dokumente-Erinnerung\nconst schueler = $('Schueler laden').all();\nconst logItems = $('Reminder-Log laden').all();\n\n// Cooldown: 7 Tage zwischen gleichen Reminder-Typen\nconst gesendetMap = {};\nfor (const item of logItems) {\n  const key = `${item.json.Telefon}_${item.json.Typ}`;\n  const datum = new Date(item.json.Gesendet_am);\n  if (!gesendetMap[key] || datum > gesendetMap[key]) {\n    gesendetMap[key] = datum;\n  }\n}\n\nconst now = new Date();\nconst results = [];\nconst COOLDOWN_TAGE = 7;\n\nfor (const item of schueler) {\n  const data = item.json;\n  \n  const name = data.Name || data.Schueler || '';\n  let telefon = data.Telefon || '';\n  const status = (data.Status || '').toLowerCase();\n  const theorieStatus = (data.Theorie_Status || data.theorie_status || '').toLowerCase();\n  const dokuStatus = (data.Dokumente_Status || '').toLowerCase();\n  const letzteTheorieAktivitaet = data.Letzte_Theorie_Aktivitaet || data.letzte_theorie || '';\n  const fehlendeDokumente = data.Fehlende_Dokumente || data.fehlende_dokumente || '';\n  \n  // Inaktive/abgemeldete Schueler ueberspringen\n  if (status === 'abgemeldet' || status === 'storniert' || status === 'bestanden') continue;\n  if (!telefon || !name) continue;\n  \n  telefon = telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) {\n    telefon = '+49' + telefon.replace(/^0/, '');\n  }\n  \n  // --- THEORIE-TRAINER REMINDER ---\n  // Nur wenn Schueler in Theorie-Phase ist und nicht schon bestanden hat\n  if (theorieStatus !== 'bestanden' && theorieStatus !== 'abgeschlossen') {\n    if (letzteTheorieAktivitaet) {\n      let letzteAktiv;\n      try { letzteAktiv = new Date(letzteTheorieAktivitaet); } catch(e) { letzteAktiv = null; }\n      \n      if (letzteAktiv && !isNaN(letzteAktiv.getTime())) {\n        const tageSeitLetzterAktivitaet = Math.floor((now.getTime() - letzteAktiv.getTime()) / (1000 * 60 * 60 * 24));\n        \n        if (tageSeitLetzterAktivitaet >= 3) {\n          const key = `${telefon}_theorie_reminder`;\n          const letzterReminder = gesendetMap[key];\n          const tageSeitReminder = letzterReminder ? Math.floor((now.getTime() - letzterReminder.getTime()) / (1000 * 60 * 60 * 24)) : 999;\n          \n          if (tageSeitReminder >= COOLDOWN_TAGE) {\n            const motivationsTexte = [\n              `Hallo ${name}! 📚\\n\\nSie haben ${tageSeitLetzterAktivitaet} Tage nicht im Theorie-Trainer geuebt. Bleiben Sie dran --- regelmaessiges Ueben ist der Schluessel zum Bestehen!\\n\\n🎯 Tagesziel: Nur 20 Fragen, das dauert ca. 10 Minuten.\\n\\n👉 Jetzt weiterlernen: ` + '{{ $env.WEBSITE_URL }}/theorie' + `\\n\\nSie schaffen das! 💪\\n\\nIhre Fahrschule 🚗`,\n              `Hi ${name}! 👋\\n\\nKleine Erinnerung: Der Theorie-Trainer wartet auf Sie! Letzte Aktivitaet war vor ${tageSeitLetzterAktivitaet} Tagen.\\n\\n💡 Wussten Sie? Schueler die taeglich ueben, bestehen die Pruefung beim ersten Versuch 40% haeufiger!\\n\\n📱 ` + '{{ $env.WEBSITE_URL }}/theorie' + `\\n\\nViel Erfolg! 🍀\\n\\nIhre Fahrschule`\n            ];\n            \n            results.push({\n              json: {\n                schuelerName: name,\n                schuelerTelefon: telefon,\n                typ: 'theorie_reminder',\n                nachricht: motivationsTexte[Math.floor(Math.random() * motivationsTexte.length)],\n                tageSeitAktivitaet: tageSeitLetzterAktivitaet\n              }\n            });\n          }\n        }\n      }\n    }\n  }\n  \n  // --- DOKUMENTE-ERINNERUNG ---\n  if (dokuStatus !== 'komplett' && dokuStatus !== 'vollstaendig' && fehlendeDokumente) {\n    const key = `${telefon}_dokumente_reminder`;\n    const letzterReminder = gesendetMap[key];\n    const tageSeitReminder = letzterReminder ? Math.floor((now.getTime() - letzterReminder.getTime()) / (1000 * 60 * 60 * 24)) : 999;\n    \n    if (tageSeitReminder >= COOLDOWN_TAGE) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          typ: 'dokumente_reminder',\n          nachricht: `Hallo ${name},\\n\\nkurze Erinnerung: Uns fehlen noch folgende Unterlagen von Ihnen:\\n\\n${fehlendeDokumente.split(',').map(d => '📎 ' + d.trim()).join('\\n')}\\n\\nBitte reichen Sie diese zeitnah ein, damit wir Ihren Antrag beim TUeV stellen koennen.\\n\\n💡 Sie koennen die Dokumente einfach als Foto per WhatsApp schicken!\\n\\nIhre Fahrschule`,\n          fehlendeDokumente\n        }\n      });\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-reminders",
+      "name": "Reminder-Kandidaten ermitteln",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-reminders",
+      "name": "Nur gueltige Reminders",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [920, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "={{ $json.nachricht }}"
+      },
+      "id": "send-reminder",
+      "name": "Reminder senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1140, 300],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Reminder_Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Schueler": "={{ $json.schuelerName }}",
+            "Telefon": "={{ $json.schuelerTelefon }}",
+            "Typ": "={{ $json.typ }}",
+            "Gesendet_am": "={{ $now.toISO() }}",
+            "Status": "gesendet"
+          }
+        }
+      },
+      "id": "log-reminder",
+      "name": "Reminder loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1380, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Taeglich um 18 Uhr pruefen": {
+      "main": [
+        [
+          { "node": "Schueler laden", "type": "main", "index": 0 },
+          { "node": "Reminder-Log laden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler laden": {
+      "main": [
+        [
+          { "node": "Reminder-Kandidaten ermitteln", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Reminder-Log laden": {
+      "main": [
+        [
+          { "node": "Reminder-Kandidaten ermitteln", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Reminder-Kandidaten ermitteln": {
+      "main": [
+        [
+          { "node": "Nur gueltige Reminders", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Nur gueltige Reminders": {
+      "main": [
+        [
+          { "node": "Reminder senden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Reminder senden": {
+      "main": [
+        [
+          { "node": "Reminder loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Theorie", "id": "11" },
+    { "name": "Dokumente", "id": "12" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

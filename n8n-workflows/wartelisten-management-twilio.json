@@ -1,0 +1,533 @@
+{
+  "name": "Fahrschule Autopilot - Wartelisten-Management",
+  "nodes": [
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "termin-absage",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-absage-wl",
+      "name": "Terminabsage empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "termin-absage"
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// Absage-Payload normalisieren\nconst body = $input.first().json.body || $input.first().json;\n\nconst datum     = body.datum      || body.Datum      || '';\nconst zeit      = body.zeit       || body.Zeit       || body.Uhrzeit || '';\nconst fahrlehrer = body.fahrlehrer || body.Fahrlehrer || '';\nconst art       = body.art        || body.Art        || 'Fahrstunde';\nconst abgesagtVon  = body.schueler || body.Schueler || body.name || '';\nconst quelle    = body.quelle     || 'manuell';\nlet   abgesagtTelefon = (body.telefon || body.Telefon || '').toString();\n\nabgesagtTelefon = abgesagtTelefon.replace(/[\\s\\-\\/\\(\\)]/g, '');\nif (abgesagtTelefon && !abgesagtTelefon.startsWith('+')) {\n  abgesagtTelefon = '+49' + abgesagtTelefon.replace(/^0/, '');\n}\n\nconst slotId = `${datum}_${zeit.replace(':','')}_ ${fahrlehrer}`.replace(/\\s+/g, '_');\n\nreturn [{ json: { datum, zeit, fahrlehrer, art, abgesagtVon, abgesagtTelefon, slotId, quelle, timestamp: new Date().toISOString() } }];"
+      },
+      "id": "parse-absage",
+      "name": "Absage normalisieren",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true, "value": "SPREADSHEET_ID_HIER", "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true, "value": "Warteliste", "mode": "name"
+        }
+      },
+      "id": "gsheets-warteliste",
+      "name": "Warteliste laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [660, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS", "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// Top-3 passende Schueler von der Warteliste ermitteln\nconst warteliste = $('Warteliste laden').all();\nconst slot = $('Absage normalisieren').first().json;\n\nconst kandidaten = [];\n\nfor (const item of warteliste) {\n  const d = item.json;\n  const status = (d.Status || '').toLowerCase();\n  if (status === 'gebucht' || status === 'abgesagt' || status === 'abgelaufen') continue;\n\n  const name = d.Schueler || d.Name || '';\n  let telefon = (d.Telefon || '').toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) telefon = '+49' + telefon.replace(/^0/, '');\n  if (!name || !telefon) continue;\n\n  const wunschTage   = (d.Wunsch_Tage   || '').toLowerCase();\n  const wunschLehrer = (d.Fahrlehrer    || '').toLowerCase();\n  const prioritaet   = parseInt(d.Prioritaet || '5', 10);\n\n  // Score-System: je hoeher, desto bevorzugter\n  let score = 10 - Math.min(prioritaet, 9);\n\n  // Bonus: Wunsch-Fahrlehrer stimmt ueberein\n  if (wunschLehrer && slot.fahrlehrer && slot.fahrlehrer.toLowerCase().includes(wunschLehrer)) score += 5;\n\n  // Bonus: Wunschtag stimmt ueberein (grober Check)\n  if (wunschTage && slot.datum) {\n    const wochentage = ['montag','dienstag','mittwoch','donnerstag','freitag','samstag'];\n    const slotTag = new Date(slot.datum).getDay(); // 0=So, 1=Mo ...\n    const tagName = wochentage[slotTag - 1] || '';\n    if (tagName && wunschTage.includes(tagName)) score += 3;\n  }\n\n  kandidaten.push({ json: { schuelerName: name, schuelerTelefon: telefon, score, rowIndex: d.row_number || 0, ...slot } });\n}\n\nkandidaten.sort((a, b) => b.json.score - a.json.score);\nconst top3 = kandidaten.slice(0, 3);\n\nreturn top3.length > 0 ? top3 : [{ json: { skip: true, ...slot } }];"
+      },
+      "id": "match-warteliste",
+      "name": "Top-3 Kandidaten ermitteln",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 300]
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "notTrue" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-kandidaten",
+      "name": "Kandidaten vorhanden?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1100, 300]
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 🚗\n\nEin kurzfristiger Fahrstunden-Slot ist frei geworden!\n\n📅 {{ $json.datum }}\n🕐 {{ $json.zeit }} Uhr\n🚗 {{ $json.art }}\n{{ $json.fahrlehrer ? '👤 ' + $json.fahrlehrer : '' }}\n\nMoechten Sie diesen Termin uebernehmen?\n\n✅ Antworten Sie mit JA\n❌ Antworten Sie mit NEIN\n\n⏰ Das Angebot gilt fuer 4 Stunden. Wir melden uns, sobald der Termin vergeben ist.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "send-warteliste-angebot",
+      "name": "Wartelisten-Angebot senden",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1320, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true, "value": "SPREADSHEET_ID_HIER", "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true, "value": "Wartelisten_Log", "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Slot_ID":       "={{ $json.slotId }}",
+            "Datum":         "={{ $json.datum }}",
+            "Zeit":          "={{ $json.zeit }}",
+            "Art":           "={{ $json.art }}",
+            "Fahrlehrer":    "={{ $json.fahrlehrer }}",
+            "Abgesagt_von":  "={{ $json.abgesagtVon }}",
+            "Angeboten_an":  "={{ $json.schuelerName }}",
+            "Telefon":       "={{ $json.schuelerTelefon }}",
+            "Gesendet_am":   "={{ $now.toISO() }}",
+            "Ablauf_um":     "={{ $now.plus({ hours: 4 }).toISO() }}",
+            "Status":        "angeboten"
+          }
+        }
+      },
+      "id": "log-warteliste-angebot",
+      "name": "Angebot ins Log schreiben",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1540, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS", "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRLEHRER_TELEFON }}",
+        "body": "=📋 Absage + Warteliste aktiviert\n\n❌ Abgesagt: {{ $json.abgesagtVon }}\n📅 {{ $json.datum }} um {{ $json.zeit }} Uhr\n🚗 {{ $json.art }}\n\n✅ Top-3 Kandidaten der Warteliste wurden kontaktiert.\n⏰ Angebot gilt 4 Stunden."
+      },
+      "id": "notify-lehrer-absage",
+      "name": "Fahrlehrer informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1320, 420],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRSCHULINHABER_TELEFON }}",
+        "body": "=⚠️ Warteliste leer!\n\nFuer den freien Slot ({{ $json.datum }}, {{ $json.zeit }} Uhr) konnten keine passenden Kandidaten auf der Warteliste gefunden werden.\n\nBitte manuell nach Ersatz suchen oder den Slot freigeben."
+      },
+      "id": "notify-no-kandidaten",
+      "name": "Inhaber - keine Kandidaten",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1100, 500],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"success\": true, \"message\": \"Warteliste aktiviert\"}"
+      },
+      "id": "webhook-response-wl",
+      "name": "API Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1540, 420]
+    },
+
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "trigger-timeout-check",
+      "name": "Stündlicher Timeout-Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 750]
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true, "value": "SPREADSHEET_ID_HIER", "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true, "value": "Wartelisten_Log", "mode": "name"
+        }
+      },
+      "id": "gsheets-wartelisten-log",
+      "name": "Wartelisten-Log laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 750],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS", "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// Abgelaufene Angebote finden (Status=angeboten AND Ablauf_um < jetzt)\nconst logItems = $input.all();\nconst now = new Date();\nconst abgelaufen = [];\n\n// Alle Slot-IDs mit abgelaufenen Angeboten sammeln\nconst slotMap = {}; // slotId -> { items: [], allAbgelaufen: bool }\n\nfor (const item of logItems) {\n  const d = item.json;\n  if ((d.Status || '').toLowerCase() !== 'angeboten') continue;\n\n  const ablaufStr = d.Ablauf_um || '';\n  if (!ablaufStr) continue;\n\n  let ablauf;\n  try { ablauf = new Date(ablaufStr); } catch(e) { continue; }\n  if (isNaN(ablauf.getTime())) continue;\n\n  const istAbgelaufen = ablauf < now;\n  const slotId = d.Slot_ID || '';\n\n  if (!slotMap[slotId]) slotMap[slotId] = { items: [], hatAktives: false };\n  slotMap[slotId].items.push({ ...d, istAbgelaufen, rowIndex: item.json.row_number || 0 });\n  if (!istAbgelaufen) slotMap[slotId].hatAktives = true;\n}\n\n// Nur Slots bei denen ALLE Angebote abgelaufen und keiner JA gesagt hat\nconst results = [];\nfor (const [slotId, data] of Object.entries(slotMap)) {\n  if (data.hatAktives) continue; // Noch aktive Angebote vorhanden\n  const hatJa = data.items.some(i => (i.Status || '').toLowerCase() === 'angenommen');\n  if (hatJa) continue; // Jemand hat schon JA gesagt\n\n  const hatAbgelaufen = data.items.some(i => i.istAbgelaufen);\n  if (!hatAbgelaufen) continue;\n\n  // Erstes Item als Repr\u00e4sentant nehmen\n  const repr = data.items[0];\n  const schonAlarmiert = data.items.some(i => (i.Status || '').toLowerCase() === 'abgelaufen_alarmiert');\n  if (schonAlarmiert) continue;\n\n  results.push({\n    json: {\n      slotId,\n      datum: repr.Datum,\n      zeit: repr.Zeit,\n      art: repr.Art,\n      fahrlehrer: repr.Fahrlehrer,\n      anzahlKontaktiert: data.items.length\n    }\n  });\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "check-expired-offers",
+      "name": "Abgelaufene Angebote pruefen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 750]
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "filter-skip-timeout",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "notTrue" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-expired",
+      "name": "Abgelaufene vorhanden?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [880, 750]
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRLEHRER_TELEFON }}",
+        "body": "=⏰ Wartelisten-Angebot abgelaufen!\n\n📅 {{ $json.datum }} | {{ $json.zeit }} Uhr\n🚗 {{ $json.art }}\n{{ $json.fahrlehrer ? '👤 ' + $json.fahrlehrer : '' }}\n\n{{ $json.anzahlKontaktiert }} Schueler wurden kontaktiert, aber niemand hat innerhalb von 4 Stunden reagiert.\n\n👉 Bitte den Slot manuell neu vergeben oder freigeben."
+      },
+      "id": "alert-timeout",
+      "name": "Timeout-Alarm an Fahrlehrer",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1100, 700],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true, "value": "SPREADSHEET_ID_HIER", "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true, "value": "Wartelisten_Log", "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Slot_ID":      "={{ $json.slotId }}",
+            "Datum":        "={{ $json.datum }}",
+            "Zeit":         "={{ $json.zeit }}",
+            "Alarm_am":     "={{ $now.toISO() }}",
+            "Status":       "abgelaufen_alarmiert"
+          }
+        }
+      },
+      "id": "log-timeout",
+      "name": "Timeout loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1320, 750],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS", "name": "Google Sheets"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "warteliste-antwort",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-wl-antwort",
+      "name": "Schueler antwortet auf Angebot",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 1100],
+      "webhookId": "warteliste-antwort"
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// JA / NEIN Response des Schuelers verarbeiten\nconst body = $input.first().json.body || $input.first().json;\nconst from = (body.From || body.from || '').replace('whatsapp:', '').trim();\nconst msg  = (body.Body || body.body || '').trim().toUpperCase();\n\nconst hatJa   = msg === 'JA' || msg === 'YES' || msg === 'OK';\nconst hatNein = msg === 'NEIN' || msg === 'NO' || msg === 'NEIN DANKE';\n\nreturn [{ json: { from, msg, hatJa, hatNein } }];"
+      },
+      "id": "parse-wl-antwort",
+      "name": "Antwort auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 1100]
+    },
+
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": []
+        },
+        "fallbackOutput": "extra",
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  { "leftValue": "={{ $json.hatJa }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }
+                ]
+              },
+              "outputIndex": 0
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  { "leftValue": "={{ $json.hatNein }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }
+                ]
+              },
+              "outputIndex": 1
+            }
+          ]
+        }
+      },
+      "id": "switch-ja-nein",
+      "name": "JA oder NEIN?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [660, 1100]
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "=Super! 🎉\n\nWir haben Ihre Zusage erhalten und bestaetigen Ihnen den Termin in Kuerze.\n\nIhr Fahrlehrer wird sich melden.\n\nIhre Fahrschule 🚗"
+      },
+      "id": "confirm-ja",
+      "name": "JA-Bestaetigung an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [880, 1020],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRLEHRER_TELEFON }}",
+        "body": "=✅ Warteliste: ZUSAGE!\n\n📱 {{ $json.from }} hat JA gesagt.\n\nBitte Termin bestaetigen und den Schueler im Kalender eintragen."
+      },
+      "id": "notify-lehrer-ja",
+      "name": "Fahrlehrer ueber Zusage informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [880, 1140],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.from }}",
+        "body": "Kein Problem! Wir schauen ob ein anderer Termin fuer Sie passt. Wir melden uns bei der naechsten Gelegenheit. 🙂"
+      },
+      "id": "confirm-nein",
+      "name": "NEIN-Bestaetigung an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [880, 1280],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS", "name": "Twilio"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response-antwort",
+      "name": "Webhook Response Antwort",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1100, 1100]
+    }
+
+  ],
+  "connections": {
+    "Terminabsage empfangen": {
+      "main": [[{ "node": "Absage normalisieren", "type": "main", "index": 0 }]]
+    },
+    "Absage normalisieren": {
+      "main": [[{ "node": "Warteliste laden", "type": "main", "index": 0 }]]
+    },
+    "Warteliste laden": {
+      "main": [[{ "node": "Top-3 Kandidaten ermitteln", "type": "main", "index": 0 }]]
+    },
+    "Top-3 Kandidaten ermitteln": {
+      "main": [[{ "node": "Kandidaten vorhanden?", "type": "main", "index": 0 }]]
+    },
+    "Kandidaten vorhanden?": {
+      "main": [
+        [
+          { "node": "Wartelisten-Angebot senden", "type": "main", "index": 0 },
+          { "node": "Fahrlehrer informieren", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Wartelisten-Angebot senden": {
+      "main": [[{ "node": "Angebot ins Log schreiben", "type": "main", "index": 0 }]]
+    },
+    "Angebot ins Log schreiben": {
+      "main": [[{ "node": "API Response", "type": "main", "index": 0 }]]
+    },
+    "Fahrlehrer informieren": {
+      "main": [[{ "node": "API Response", "type": "main", "index": 0 }]]
+    },
+    "Stündlicher Timeout-Check": {
+      "main": [[{ "node": "Wartelisten-Log laden", "type": "main", "index": 0 }]]
+    },
+    "Wartelisten-Log laden": {
+      "main": [[{ "node": "Abgelaufene Angebote pruefen", "type": "main", "index": 0 }]]
+    },
+    "Abgelaufene Angebote pruefen": {
+      "main": [[{ "node": "Abgelaufene vorhanden?", "type": "main", "index": 0 }]]
+    },
+    "Abgelaufene vorhanden?": {
+      "main": [
+        [
+          { "node": "Timeout-Alarm an Fahrlehrer", "type": "main", "index": 0 },
+          { "node": "Timeout loggen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Schueler antwortet auf Angebot": {
+      "main": [[{ "node": "Antwort auswerten", "type": "main", "index": 0 }]]
+    },
+    "Antwort auswerten": {
+      "main": [[{ "node": "JA oder NEIN?", "type": "main", "index": 0 }]]
+    },
+    "JA oder NEIN?": {
+      "main": [
+        [
+          { "node": "JA-Bestaetigung an Schueler", "type": "main", "index": 0 },
+          { "node": "Fahrlehrer ueber Zusage informieren", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "NEIN-Bestaetigung an Schueler", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "JA-Bestaetigung an Schueler": {
+      "main": [[{ "node": "Webhook Response Antwort", "type": "main", "index": 0 }]]
+    },
+    "NEIN-Bestaetigung an Schueler": {
+      "main": [[{ "node": "Webhook Response Antwort", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Warteliste", "id": "15" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

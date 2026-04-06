@@ -1,0 +1,5 @@
+Rechnungs_Nr,Schueler,Telefon,Betrag,Beschreibung,Faellig,Status
+RE-2026-001,Max Mustermann,+491721234567,180,Grundgebuehr Klasse B,2026-03-15,offen
+RE-2026-002,Tom Klein,+491741234567,65,5 Fahrstunden a 65 EUR,2026-03-10,offen
+RE-2026-003,Lisa Weber,+491731234567,250,Pruefungsgebuehr + Fahrstunden,2026-03-01,offen
+RE-2026-004,Anna Schmidt,+491751234567,120,Restbetrag,2026-03-25,bezahlt

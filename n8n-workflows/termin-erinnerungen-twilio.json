@@ -1,0 +1,453 @@
+{
+  "name": "Fahrschule Autopilot - Termin-Erinnerungen (Twilio)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "trigger-1",
+      "name": "Alle 15 Min pruefen",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Termine",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-termine",
+      "name": "Termine aus Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Gesendet",
+          "mode": "name"
+        }
+      },
+      "id": "gsheets-gesendet",
+      "name": "Bereits gesendet laden",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [440, 500],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Termine verarbeiten und mit \"Gesendet\"-Liste abgleichen\nconst termine = $('Termine aus Google Sheets').all();\nconst gesendetItems = $('Bereits gesendet laden').all();\n\n// Set von bereits gesendeten Erinnerungen\nconst gesendet = new Set();\nfor (const item of gesendetItems) {\n  const key = `${item.json.Telefon}_${item.json.Datum}_${item.json.Uhrzeit}_${item.json.Typ}`;\n  gesendet.add(key);\n}\n\nconst now = new Date();\nconst results = [];\n\nfor (const item of termine) {\n  const data = item.json;\n  \n  // Pflichtfelder pruefen\n  const datum = data.Datum || data.datum;\n  const zeit = data.Uhrzeit || data.uhrzeit || data.Zeit || '09:00';\n  const name = data.Schueler || data.Name || data.schueler || data.name || '';\n  let telefon = data.Telefon || data.telefon || data.Handy || data.handy || data.WhatsApp || '';\n  const fahrlehrer = data.Fahrlehrer || data.fahrlehrer || data.Lehrer || '';\n  const art = data.Art || data.art || data.Typ || 'Fahrstunde';\n  const status = (data.Status || data.status || '').toLowerCase();\n  \n  // Abgesagte Termine ueberspringen\n  if (status === 'abgesagt' || status === 'cancelled' || status === 'storniert') continue;\n  if (!datum || !telefon || !name) continue;\n  \n  // Telefonnummer bereinigen\n  telefon = telefon.toString().replace(/[\\s\\-\\/\\(\\)]/g, '');\n  if (!telefon.startsWith('+')) {\n    telefon = '+49' + telefon.replace(/^0/, '');\n  }\n  \n  // Termin-Zeitpunkt berechnen\n  let terminDatum;\n  try {\n    // Verschiedene Datumsformate unterstuetzen\n    if (datum.includes('.')) {\n      // DD.MM.YYYY Format\n      const parts = datum.split('.');\n      terminDatum = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}T${zeit}:00`);\n    } else {\n      // YYYY-MM-DD Format\n      terminDatum = new Date(`${datum}T${zeit}:00`);\n    }\n  } catch(e) {\n    continue;\n  }\n  \n  if (isNaN(terminDatum.getTime())) continue;\n  \n  // Stunden bis zum Termin\n  const stundenBis = (terminDatum.getTime() - now.getTime()) / (1000 * 60 * 60);\n  \n  // 24h Erinnerung (23-25h vorher)\n  if (stundenBis >= 23 && stundenBis <= 25) {\n    const key = `${telefon}_${datum}_${zeit}_24h`;\n    if (!gesendet.has(key)) {\n      const optionen = { weekday: 'long', day: 'numeric', month: 'long' };\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          fahrlehrerName: fahrlehrer,\n          terminArt: art,\n          terminDatum: datum,\n          terminZeit: zeit,\n          terminDatumFormatiert: terminDatum.toLocaleDateString('de-DE', optionen),\n          terminZeitFormatiert: zeit,\n          erinnerungsTyp: '24h',\n          stundenBisTermin: Math.round(stundenBis * 10) / 10\n        }\n      });\n    }\n  }\n  \n  // 2h Erinnerung (1.5-2.5h vorher)\n  if (stundenBis >= 1.5 && stundenBis <= 2.5) {\n    const key = `${telefon}_${datum}_${zeit}_2h`;\n    if (!gesendet.has(key)) {\n      results.push({\n        json: {\n          schuelerName: name,\n          schuelerTelefon: telefon,\n          fahrlehrerName: fahrlehrer,\n          terminArt: art,\n          terminDatum: datum,\n          terminZeit: zeit,\n          terminDatumFormatiert: terminDatum.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }),\n          terminZeitFormatiert: zeit,\n          erinnerungsTyp: '2h',\n          stundenBisTermin: Math.round(stundenBis * 10) / 10\n        }\n      });\n    }\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { skip: true } }];"
+      },
+      "id": "process-1",
+      "name": "Termine verarbeiten + Duplikate filtern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "filter-1",
+      "name": "Nur gueltige Erinnerungen",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [920, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-24h",
+              "leftValue": "={{ $json.erinnerungsTyp }}",
+              "rightValue": "24h",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-type",
+      "name": "24h oder 2h",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1140, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! 👋\n\nKurze Erinnerung an morgen:\n\n📅 {{ $json.terminDatumFormatiert }}\n🕐 {{ $json.terminZeitFormatiert }} Uhr\n🚗 {{ $json.terminArt }}\n👤 {{ $json.fahrlehrerName }}\n\nBitte denken Sie an:\n✅ Personalausweis\n✅ Festes Schuhwerk\n✅ Brille (falls noetig)\n\nKoennen Sie den Termin nicht wahrnehmen?\nAntworten Sie bitte mit ABSAGE.\n\nWir freuen uns auf Sie! 🚗"
+      },
+      "id": "twilio-24h",
+      "name": "WhatsApp 24h Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1360, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.schuelerTelefon }}",
+        "body": "=Hallo {{ $json.schuelerName }}! ⏰\n\nIhre {{ $json.terminArt }} beginnt in 2 Stunden!\n\n🕐 {{ $json.terminZeitFormatiert }} Uhr\n👤 {{ $json.fahrlehrerName }}\n\nBitte seien Sie 5 Minuten vorher da.\nWir freuen uns auf Sie! 🚗💨"
+      },
+      "id": "twilio-2h",
+      "name": "WhatsApp 2h Erinnerung",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1360, 400],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID_HIER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Gesendet",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefon": "={{ $json.schuelerTelefon }}",
+            "Datum": "={{ $json.terminDatum }}",
+            "Uhrzeit": "={{ $json.terminZeit }}",
+            "Typ": "={{ $json.erinnerungsTyp }}",
+            "Schueler": "={{ $json.schuelerName }}",
+            "Gesendet_am": "={{ $now.toISO() }}",
+            "Status": "gesendet"
+          }
+        }
+      },
+      "id": "log-gesendet",
+      "name": "In Gesendet-Sheet loggen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1580, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CREDENTIALS",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.WEBHOOK_NOTIFY_URL }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "=✅ Erinnerung gesendet!\n👤 {{ $json.schuelerName }}\n📱 {{ $json.schuelerTelefon }}\n📅 {{ $json.terminDatumFormatiert }} {{ $json.terminZeitFormatiert }}\n🔔 {{ $json.erinnerungsTyp }} Erinnerung"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "notify-owner",
+      "name": "Fahrschulinhaber benachrichtigen (optional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1580, 500],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-incoming",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-absage",
+      "name": "Eingehende WhatsApp Antwort",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 700],
+      "webhookId": "whatsapp-incoming"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Eingehende Nachricht verarbeiten\nconst body = $input.first().json.body || $input.first().json;\nconst messageBody = (body.Body || body.body || '').trim().toUpperCase();\nconst from = body.From || body.from || '';\n\n// Nummer extrahieren\nconst telefon = from.replace('whatsapp:', '').trim();\n\nif (messageBody === 'ABSAGE' || messageBody === 'CANCEL' || messageBody === 'STORNIEREN') {\n  return [{\n    json: {\n      action: 'absage',\n      telefon,\n      message: messageBody,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}\n\nif (messageBody === 'OK' || messageBody === 'JA' || messageBody === 'BESTÄTIGT') {\n  return [{\n    json: {\n      action: 'bestaetigung',\n      telefon,\n      message: messageBody,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    action: 'unbekannt',\n    telefon,\n    message: messageBody,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "parse-response",
+      "name": "Antwort auswerten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 700]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-absage",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "absage",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "switch-action",
+      "name": "Absage oder Bestaetigung",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [660, 700]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $env.FAHRLEHRER_TELEFON }}",
+        "body": "=⚠️ ABSAGE eingegangen!\n\n📱 {{ $json.telefon }}\n🕐 {{ $now.toLocaleString('de-DE') }}\n\nBitte pruefen Sie den Terminkalender und kontaktieren Sie ggf. den naechsten Schueler auf der Warteliste."
+      },
+      "id": "notify-absage",
+      "name": "Fahrlehrer ueber Absage informieren",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [880, 650],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "={{ $env.TWILIO_WHATSAPP_FROM }}",
+        "to": "=whatsapp:{{ $json.telefon }}",
+        "body": "Vielen Dank fuer Ihre Absage. Wir haben Ihren Fahrlehrer informiert. Falls Sie einen neuen Termin buchen moechten, melden Sie sich gerne bei uns. 🚗"
+      },
+      "id": "confirm-absage",
+      "name": "Absage bestaetigen an Schueler",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [880, 800],
+      "credentials": {
+        "twilioApi": {
+          "id": "TWILIO_CREDENTIALS",
+          "name": "Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1100, 700]
+    }
+  ],
+  "connections": {
+    "Alle 15 Min pruefen": {
+      "main": [
+        [
+          { "node": "Termine aus Google Sheets", "type": "main", "index": 0 },
+          { "node": "Bereits gesendet laden", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Termine aus Google Sheets": {
+      "main": [
+        [
+          { "node": "Termine verarbeiten + Duplikate filtern", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Bereits gesendet laden": {
+      "main": [
+        [
+          { "node": "Termine verarbeiten + Duplikate filtern", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Termine verarbeiten + Duplikate filtern": {
+      "main": [
+        [
+          { "node": "Nur gueltige Erinnerungen", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Nur gueltige Erinnerungen": {
+      "main": [
+        [
+          { "node": "24h oder 2h", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "24h oder 2h": {
+      "main": [
+        [
+          { "node": "WhatsApp 24h Erinnerung", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "WhatsApp 2h Erinnerung", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "WhatsApp 24h Erinnerung": {
+      "main": [
+        [
+          { "node": "In Gesendet-Sheet loggen", "type": "main", "index": 0 },
+          { "node": "Fahrschulinhaber benachrichtigen (optional)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "WhatsApp 2h Erinnerung": {
+      "main": [
+        [
+          { "node": "In Gesendet-Sheet loggen", "type": "main", "index": 0 },
+          { "node": "Fahrschulinhaber benachrichtigen (optional)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Eingehende WhatsApp Antwort": {
+      "main": [
+        [
+          { "node": "Antwort auswerten", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Antwort auswerten": {
+      "main": [
+        [
+          { "node": "Absage oder Bestaetigung", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Absage oder Bestaetigung": {
+      "main": [
+        [
+          { "node": "Fahrlehrer ueber Absage informieren", "type": "main", "index": 0 },
+          { "node": "Absage bestaetigen an Schueler", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Webhook Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Fahrlehrer ueber Absage informieren": {
+      "main": [
+        [
+          { "node": "Webhook Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Absage bestaetigen an Schueler": {
+      "main": [
+        [
+          { "node": "Webhook Response", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "Fahrschule Autopilot", "id": "1" },
+    { "name": "Termin-Erinnerungen", "id": "2" },
+    { "name": "Twilio", "id": "3" }
+  ]
+}

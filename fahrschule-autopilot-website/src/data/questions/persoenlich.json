@@ -1,0 +1,393 @@
+[
+  {
+    "id": "1.8.01-003",
+    "category": "persoenlich",
+    "question": "Wann werden im Fahreignungsregister eingetragene Ordnungswidrigkeiten getilgt, die mit zwei Punkten bewertet wurden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- 5 Jahren",
+        "correct": true
+      },
+      {
+        "text": "- 3 Jahren",
+        "correct": false
+      },
+      {
+        "text": "- 2 Jahren",
+        "correct": false
+      }
+    ],
+    "explanation": "Eingetragene Ordnungswidrigkeiten, die im Fahreignungsregister mit zwei Punkten bewertet und eingetragen wurden, verjähren erst nach fünf Jahren. Schwere Verstöße werden immer mit zwei Punkten geahndet.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.8.01-001",
+    "category": "persoenlich",
+    "question": "Wie lange dauert normalerweise die Probezeit?",
+    "image": null,
+    "answers": [
+      {
+        "text": "2 Jahre",
+        "correct": true
+      },
+      {
+        "text": "1 Jahr",
+        "correct": false
+      },
+      {
+        "text": "3 Jahre",
+        "correct": false
+      }
+    ],
+    "explanation": "Im Normalfall dauert die Probezeit 2 Jahre. Es gibt aber auch Situationen, in denen sie auf bis zu 4 Jahre verlängert werden kann.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-009",
+    "category": "persoenlich",
+    "question": "Sie befinden sich in der Probezeit und sind bisher nicht auffällig geworden. Welche Folgen können eintreten, wenn Sie an dem Verkehrszeichen „Halt. Vorfahrt gewähren.“ nicht anhalten und dadurch andere Verkehrsteilnehmer gefährden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Anordnung zur Teilnahme an einem Aufbauseminar für Fahranfänger",
+        "correct": true
+      },
+      {
+        "text": "Eintrag in das Fahreignungsregister",
+        "correct": true
+      },
+      {
+        "text": "Anordnung zum erneuten Ablegen einer theoretischen Fahrerlaubnisprüfung",
+        "correct": false
+      }
+    ],
+    "explanation": "Das Nichtbeachten des Verkehrszeichens „Halt. Vorfahrt gewähren“ ist ein schwerwiegender Verstoß, ein A-Verstoß, der in das Fahreignungsregister eingetragen wird. Bei einem A-Verstoß oder zwei weniger schwerwiegenden Verstößen (B-Verstößen) innerhalb der Probezeit müssen Sie als FahranfängerIn an einem Aufbauseminar teilnehmen. Die Prüfung müssen Sie deswegen nicht erneut ablegen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-010",
+    "category": "persoenlich",
+    "question": "Was soll mit der Teilnahme an einem Aufbauseminar innerhalb der Probezeit erreicht werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Eine rücksichtsvollere und risikobewusstere Einstellung zum Straßenverkehr",
+        "correct": true
+      },
+      {
+        "text": "Eine Verbesserung der Gefahrenerkennung",
+        "correct": true
+      },
+      {
+        "text": "Ein Abbau der Punkte im Fahreignungsregister",
+        "correct": false
+      }
+    ],
+    "explanation": "Mit einer Teilnahme am Aufbauseminar für Fahranfänger in der Probezeit (ASF) sollen Sie als Kfz-FahrerIn Ihr tägliches Fahrverhalten analysieren lernen und Ihr Bewusstsein für Gefahrensituationen schärfen. Punkte können mit dem Seminar nicht abgebaut werden. Diese Aufgabe übernehmen die Fahreignungsseminare (FES).",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-011",
+    "category": "persoenlich",
+    "question": "Aufgrund mehrerer Verstöße innerhalb der Probezeit hat die Behörde die Teilnahme an einem Aufbauseminar angeordnet. Der Fahranfänger kommt dieser Anordnung nicht nach. Womit muss er jetzt rechnen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Mit dem Entzug der Fahrerlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Mit einem Bußgeldbescheid",
+        "correct": false
+      },
+      {
+        "text": "Mit zusätzlichen Punkten im Fahreignungsregister",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn der Fahranfänger einer Teilnahme am Aufbauseminar nicht wie gefordert nachkommt, droht ihm der sofortige Verlust seiner Fahrerlaubnis. Ein zusätzliches Bußgeld wird nicht verhängt. Auch eine Punkteeintragung im Fahreignungsregister findet nicht satt.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-012",
+    "category": "persoenlich",
+    "question": "Womit muss ein Fahrerlaubnisbewerber rechnen, wenn er beim Fahren ohne Fahrerlaubnis erwischt wird?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Fahrerlaubnisbehörde kann den Prüfauftrag zurückziehen",
+        "correct": true
+      },
+      {
+        "text": "Eine Überprüfung der Eignung zum Führen von Kraftfahrzeugen kann angeordnet werden",
+        "correct": true
+      },
+      {
+        "text": "Mit keinen Auswirkungen, solange man in einer Fahrschule angemeldet ist",
+        "correct": false
+      }
+    ],
+    "explanation": "Ein Fahrerlaubnisbewerber muss nicht nur die dafür erforderlichen körperlichen und geistigen Anforderungen mitbringen. Zudem darf er nicht wiederholt gegen verkehrsrechtliche Vorschriften oder Strafgesetze verstoßen haben. Hierdurch würde der Bewerber zeigen, dass er sich nicht zum Führen eines Kraftfahrzeugs eignet. Ähnliches gilt für das Schwarzfahren. Sollte ein Fahrerlaubnisbewerber schwarzfahren, kann der Prüfauftrag von der Fahrerlaubnisbehörde zurückgezogen werden.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.8.01-013",
+    "category": "persoenlich",
+    "question": "Ein Fahranfänger hat innerhalb der Probezeit mehrere Verstöße begangen. Die Behörde hat die Teilnahme an einem Aufbauseminar angeordnet. Der Fahranfänger kommt dieser Anordnung nicht nach. Womit muss er jetzt rechnen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Mit einem Entzug der Fahrerlaubnis",
+        "correct": true
+      },
+      {
+        "text": "Mit einer Verlängerung der Probezeit um weitere 3 Jahre",
+        "correct": false
+      },
+      {
+        "text": "Mit einer Anordnung für ein Fahreignungsseminar",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Probezeit für Fahranfänger beträgt 2 Jahre. Während dieser Zeit gelten sehr strenge Strafen aus dem Bußgeldkatalog. Wenn du innerhalb der Probezeit einen A-Verstoß oder zwei B-Verstöße begehst wird ein Aufbauseminar (ASF) angeordnet. Solltest du dieser behördlichen Aufforderung nicht nachkommen, wird dir die Fahrerlaubnis entzogen.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-014",
+    "category": "persoenlich",
+    "question": "Ein Fahrerlaubnisbewerber übt das praktische Fahren ohne Fahrlehrer im öffentlichen Verkehrsraum. Womit muss er rechnen, wenn er von der Polizei kontrolliert wird?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Mit einem Strafverfahren",
+        "correct": true
+      },
+      {
+        "text": "Mit einer Überprüfung der Eignung zum Führen von Kraftfahrzeugen",
+        "correct": true
+      },
+      {
+        "text": "Mit keinen Auswirkungen, wenn ein Inhaber einer Fahrerlaubnis im Fahrzeug mitfährt",
+        "correct": false
+      }
+    ],
+    "explanation": "Als Fahrerlaubnisbewerber darfst du auf keinen Fall ohne Fahrlehrer im öffentliche Verkehr üben. Das Fahren ohne Fahrerlaubnis ist strafbar und kann mit einer Geld- oder Freiheitsstrafe bestraft werden.\nDie Polizei kann eine Überprüfung der Fahreignung anordnen. So riskiert du als Fahrerlaubnisbewerber, jemals einen Führerschein zu bekommen.",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.8.01-201",
+    "category": "persoenlich",
+    "question": "Sie transportieren mit einem Lkw gewerblich Güter. Was ist das Ziel der 35-stündigen Weiterbildung, an der Sie innerhalb von 5 Jahren teilnehmen müssen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Erhöhung des Gesundheitsbewusstseins",
+        "correct": true
+      },
+      {
+        "text": "Die Auffrischung der Kenntnisse über die Vorschriften für den Güterkraftverkehr",
+        "correct": true
+      },
+      {
+        "text": "Der Erwerb einer zusätzlichen Fahrerlaubnisklasse",
+        "correct": false
+      }
+    ],
+    "explanation": "Bei einem Transport mit gewerblichen Gütern ist das Ziel der 35-stündigen Weiterbildung die Erhöhung des Gesundheitsbewusstseins und die Auffrischung der Kenntnisse über die Vorschriften für den Güterverkehr.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-202",
+    "category": "persoenlich",
+    "question": "Die Tätigkeit als Berufskraftfahrer erfordert das Absolvieren einer Grundqualifikation und die regelmäßige Teilnahme an Weiterbildungen. Wo finden Sie die Angaben zur Befristung Ihrer Grundqualifikation zum Berufskraftfahrer?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf dem Führerschein",
+        "correct": true
+      },
+      {
+        "text": "Auf der Fahrerkarte",
+        "correct": false
+      },
+      {
+        "text": "Auf der Internetseite des Kraftfahrt-Bundesamtes (KBA)",
+        "correct": false
+      }
+    ],
+    "explanation": "Die Angaben zur Befristung findest du auf dem Führerschein auf der Rückseite.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-203",
+    "category": "persoenlich",
+    "question": "Sie befördern mit einem Bus gewerblich Personen. Was ist das Ziel der 35-stündigen Weiterbildung, an der Sie innerhalb von 5 Jahren teilnehmen müssen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Die Erhöhung des Gesundheitsbewusstseins",
+        "correct": true
+      },
+      {
+        "text": "Die Auffrischung der Kenntnisse über die Vorschriften für den Personenverkehr",
+        "correct": true
+      },
+      {
+        "text": "Der Erwerb einer zusätzlichen Fahrerlaubnisklasse",
+        "correct": false
+      }
+    ],
+    "explanation": "Wenn du gewerblich mit dem Bus Personen beförderst, lernst du innerhalb der 35-stündigen Weiterbildung die Erhöhung des Gesundheitsbewusstseins und die Auffrischung der Kenntnisse über die Vorschriften für den Personenverkehr. Die Teilnahme ist Pflicht.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-204",
+    "category": "persoenlich",
+    "question": "Was kann dazu führen, dass Ihre Eignung als Busfahrer überprüft werden muss?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- meiner körperlichen Leistungsfähigkeit",
+        "correct": true
+      },
+      {
+        "text": "- meiner geistigen Leistungsfähigkeit",
+        "correct": true
+      },
+      {
+        "text": "- der Zuverlässigkeit meines Arbeitgebers",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.8.01-205",
+    "category": "persoenlich",
+    "question": "Aus welchem Grund kann eine Eignungsuntersuchung gegenüber einem Busfahrer durch die Behörde angeordnet werden?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Wenn ein erheblicher Verstoß gegen verkehrsrechtliche Vorschriften vorliegt",
+        "correct": true
+      },
+      {
+        "text": "Wenn eine erhebliche Straftat, die im Zusammenhang mit dem Straßenverkehr steht, vorliegt",
+        "correct": true
+      },
+      {
+        "text": "Wenn Anhaltspunkte für ein hohes Aggressionspotenzial des Busfahrers vorliegen",
+        "correct": true
+      }
+    ],
+    "explanation": "",
+    "difficulty": "medium",
+    "points": 3
+  },
+  {
+    "id": "2.8.01-206",
+    "category": "persoenlich",
+    "question": "Nach dem erstmaligen Erwerb der Fahrerlaubnis der Klasse C möchten Sie gewerblich Güter transportieren. Auf welche Weise können Sie die Voraussetzung erfüllen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- der beschleunigten Grundqualifikation",
+        "correct": true
+      },
+      {
+        "text": "- einer Ausbildung zum Berufskraftfahrer",
+        "correct": true
+      },
+      {
+        "text": "- einer 35-stündigen Weiterbildung",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-207",
+    "category": "persoenlich",
+    "question": "Nach dem erstmaligen Erwerb der Fahrerlaubnis der Klasse D möchten Sie gewerblich Personen befördern. Auf welche Weise können Sie die Voraussetzung erfüllen?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- der beschleunigten Grundqualifikation",
+        "correct": true
+      },
+      {
+        "text": "- einer Ausbildung zum Berufskraftfahrer",
+        "correct": true
+      },
+      {
+        "text": "- einer 35-stündigen Weiterbildung",
+        "correct": false
+      }
+    ],
+    "explanation": "",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-208",
+    "category": "persoenlich",
+    "question": "Ihre Tätigkeit als Berufskraftfahrer erfordert eine Grundqualifikation sowie regelmäßige Weiterbildungen. Wo werden die Nachweise dokumentiert?",
+    "image": null,
+    "answers": [
+      {
+        "text": "Auf dem Fahrerqualifizierungsnachweis",
+        "correct": true
+      },
+      {
+        "text": "In dem Register des Kraftfahrt-Bundesamts (KBA) zur Berufskraftfahrerqualifikation",
+        "correct": true
+      },
+      {
+        "text": "Auf der Internetseite der für mich zuständigen Führerscheinstelle",
+        "correct": false
+      }
+    ],
+    "explanation": "Berufskraftfahrer, die im Güter- oder Personenverkehrs auf öffentlichen Straßen tätig sind, benötigen eine Grundqualifikation sowie anschließend eine regelmäßige Weiterbildung. Die Gültigkeit dieser Schulungen werden auf dem Fahrerqualifizierungsnachweis dokumentiert.",
+    "difficulty": "easy",
+    "points": 2
+  },
+  {
+    "id": "2.8.01-209",
+    "category": "persoenlich",
+    "question": "Was wird auf dem Fahrerqualifizierungsnachweis dokumentiert?",
+    "image": null,
+    "answers": [
+      {
+        "text": "- Grundqualifikation",
+        "correct": true
+      },
+      {
+        "text": "- Weiterbildung",
+        "correct": true
+      },
+      {
+        "text": "- erteilten Fahrerlaubnis",
+        "correct": false
+      }
+    ],
+    "explanation": "Kraftfahrer, die im Güter- oder Personenverkehrs auf öffentlichen Straßen tätig sind, benötigen eine Grundqualifikation sowie anschließend eine regelmäßige Weiterbildung. Die Gültigkeit dieser Schulungen werden auf dem Fahrerqualifizierungsnachweis dokumentiert.",
+    "difficulty": "easy",
+    "points": 2
+  }
+]

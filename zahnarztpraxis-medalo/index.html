@@ -728,72 +728,9 @@
             .trust-bar .container { grid-template-columns: 1fr; }
             .trust-item { border-right: none !important; }
         }
-        /* ===== VACATION OVERLAY ===== */
-        .vacation-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center;
-            padding: 24px; opacity: 0; animation: vacFadeIn 0.5s ease forwards;
-        }
-        @keyframes vacFadeIn { to { opacity: 1; } }
-        .vacation-modal {
-            background: var(--white); border-radius: var(--radius);
-            max-width: 540px; width: 100%; padding: 48px 40px; text-align: center;
-            box-shadow: var(--shadow-xl); position: relative;
-            animation: vacSlideUp 0.5s ease forwards;
-        }
-        @keyframes vacSlideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .vacation-modal .vac-icon {
-            font-size: 3rem; margin-bottom: 16px; display: block;
-        }
-        .vacation-modal h2 {
-            font-family: 'Playfair Display', serif; font-size: 1.8rem;
-            color: var(--dark); margin-bottom: 12px; font-weight: 600;
-        }
-        .vacation-modal .vac-dates {
-            font-size: 1.15rem; font-weight: 600; color: var(--primary);
-            margin-bottom: 20px; display: block;
-        }
-        .vacation-modal p {
-            color: var(--text-light); font-size: 1rem; line-height: 1.8; margin-bottom: 8px;
-        }
-        .vacation-modal .vac-note {
-            background: var(--light); border-radius: var(--radius-sm);
-            padding: 16px 20px; margin-top: 20px; font-size: 0.92rem;
-            color: var(--text); line-height: 1.7; border-left: 3px solid var(--primary);
-            text-align: left;
-        }
-        .vacation-modal .vac-close {
-            margin-top: 28px; padding: 14px 36px; border: none; border-radius: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white); font-size: 1rem; font-weight: 600; cursor: pointer;
-            transition: var(--transition);
-        }
-        .vacation-modal .vac-close:hover {
-            transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,116,144,0.35);
-        }
     </style>
 </head>
 <body>
-
-    <!-- VACATION NOTICE -->
-    <div class="vacation-overlay" id="vacationOverlay">
-        <div class="vacation-modal">
-            <span class="vac-icon">&#9992;&#65039;</span>
-            <h2>Wir sind im Urlaub</h2>
-            <span class="vac-dates">03.04.2026 &ndash; 12.04.2026</span>
-            <p>Liebe Patientinnen und Patienten,</p>
-            <p>unsere Praxis bleibt in der Zeit vom <strong>03. April</strong> bis einschlie&szlig;lich <strong>12. April 2026</strong> wegen Urlaub geschlossen.</p>
-            <div class="vac-note">
-                <strong>In dringenden Notf&auml;llen</strong> wenden Sie sich bitte an den zahn&auml;rztlichen Notdienst unter <strong>116 117</strong> oder an die n&auml;chstgelegene Zahnklinik.
-            </div>
-            <p style="margin-top: 16px;">Ab dem <strong>13. April 2026</strong> sind wir gerne wieder f&uuml;r Sie da.</p>
-            <button class="vac-close" onclick="document.getElementById('vacationOverlay').style.display='none'">Verstanden</button>
-        </div>
-    </div>
 
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
